@@ -1,0 +1,29 @@
+1. Use Following grid to define the maze
+
+._._._._._._._._._._._._._._._._._.
+| | | | | | | | | | | | | | | | | | 
+._._._._._._._._._._._._._._._._._.
+| | | | | | | | | | | | | | | | | | 
+._._._._._._._._._._._._._._._._._.
+| | | | | | | | | | | | | | | | | | 
+._._._._._._._._._._._._._._._._._.
+| | | | | | | | | | | | | | | | | | 
+._._._._._._._._._._._._._._._._._.
+
+2. Start positions
+M - Minotaur start position
+T - Theseus start position
+E - Exit
+
+3. File must contains only single grid
+
+4. Example (1st level from reference game)
+------Start of the file-------
+._._._.
+|  T  |
+. ._. ._.
+|   |  E
+. ._. ._.
+|  M  |
+._._._.
+------End of the file-------
