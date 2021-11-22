@@ -5,7 +5,7 @@ using UnityEngine;
 namespace TheseusAndMinotaur.Game
 {
     /// <summary>
-    /// Listen user input defined at <see cref="InputActions"/> with the same name as in project settings in Input section
+    ///     Listen user input defined at <see cref="InputActions" /> with the same name as in project settings in Input section
     /// </summary>
     public class InputController : MonoBehaviour
     {
@@ -16,12 +16,8 @@ namespace TheseusAndMinotaur.Game
             do
             {
                 foreach (var inputAction in InputActions)
-                {
                     if (Input.GetButton(inputAction.ToString()))
-                    {
                         return inputAction;
-                    }
-                }
 
                 await Task.Yield();
             } while (true);

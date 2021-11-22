@@ -1,15 +1,12 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using TheseusAndMinotaur.Data;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace TheseusAndMinotaur.Game
 {
     /// <summary>
-    ///  This controller is responsible in movement maze entities on the screen 
+    ///     This controller is responsible in movement maze entities on the screen
     /// </summary>
     public class MovementController : MonoBehaviour
     {
@@ -24,10 +21,8 @@ namespace TheseusAndMinotaur.Game
         }
 
         /// <summary>
-        /// Move entity to target board position and update internal state for board position
-        ///
-        /// 
-        ///   FutureTask: Should we use cancellation token and handle errors 
+        ///     Move entity to target board position and update internal state for board position
+        ///     FutureTask: Should we use cancellation token and handle errors
         /// </summary>
         /// <param name="direction"></param>
         public async Task MoveTo(Direction direction)

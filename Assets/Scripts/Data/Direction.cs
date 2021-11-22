@@ -36,9 +36,10 @@ namespace TheseusAndMinotaur.Data
         /// <summary>
         ///     List of all possible directions
         /// </summary>
-        public static readonly Direction[] BaseDirections = { Direction.Left, Direction.Right, Direction.Up, Direction.Down };
+        public static readonly Direction[] BaseDirections =
+            { Direction.Left, Direction.Right, Direction.Up, Direction.Down };
 
-        public static readonly HashSet<Direction> BaseDirectionsHashSet = new HashSet<Direction>(BaseDirections);
+        public static readonly HashSet<Direction> BaseDirectionsHashSet = new(BaseDirections);
 
 
         private static readonly Dictionary<Direction, Vector2Int> OffsetByDirection = new()
@@ -46,7 +47,7 @@ namespace TheseusAndMinotaur.Data
             { Direction.Left, new Vector2Int(-1, 0) },
             { Direction.Right, new Vector2Int(1, 0) },
             { Direction.Up, new Vector2Int(0, 1) },
-            { Direction.Down, new Vector2Int(0, -1) },
+            { Direction.Down, new Vector2Int(0, -1) }
         };
 
         public static bool HasDirection(this Direction direction, Direction targetDirection)
@@ -75,7 +76,10 @@ namespace TheseusAndMinotaur.Data
             return direction.HasDirection(Direction.Down);
         }
 
-        public static bool HasWallAt(this Direction direction, Direction target) => direction.HasDirection(target);
+        public static bool HasWallAt(this Direction direction, Direction target)
+        {
+            return direction.HasDirection(target);
+        }
 
         /// <summary>
         ///     Return list of base direction (Left, Right, Top, Down)
@@ -87,19 +91,19 @@ namespace TheseusAndMinotaur.Data
         }
 
         /// <summary>
-        /// Indicate if direction is base (up, down, left, right) and not compound (e.g. Left+Top)
+        ///     Indicate if direction is base (up, down, left, right) and not compound (e.g. Left+Top)
         /// </summary>
         public static bool IsBaseDirection(this Direction direction)
         {
             return BaseDirectionsHashSet.Contains(direction);
         }
-        
+
 
         /// <summary>
-        /// Filter Directions with filter. (intersection)
-        /// eg.
-        ///    Direction.All with filter (Left + Top) will return only (Left+ Top)
-        ///    (Left+Bottom) with filter (Left + Top) will return (Left)
+        ///     Filter Directions with filter. (intersection)
+        ///     eg.
+        ///     Direction.All with filter (Left + Top) will return only (Left+ Top)
+        ///     (Left+Bottom) with filter (Left + Top) will return (Left)
         /// </summary>
         public static IEnumerable<Direction> Filter(this Direction direction, Direction[] directions)
         {
@@ -107,7 +111,7 @@ namespace TheseusAndMinotaur.Data
         }
 
         /// <summary>
-        /// return neighbour cell in required direction
+        ///     return neighbour cell in required direction
         /// </summary>
         /// <param name="boardPosition"></param>
         /// <param name="direction">must be base direction (up or left or down or top, not combination)</param>

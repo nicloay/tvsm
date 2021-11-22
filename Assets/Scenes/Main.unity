@@ -344,7 +344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9f5667ab8ea42599c95d71e557f5f30, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _theseusMovementController: {fileID: 1785151015}
+  theseusMovementController: {fileID: 1785151015}
 --- !u!114 &1430246603
 MonoBehaviour:
   m_ObjectHideFlags: 0

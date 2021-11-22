@@ -1,6 +1,4 @@
-using System;
 using System.Threading.Tasks;
-using TheseusAndMinotaur.Data;
 using TheseusAndMinotaur.Data.Deserializer;
 using TheseusAndMinotaur.Maze;
 using UnityEngine;
@@ -8,24 +6,24 @@ using UnityEngine.Events;
 
 namespace TheseusAndMinotaur.Game
 {
-    
     /// <summary>
-    /// Main manager responsible to handle the game
+    ///     Main manager responsible to handle the game
     /// </summary>
     [RequireComponent(typeof(InputController))]
     public class GameManager : MonoBehaviour
     {
-        public readonly UnityEvent WrongMovement = new UnityEvent();
-        [SerializeField] private MovementController _theseusMovementController;
-        private InputController _inputController;
+        [SerializeField] private MovementController theseusMovementController;
+        public readonly UnityEvent WrongMovement = new();
         private BoardGenerator _boardGenerator;
+        private InputController _inputController;
+
         private void Start()
         {
             _inputController = GetComponent<InputController>();
             _boardGenerator = FindObjectOfType<BoardGenerator>();
             var board = BoardDeserializer.DeserializeFromStreamingAssets("Test/test3.txt");
             _boardGenerator.SpawnBoard(board);
-            _theseusMovementController.Initialize(Vector2Int.one, board);
+            theseusMovementController.Initialize(Vector2Int.one, board);
             GameLoop();
         }
 
@@ -46,7 +44,6 @@ namespace TheseusAndMinotaur.Game
                 else if (key == InputAction.Restart)
                 {
                     // 2.3 Restart
-
                 }
                 else
                 {
@@ -54,7 +51,7 @@ namespace TheseusAndMinotaur.Game
                     if (movementResult == InputResult.WrongAction)
                     {
                         WrongMovement.Invoke();
-                        continue; //nothing changed on board - repeat loop from beginning
+                        continue;
                     }
                 }
 
@@ -72,23 +69,24 @@ namespace TheseusAndMinotaur.Game
             } while (true);
         }
 
+        private async Task<InputResult> HandleDirectionalInput(InputAction inputAction)
+        {
+            var direction = inputAction.ToDirection();
+            if (theseusMovementController.CanMoveTo(direction))
+            {
+                await theseusMovementController.MoveTo(direction);
+                return InputResult.Complete;
+            }
+
+            await Task.Yield();
+            return InputResult.WrongAction;
+        }
+
 
         private enum InputResult
         {
             Complete,
             WrongAction
-        }
-        
-        private async Task<InputResult> HandleDirectionalInput(InputAction inputAction)
-        {
-            var direction = inputAction.ToDirection();
-            if (_theseusMovementController.CanMoveTo(direction))
-            {
-                await _theseusMovementController.MoveTo(direction);
-                return InputResult.Complete; 
-            }
-            await Task.Yield(); 
-            return InputResult.WrongAction;
         }
     }
 }

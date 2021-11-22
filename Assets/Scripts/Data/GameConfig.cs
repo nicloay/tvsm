@@ -4,7 +4,7 @@ using UnityEngine.Assertions;
 namespace TheseusAndMinotaur.Data
 {
     /// <summary>
-    /// We don't have DI system yet, so let's use singleton
+    ///     We don't have DI system yet, so let's use singleton
     /// </summary>
     [CreateAssetMenu]
     public class GameConfig : ScriptableObject
@@ -12,6 +12,13 @@ namespace TheseusAndMinotaur.Data
         private const string ResourceName = "GameConfig";
 
         private static GameConfig _instance;
+
+        [Tooltip("Distance between 2 cells (vertically and horizontally")] [SerializeField]
+        private Vector2 cellStep = Vector2.one;
+
+        [Tooltip("Seconds per cell speed for Theseus, Minotaur and Undo back movement")] [SerializeField]
+        private float movementSpeed = 0.3f;
+
         public static GameConfig Instance
         {
             get
@@ -25,14 +32,8 @@ namespace TheseusAndMinotaur.Data
                 return _instance;
             }
         }
-        
-        [Tooltip("Distance between 2 cells (vertically and horizontally")]
-        [SerializeField] private Vector2 cellStep = Vector2.one;
 
         public Vector2 CellStep => cellStep;
-
-        [Tooltip("Seconds per cell speed for Theseus, Minotaur and Undo back movement")]
-        [SerializeField] private float movementSpeed = 0.3f;
 
         public float MovementSpeed => movementSpeed;
     }

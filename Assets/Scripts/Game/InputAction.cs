@@ -4,7 +4,7 @@ using TheseusAndMinotaur.Data;
 namespace TheseusAndMinotaur.Game
 {
     /// <summary>
-    /// AvailableInputAction
+    ///     AvailableInputAction
     /// </summary>
     public enum InputAction
     {
@@ -18,7 +18,7 @@ namespace TheseusAndMinotaur.Game
 
     public static class InputActionUtil
     {
-        private static Dictionary<InputAction, Direction> _directionByInputAction = new()
+        private static readonly Dictionary<InputAction, Direction> _directionByInputAction = new()
         {
             { InputAction.MoveDown, Direction.Down },
             { InputAction.MoveLeft, Direction.Left },
@@ -27,8 +27,11 @@ namespace TheseusAndMinotaur.Game
         };
 
         /// <summary>
-        /// Convert input to proper direction
+        ///     Convert input to proper direction
         /// </summary>
-        public static Direction ToDirection(this InputAction inputAction) => _directionByInputAction[inputAction];
+        public static Direction ToDirection(this InputAction inputAction)
+        {
+            return _directionByInputAction[inputAction];
+        }
     }
 }
