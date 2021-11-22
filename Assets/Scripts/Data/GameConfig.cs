@@ -19,6 +19,9 @@ namespace TheseusAndMinotaur.Data
         [Tooltip("Seconds per cell speed for Theseus, Minotaur and Undo back movement")] [SerializeField]
         private float movementSpeed = 0.3f;
 
+        [Tooltip("how many times minotaur can step for single steps of player")] [SerializeField]
+        private int minotaurStepsPerTurn = 2;
+
         public static GameConfig Instance
         {
             get
@@ -26,7 +29,10 @@ namespace TheseusAndMinotaur.Data
                 if (_instance == null)
                 {
                     _instance = Resources.Load<GameConfig>(ResourceName);
-                    Assert.IsTrue(_instance.movementSpeed > 0, "GameConfig movementSpeed must be greater than zero");
+                    Assert.IsTrue(_instance.movementSpeed > 0,
+                        $"GameConfig {nameof(movementSpeed)} must be greater than zero");
+                    Assert.IsTrue(_instance.minotaurStepsPerTurn > 0,
+                        $"GameConfig {nameof(minotaurStepsPerTurn)} must be greater than zero");
                 }
 
                 return _instance;
@@ -36,5 +42,7 @@ namespace TheseusAndMinotaur.Data
         public Vector2 CellStep => cellStep;
 
         public float MovementSpeed => movementSpeed;
+
+        public int MinotaurStepsPerTurn => minotaurStepsPerTurn;
     }
 }

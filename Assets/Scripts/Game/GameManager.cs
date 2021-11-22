@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using TheseusAndMinotaur.Data;
 using TheseusAndMinotaur.Data.Deserializer;
 using TheseusAndMinotaur.Maze;
 using UnityEngine;
@@ -13,9 +14,28 @@ namespace TheseusAndMinotaur.Game
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private MovementController theseusMovementController;
+        [SerializeField] private MinotaurAI minotaurAI;
+        [SerializeField] private MovementController minotaurMovementController;
+
         public readonly UnityEvent WrongMovement = new();
         private BoardGenerator _boardGenerator;
         private InputController _inputController;
+
+        private GameState _state;
+
+        public GameStateChangedEvent GameStateChanged = new();
+
+        private GameState State
+        {
+            get => _state;
+            set
+            {
+                if (value == _state) return;
+                _state = value;
+                GameStateChanged.Invoke(_state);
+            }
+        }
+
 
         private void Start()
         {
@@ -24,12 +44,21 @@ namespace TheseusAndMinotaur.Game
             var board = BoardDeserializer.DeserializeFromStreamingAssets("Test/test3.txt");
             _boardGenerator.SpawnBoard(board);
             theseusMovementController.Initialize(Vector2Int.one, board);
-            GameLoop();
+            minotaurAI.Initialize(theseusMovementController, board);
+            minotaurMovementController = minotaurAI.GetComponent<MovementController>();
+            StartGameLoop();
         }
 
-
-        private async Task GameLoop()
+        public void RestartBoard()
         {
+            theseusMovementController.ResetToOriginalPosition();
+            minotaurMovementController.ResetToOriginalPosition();
+            if (State == GameState.GameOver) StartGameLoop();
+        }
+
+        private async Task StartGameLoop()
+        {
+            State = GameState.Active;
             do
             {
                 // 1. Listen Input
@@ -43,50 +72,87 @@ namespace TheseusAndMinotaur.Game
                 }
                 else if (key == InputAction.Restart)
                 {
-                    // 2.3 Restart
+                    RestartBoard();
+                    await Task.Yield();
+                    continue;
                 }
                 else
                 {
+                    // 2.4 move Theseus
                     var movementResult = await HandleDirectionalInput(key);
-                    if (movementResult == InputResult.WrongAction)
+                    if (movementResult == MovementResultType.NotPossible)
                     {
                         WrongMovement.Invoke();
                         continue;
                     }
+
+                    if (HandleGameOver()) break;
                 }
 
-                // 2.4 move Theseus
-
-                // 2.4.1 check game over
 
                 // 2.5 move Minotaur
+                for (var i = 0; i < GameConfig.Instance.MinotaurStepsPerTurn; i++)
+                {
+                    var movementResult = await HandleMinotaurMovement();
+                    if (movementResult == MovementResultType.NotPossible) continue;
 
-                // 2.5.1 check game over
-
-                // 2.6 move Minotaur
-
-                // 2.6.1 check game over
+                    if (HandleGameOver()) break;
+                }
             } while (true);
         }
 
-        private async Task<InputResult> HandleDirectionalInput(InputAction inputAction)
+        /// <summary>
+        ///     Check if Minotaur caught Theseus.
+        ///     If yes - raise Event
+        /// </summary>
+        /// <returns>return true if Minotaur caught Theseus, false otherwise</returns>
+        private bool HandleGameOver()
+        {
+            var result = minotaurMovementController.CurrentBoardPosition ==
+                         theseusMovementController.CurrentBoardPosition;
+            if (result) State = GameState.GameOver;
+
+            return result;
+        }
+
+        private async Task<MovementResultType> HandleDirectionalInput(InputAction inputAction)
         {
             var direction = inputAction.ToDirection();
             if (theseusMovementController.CanMoveTo(direction))
             {
+                State = GameState.ActiveWithMovementOnScreen;
                 await theseusMovementController.MoveTo(direction);
-                return InputResult.Complete;
+                State = GameState.Active;
+                return MovementResultType.Complete;
             }
 
             await Task.Yield();
-            return InputResult.WrongAction;
+            return MovementResultType.NotPossible;
+        }
+
+        private async Task<MovementResultType> HandleMinotaurMovement()
+        {
+            var direction = minotaurAI.GetDirectionToTheTarget();
+            if (direction != Direction.None)
+            {
+                State = GameState.ActiveWithMovementOnScreen;
+                await minotaurMovementController.MoveTo(direction);
+                State = GameState.Active;
+                return MovementResultType.Complete;
+            }
+
+            return MovementResultType.NotPossible;
+        }
+
+        public class GameStateChangedEvent : UnityEvent<GameState>
+        {
         }
 
 
-        private enum InputResult
+        private enum MovementResultType
         {
             Complete,
-            WrongAction
+            NotPossible
         }
     }
 }
