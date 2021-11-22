@@ -12,8 +12,12 @@ namespace TheseusAndMinotaur.Data
     public class RawBoard
     {
         private readonly Dictionary<Vector2Int, Direction> _directions = new();
-        private int _maxX; // max x of assigned values
-        private int _maxY; // max y of assigned values
+        private int _maxX = int.MinValue; // max x of assigned values
+        private int _maxY = int.MinValue; // max y of assigned values
+        public readonly SingleTimeSetValue<Vector2Int> TheseusStartPosition = new SingleTimeSetValue<Vector2Int>();
+        public readonly SingleTimeSetValue<Vector2Int> MinotaurStartPosition = new SingleTimeSetValue<Vector2Int>();
+        public readonly SingleTimeSetValue<Vector2Int> ExitPosition = new SingleTimeSetValue<Vector2Int>();
+
 
         public Direction this[Vector2Int position]
         {
@@ -35,15 +39,35 @@ namespace TheseusAndMinotaur.Data
             }
         }
 
-        public void AddWall( int y, int x, Direction wallDirection)
+        public void AddWall(int y, int x, Direction wallDirection)
         {
-            this[ y,x] |= wallDirection;
+            this[y, x] |= wallDirection;
         }
 
         public Board ConvertToBoard()
         {
+            if (_maxX < 0 && _maxY < 0)
+            {
+                throw new ParseMazeException("maze contains no walls");
+            }
+            
+            if (!TheseusStartPosition.IsValueSet)
+            {
+                throw new ParseMazeException("Theseus position is not set");
+            }
+
+            if (!MinotaurStartPosition.IsValueSet)
+            {
+                throw new ParseMazeException("Minotaur position is not set");
+            }
+
+            if (!ExitPosition.IsValueSet)
+            {
+                throw new ParseMazeException("Exit position is not set");
+            }
+
             var map = new Direction[_maxY + 1, _maxX + 1];
-            // 1. invert indexes (y on the bottom)
+            // 1. invert Y indexes (move Y to the bottom)
             for (int y = 0; y <= _maxY; y++)
             {
                 for (int x = 0; x <= _maxX; x++)
@@ -52,7 +76,7 @@ namespace TheseusAndMinotaur.Data
                 }
             }
 
-            // 2. fill walls for every cells (so any cells will have info about left, right, top, down cells
+            // 2. fill walls for neighbour cells (so any cells will have info about left, right, top, down cells
             for (int y = 0, nextY = 1; y <= _maxY; y = nextY++)
             {
                 for (int x = 0, nextX = 1; x <= _maxX; x = nextX++)
@@ -69,8 +93,20 @@ namespace TheseusAndMinotaur.Data
                 }
             }
 
-            return new Board(map, Vector2Int.zero, Vector2Int.zero,
-                Vector2Int.zero); // FIXME: add proper vector values here
+            return new Board(map: map,
+                theseusStartPosition: ConvertToBoardPosition(TheseusStartPosition.Value),
+                minotaurStartPosition: ConvertToBoardPosition(MinotaurStartPosition.Value),
+                exit: ConvertToBoardPosition(ExitPosition.Value));
+        }
+
+        /// <summary>
+        /// Original value is based on topLeft pivot point, result board pivot point is bottomLeft
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        private Vector2Int ConvertToBoardPosition(Vector2Int value)
+        {
+            return new Vector2Int(value.x, _maxY - value.y);
         }
     }
 }
