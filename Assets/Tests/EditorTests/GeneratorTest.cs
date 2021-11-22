@@ -27,7 +27,7 @@ namespace TheseusAndMinotaur.Tests
 
             var board = BoardDeserializer.DeserializeFrom(boardSrc);
 
-            Assert.That(board[0, 0], Is.EqualTo(Direction.Left | Direction.Top));
+            Assert.That(board[0, 0], Is.EqualTo(Direction.Left | Direction.Up));
         }
 
         [Test]
@@ -41,7 +41,7 @@ namespace TheseusAndMinotaur.Tests
 
             var board = BoardDeserializer.DeserializeFrom(boardSrc);
             Assert.That(board.GetWallsAtRow(1), Is.EquivalentTo(new[] { Direction.Vertical }));
-            Assert.That(board.GetWallsAtRow(0), Is.EquivalentTo(new[] { Direction.Top }));
+            Assert.That(board.GetWallsAtRow(0), Is.EquivalentTo(new[] { Direction.Up }));
         }
 
         [Test]
@@ -54,7 +54,7 @@ namespace TheseusAndMinotaur.Tests
 
             var board = BoardDeserializer.DeserializeFrom(boardSrc);
             Assert.That(board.GetWallsAtRow(0),
-                Is.EquivalentTo(new[] { Direction.Horizontal | Direction.Top, Direction.Left }));
+                Is.EquivalentTo(new[] { Direction.Horizontal | Direction.Up, Direction.Left }));
         }
 
         [Test]
@@ -70,7 +70,7 @@ namespace TheseusAndMinotaur.Tests
 
             var board = BoardDeserializer.DeserializeFrom(boardSrc);
             Assert.That(board.GetWallsAtRow(0),
-                Is.EquivalentTo(new[] { Direction.None, Direction.Top, Direction.None }));
+                Is.EquivalentTo(new[] { Direction.None, Direction.Up, Direction.None }));
             Assert.That(board.GetWallsAtRow(1),
                 Is.EquivalentTo(new[] { Direction.Right, Direction.All, Direction.Left }));
             Assert.That(board.GetWallsAtRow(2),
@@ -91,7 +91,7 @@ namespace TheseusAndMinotaur.Tests
             var board = BoardDeserializer.DeserializeFrom(boardSrc);
 
             Assert.That(board.GetWallsAtRow(0),
-                Is.EquivalentTo(new[] { Direction.None, Direction.Top, Direction.None }));
+                Is.EquivalentTo(new[] { Direction.None, Direction.Up, Direction.None }));
             Assert.That(board.GetWallsAtRow(1),
                 Is.EquivalentTo(new[] { Direction.Right, Direction.All, Direction.Left }));
             Assert.That(board.GetWallsAtRow(2),
