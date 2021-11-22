@@ -4,14 +4,14 @@ using UnityEngine;
 
 namespace TheseusAndMinotaur
 {
-    public static class BoardDeserializer
+    public static partial class BoardDeserializer
     {
         private const char HorizontalWallChar = '_';
         private const char VerticalWallChar = '|';
         private const char TheseusStartPoint = 'T';
         private const char MinotaurStartPoint = 'M';
         private const char Exit = 'E';
-        
+
         /// <summary>
         /// Source format contains switching line one after another in the following way (first column wall is skipped)
         ///     ._._._ // which is for Bottom Walls
@@ -24,7 +24,7 @@ namespace TheseusAndMinotaur
             LeftWall
         }
 
-        
+
         /// <summary>
         /// Deserialize from streaming asset file
         /// </summary>
@@ -36,21 +36,20 @@ namespace TheseusAndMinotaur
             var data = File.ReadAllText(fullPath);
             return DeserializeFrom(data);
         }
-        
+
         public static Board DeserializeFrom(string textData)
         {
-
-
             if (string.IsNullOrEmpty(textData))
             {
                 throw new ParseMazeException("string is empty or null, you must provide something");
             }
+
             var reader = new StringReader(textData);
             var line = reader.ReadLine();
-            
+
             var rawBoard = new RawBoard();
             int y = 0; // get 2 lines from source file and merge them in to the one
-            
+
             while (line != null)
             {
                 // check top wall from current line
@@ -70,7 +69,7 @@ namespace TheseusAndMinotaur
                 }
                 else
                 {
-                    for (int x = 0; x < line.Length; x ++)
+                    for (int x = 0; x < line.Length; x++)
                     {
                         if (line[x] == VerticalWallChar)
                         {
@@ -93,13 +92,14 @@ namespace TheseusAndMinotaur
                                     rawBoard.ExitPosition.Value = boardPosition;
                                     break;
                             }
-                        } 
+                        }
                     }
                 }
+
                 y++;
-                line = reader.ReadLine(); 
+                line = reader.ReadLine();
             }
-            
+
             return rawBoard.ConvertToBoard();
         }
     }

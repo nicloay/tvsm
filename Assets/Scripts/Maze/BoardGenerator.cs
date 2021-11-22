@@ -3,6 +3,10 @@ using UnityEngine;
 
 namespace TheseusAndMinotaur.Maze
 {
+    /// <summary>
+    /// Generate game object from board data
+    /// place cells to proper positions.
+    /// </summary>
     [RequireComponent(typeof(MazePools))]
     public class BoardGenerator : MonoBehaviour
     {

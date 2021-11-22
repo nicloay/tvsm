@@ -17,7 +17,7 @@ namespace TheseusAndMinotaur.Tests
         [TestCaseSource(nameof(_setValueSource))]
         public void TestSetValue(Vector2Int position, Direction value)
         {
-            var board = new RawBoard();
+            var board = new BoardDeserializer.RawBoard();
             board[position] = value;
             Assert.That(board[position], Is.EqualTo(value));
         }
@@ -25,7 +25,7 @@ namespace TheseusAndMinotaur.Tests
         [Test]
         public void TestCombine()
         {
-            var board = new RawBoard();
+            var board = new BoardDeserializer.RawBoard();
             board.AddWall(3,2, Direction.Left);
             board.AddWall(3,2, Direction.Right);
             Assert.That(board[3,2], Is.EqualTo(Direction.Left | Direction.Right));
