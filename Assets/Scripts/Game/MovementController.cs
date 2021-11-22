@@ -11,11 +11,10 @@ namespace TheseusAndMinotaur.Game
     public class MovementController : MonoBehaviour
     {
         private Board _board;
-        private Vector2Int _currentBoardPosition;
-        public Vector2Int CurrentBoardPosition => _currentBoardPosition;
 
         private Vector2Int _originalBoardPosition;
-        
+        public Vector2Int CurrentBoardPosition { get; private set; }
+
         public void Initialize(Vector2Int startPosition, Board board)
         {
             _originalBoardPosition = startPosition;
@@ -25,9 +24,8 @@ namespace TheseusAndMinotaur.Game
 
         public void ResetToOriginalPosition()
         {
-            _currentBoardPosition = _originalBoardPosition;
+            CurrentBoardPosition = _originalBoardPosition;
             transform.position = _originalBoardPosition.GetGlobalPosition();
-            
         }
 
         /// <summary>
@@ -39,7 +37,7 @@ namespace TheseusAndMinotaur.Game
         {
             Assert.IsTrue(direction.IsBaseDirection());
             var currentPosition = transform.position;
-            var targetBoardPoisition = _currentBoardPosition.GetNeighbour(direction);
+            var targetBoardPoisition = CurrentBoardPosition.GetNeighbour(direction);
             var targetPosition = targetBoardPoisition.GetGlobalPosition();
             var time = GameConfig.Instance.MovementSpeed;
             var currentTime = 0f;
@@ -51,13 +49,13 @@ namespace TheseusAndMinotaur.Game
             } while (currentTime < time);
 
             transform.position = targetPosition;
-            _currentBoardPosition = targetBoardPoisition;
+            CurrentBoardPosition = targetBoardPoisition;
         }
 
         public bool CanMoveTo(Direction direction)
         {
-            var targetBoardPosition = _currentBoardPosition.GetNeighbour(direction);
-            return !_board[_currentBoardPosition].HasWallAt(direction)
+            var targetBoardPosition = CurrentBoardPosition.GetNeighbour(direction);
+            return !_board[CurrentBoardPosition].HasWallAt(direction)
                    && targetBoardPosition.x >= 0
                    && targetBoardPosition.y >= 0
                    && targetBoardPosition.x <= _board.Width

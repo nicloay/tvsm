@@ -13,21 +13,18 @@ namespace TheseusAndMinotaur.Game
     [RequireComponent(typeof(InputController))]
     public class GameManager : MonoBehaviour
     {
-        public class GameStateChangedEvent : UnityEvent<GameState>
-        {
-        }
-
         [SerializeField] private MovementController theseusMovementController;
         [SerializeField] private MinotaurAI minotaurAI;
         [SerializeField] private MovementController minotaurMovementController;
 
-        public GameStateChangedEvent GameStateChanged = new();
-        
         public readonly UnityEvent WrongMovement = new();
         private BoardGenerator _boardGenerator;
         private InputController _inputController;
 
         private GameState _state;
+
+        public GameStateChangedEvent GameStateChanged = new();
+
         private GameState State
         {
             get => _state;
@@ -38,8 +35,8 @@ namespace TheseusAndMinotaur.Game
                 GameStateChanged.Invoke(_state);
             }
         }
-        
-        
+
+
         private void Start()
         {
             _inputController = GetComponent<InputController>();
@@ -56,10 +53,7 @@ namespace TheseusAndMinotaur.Game
         {
             theseusMovementController.ResetToOriginalPosition();
             minotaurMovementController.ResetToOriginalPosition();
-            if (State == GameState.GameOver)
-            {
-                StartGameLoop();
-            }
+            if (State == GameState.GameOver) StartGameLoop();
         }
 
         private async Task StartGameLoop()
@@ -92,45 +86,31 @@ namespace TheseusAndMinotaur.Game
                         continue;
                     }
 
-                    if (HandleGameOver())
-                    {
-                        break;
-                    }
+                    if (HandleGameOver()) break;
                 }
 
 
                 // 2.5 move Minotaur
-                for (int i = 0; i < GameConfig.Instance.MinotaurStepsPerTurn; i++)
+                for (var i = 0; i < GameConfig.Instance.MinotaurStepsPerTurn; i++)
                 {
-
                     var movementResult = await HandleMinotaurMovement();
-                    if (movementResult == MovementResultType.NotPossible)
-                    {
-                        continue;
-                    }
-                    else
-                    {
-                        if (HandleGameOver())
-                        {
-                            break;
-                        }   
-                    }
+                    if (movementResult == MovementResultType.NotPossible) continue;
+
+                    if (HandleGameOver()) break;
                 }
             } while (true);
         }
-        
+
         /// <summary>
-        /// Check if Minotaur caught Theseus.
-        /// If yes - raise Event
+        ///     Check if Minotaur caught Theseus.
+        ///     If yes - raise Event
         /// </summary>
         /// <returns>return true if Minotaur caught Theseus, false otherwise</returns>
         private bool HandleGameOver()
         {
-            var result = minotaurMovementController.CurrentBoardPosition == theseusMovementController.CurrentBoardPosition;
-            if (result)
-            {
-                State = GameState.GameOver;
-            }
+            var result = minotaurMovementController.CurrentBoardPosition ==
+                         theseusMovementController.CurrentBoardPosition;
+            if (result) State = GameState.GameOver;
 
             return result;
         }
@@ -163,7 +143,11 @@ namespace TheseusAndMinotaur.Game
 
             return MovementResultType.NotPossible;
         }
-        
+
+        public class GameStateChangedEvent : UnityEvent<GameState>
+        {
+        }
+
 
         private enum MovementResultType
         {

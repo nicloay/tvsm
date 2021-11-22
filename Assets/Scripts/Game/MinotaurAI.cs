@@ -7,9 +7,9 @@ namespace TheseusAndMinotaur.Game
     public class MinotaurAI : MonoBehaviour
     {
         private Board _board;
-        private MovementController _target;
         private MovementController _selfMovementController;
-        
+        private MovementController _target;
+
         public void Initialize(MovementController target, Board board)
         {
             _selfMovementController = GetComponent<MovementController>();
@@ -22,25 +22,13 @@ namespace TheseusAndMinotaur.Game
         public Direction GetDirectionToTheTarget()
         {
             var diff = _target.CurrentBoardPosition - _selfMovementController.CurrentBoardPosition;
-            if (diff.x < 0 && _selfMovementController.CanMoveTo(Direction.Left))
-            {
-                return Direction.Left;
-            }
+            if (diff.x < 0 && _selfMovementController.CanMoveTo(Direction.Left)) return Direction.Left;
 
-            if (diff.x > 0 && _selfMovementController.CanMoveTo(Direction.Right))
-            {
-                return Direction.Right;
-            }
+            if (diff.x > 0 && _selfMovementController.CanMoveTo(Direction.Right)) return Direction.Right;
 
-            if (diff.y < 0 && _selfMovementController.CanMoveTo(Direction.Down))
-            {
-                return Direction.Down;
-            }
+            if (diff.y < 0 && _selfMovementController.CanMoveTo(Direction.Down)) return Direction.Down;
 
-            if (diff.y > 0 && _selfMovementController.CanMoveTo(Direction.Up))
-            {
-                return Direction.Up;
-            }
+            if (diff.y > 0 && _selfMovementController.CanMoveTo(Direction.Up)) return Direction.Up;
 
             return Direction.None;
         }

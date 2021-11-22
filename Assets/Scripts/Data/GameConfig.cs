@@ -19,6 +19,9 @@ namespace TheseusAndMinotaur.Data
         [Tooltip("Seconds per cell speed for Theseus, Minotaur and Undo back movement")] [SerializeField]
         private float movementSpeed = 0.3f;
 
+        [Tooltip("how many times minotaur can step for single steps of player")] [SerializeField]
+        private int minotaurStepsPerTurn = 2;
+
         public static GameConfig Instance
         {
             get
@@ -39,9 +42,6 @@ namespace TheseusAndMinotaur.Data
         public Vector2 CellStep => cellStep;
 
         public float MovementSpeed => movementSpeed;
-
-        [Tooltip("how many times minotaur can step for single steps of player")] [SerializeField]
-        private int minotaurStepsPerTurn = 2;
 
         public int MinotaurStepsPerTurn => minotaurStepsPerTurn;
     }

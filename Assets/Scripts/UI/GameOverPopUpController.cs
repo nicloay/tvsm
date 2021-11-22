@@ -10,8 +10,8 @@ namespace TheseusAndMinotaur.UI
         [SerializeField] private Canvas canvas;
         [SerializeField] private Button restartButton;
         [SerializeField] private Button undoButton;
-        
-        
+
+
         private void Awake()
         {
             gameManager.GameStateChanged.AddListener(GameStateChanged);
@@ -19,25 +19,20 @@ namespace TheseusAndMinotaur.UI
             undoButton.onClick.AddListener(UndoLastTurn);
         }
 
+        private void Update()
+        {
+            if (canvas.enabled)
+                if (Input.GetButtonUp(nameof(InputAction.Restart)))
+                    gameManager.RestartBoard();
+        }
+
         private void GameStateChanged(GameState gameState)
         {
             canvas.enabled = gameState == GameState.GameOver;
         }
 
-        private void Update()
-        {
-            if (canvas.enabled)
-            {
-                if (Input.GetButtonUp(nameof(InputAction.Restart)))
-                {
-                    gameManager.RestartBoard();
-                }
-            }
-        }
-        
         private void UndoLastTurn()
         {
-            
         }
 
         private void RestartBoard()
