@@ -13,13 +13,21 @@ namespace TheseusAndMinotaur.Game
         private Board _board;
         private Vector2Int _currentBoardPosition;
         public Vector2Int CurrentBoardPosition => _currentBoardPosition;
-        
+
+        private Vector2Int _originalBoardPosition;
         
         public void Initialize(Vector2Int startPosition, Board board)
         {
+            _originalBoardPosition = startPosition;
             _board = board;
-            _currentBoardPosition = startPosition;
-            transform.position = startPosition.GetGlobalPosition();
+            ResetToOriginalPosition();
+        }
+
+        public void ResetToOriginalPosition()
+        {
+            _currentBoardPosition = _originalBoardPosition;
+            transform.position = _originalBoardPosition.GetGlobalPosition();
+            
         }
 
         /// <summary>

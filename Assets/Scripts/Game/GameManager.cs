@@ -13,14 +13,33 @@ namespace TheseusAndMinotaur.Game
     [RequireComponent(typeof(InputController))]
     public class GameManager : MonoBehaviour
     {
+        public class GameStateChangedEvent : UnityEvent<GameState>
+        {
+        }
+
         [SerializeField] private MovementController theseusMovementController;
         [SerializeField] private MinotaurAI minotaurAI;
         [SerializeField] private MovementController minotaurMovementController;
 
+        public GameStateChangedEvent GameStateChanged = new();
+        
         public readonly UnityEvent WrongMovement = new();
         private BoardGenerator _boardGenerator;
         private InputController _inputController;
 
+        private GameState _state;
+        private GameState State
+        {
+            get => _state;
+            set
+            {
+                if (value == _state) return;
+                _state = value;
+                GameStateChanged.Invoke(_state);
+            }
+        }
+        
+        
         private void Start()
         {
             _inputController = GetComponent<InputController>();
@@ -30,12 +49,22 @@ namespace TheseusAndMinotaur.Game
             theseusMovementController.Initialize(Vector2Int.one, board);
             minotaurAI.Initialize(theseusMovementController, board);
             minotaurMovementController = minotaurAI.GetComponent<MovementController>();
-            GameLoop();
+            StartGameLoop();
         }
 
-
-        private async Task GameLoop()
+        public void RestartBoard()
         {
+            theseusMovementController.ResetToOriginalPosition();
+            minotaurMovementController.ResetToOriginalPosition();
+            if (State == GameState.GameOver)
+            {
+                StartGameLoop();
+            }
+        }
+
+        private async Task StartGameLoop()
+        {
+            State = GameState.Active;
             do
             {
                 // 1. Listen Input
@@ -49,7 +78,9 @@ namespace TheseusAndMinotaur.Game
                 }
                 else if (key == InputAction.Restart)
                 {
-                    // 2.3 Restart
+                    RestartBoard();
+                    await Task.Yield();
+                    continue;
                 }
                 else
                 {
@@ -60,7 +91,11 @@ namespace TheseusAndMinotaur.Game
                         WrongMovement.Invoke();
                         continue;
                     }
-                    // 2.4.1 check game over // FIXME: add check here
+
+                    if (HandleGameOver())
+                    {
+                        break;
+                    }
                 }
 
 
@@ -75,10 +110,29 @@ namespace TheseusAndMinotaur.Game
                     }
                     else
                     {
-                        // 2.5.1 check game over
+                        if (HandleGameOver())
+                        {
+                            break;
+                        }   
                     }
                 }
             } while (true);
+        }
+        
+        /// <summary>
+        /// Check if Minotaur caught Theseus.
+        /// If yes - raise Event
+        /// </summary>
+        /// <returns>return true if Minotaur caught Theseus, false otherwise</returns>
+        private bool HandleGameOver()
+        {
+            var result = minotaurMovementController.CurrentBoardPosition == theseusMovementController.CurrentBoardPosition;
+            if (result)
+            {
+                State = GameState.GameOver;
+            }
+
+            return result;
         }
 
         private async Task<MovementResultType> HandleDirectionalInput(InputAction inputAction)
@@ -86,7 +140,9 @@ namespace TheseusAndMinotaur.Game
             var direction = inputAction.ToDirection();
             if (theseusMovementController.CanMoveTo(direction))
             {
+                State = GameState.ActiveWithMovementOnScreen;
                 await theseusMovementController.MoveTo(direction);
+                State = GameState.Active;
                 return MovementResultType.Complete;
             }
 
@@ -99,7 +155,9 @@ namespace TheseusAndMinotaur.Game
             var direction = minotaurAI.GetDirectionToTheTarget();
             if (direction != Direction.None)
             {
+                State = GameState.ActiveWithMovementOnScreen;
                 await minotaurMovementController.MoveTo(direction);
+                State = GameState.Active;
                 return MovementResultType.Complete;
             }
 
