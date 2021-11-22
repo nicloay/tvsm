@@ -1,5 +1,6 @@
 using TheseusAndMinotaur.Data;
 using NUnit.Framework;
+using TheseusAndMinotaur.Data.Deserializer;
 using UnityEngine;
 
 namespace TheseusAndMinotaur.Tests

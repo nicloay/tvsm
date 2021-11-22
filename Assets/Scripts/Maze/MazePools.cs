@@ -10,8 +10,8 @@ namespace TheseusAndMinotaur.Maze
     /// </summary>
     public class MazePools : MonoBehaviour
     {
-        [SerializeField] private GameObject wall;
-        [SerializeField] private CellController cell;
+        [SerializeField] private GameObject wallPrefab;
+        [SerializeField] private CellController cellPrefab;
 
         private ObjectPool<GameObject> _wallsPool;
         private ObjectPool<CellController> _cellPool;
@@ -21,13 +21,13 @@ namespace TheseusAndMinotaur.Maze
         private void Awake()
         {
             _wallsPool = new ObjectPool<GameObject>(
-                createFunc: () => Instantiate(wall), 
+                createFunc: () => Instantiate(wallPrefab), 
                 actionOnGet: o => o.SetActive(true),
                 actionOnRelease: o => o.SetActive(false));
             _cellPool = new ObjectPool<CellController>(
                 createFunc: () =>
                 {
-                    var instance = Instantiate(cell);
+                    var instance = Instantiate(cellPrefab);
                     instance.Initialize(_wallsPool);
                     return instance;
                 },

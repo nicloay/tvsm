@@ -1,6 +1,6 @@
 using System;
 
-namespace TheseusAndMinotaur.Data
+namespace TheseusAndMinotaur.Data.Deserializer
 {
     public class ParseMazeException : Exception
     {

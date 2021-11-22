@@ -1,8 +1,7 @@
 using System.IO;
-using TheseusAndMinotaur.Data;
 using UnityEngine;
 
-namespace TheseusAndMinotaur
+namespace TheseusAndMinotaur.Data.Deserializer
 {
     public static partial class BoardDeserializer
     {
@@ -11,19 +10,6 @@ namespace TheseusAndMinotaur
         private const char TheseusStartPoint = 'T';
         private const char MinotaurStartPoint = 'M';
         private const char Exit = 'E';
-
-        /// <summary>
-        /// Source format contains switching line one after another in the following way (first column wall is skipped)
-        ///     ._._._ // which is for Bottom Walls
-        ///     |   |  // for left walls
-        ///     ._._._ // again walls and so on
-        /// </summary>
-        private enum RowType
-        {
-            BottomWall,
-            LeftWall
-        }
-
 
         /// <summary>
         /// Deserialize from streaming asset file
@@ -48,12 +34,12 @@ namespace TheseusAndMinotaur
             var line = reader.ReadLine();
 
             var rawBoard = new RawBoard();
-            int y = 0; // get 2 lines from source file and merge them in to the one
+            var y = 0; // get 2 lines from source file and merge them in to the one
 
             while (line != null)
             {
                 // check top wall from current line
-                for (int x = 1; x < line.Length; x += 2)
+                for (var x = 1; x < line.Length; x += 2)
                 {
                     if (line[x] == HorizontalWallChar)
                     {
@@ -67,34 +53,33 @@ namespace TheseusAndMinotaur
                 {
                     break;
                 }
-                else
-                {
-                    for (int x = 0; x < line.Length; x++)
-                    {
-                        if (line[x] == VerticalWallChar)
-                        {
-                            rawBoard[y, x / 2] |= Direction.Left;
-                        }
 
-                        if (++x < line.Length)
+                for (var x = 0; x < line.Length; x++)
+                {
+                    if (line[x] == VerticalWallChar)
+                    {
+                        rawBoard[y, x / 2] |= Direction.Left;
+                    }
+
+                    if (++x < line.Length)
+                    {
+                        var nextChar = line[x];
+                        var boardPosition = new Vector2Int(x / 2, y);
+                        switch (nextChar)
                         {
-                            var nextChar = line[x];
-                            var boardPosition = new Vector2Int(x / 2, y);
-                            switch (nextChar)
-                            {
-                                case MinotaurStartPoint:
-                                    rawBoard.MinotaurStartPosition.Value = boardPosition;
-                                    break;
-                                case TheseusStartPoint:
-                                    rawBoard.TheseusStartPosition.Value = boardPosition;
-                                    break;
-                                case Exit:
-                                    rawBoard.ExitPosition.Value = boardPosition;
-                                    break;
-                            }
+                            case MinotaurStartPoint:
+                                rawBoard.MinotaurStartPosition.Value = boardPosition;
+                                break;
+                            case TheseusStartPoint:
+                                rawBoard.TheseusStartPosition.Value = boardPosition;
+                                break;
+                            case Exit:
+                                rawBoard.ExitPosition.Value = boardPosition;
+                                break;
                         }
                     }
                 }
+
 
                 y++;
                 line = reader.ReadLine();

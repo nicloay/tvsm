@@ -7,7 +7,7 @@ namespace TheseusAndMinotaur.Data
     /// </summary>
     public class SingleTimeSetValue<T>
     {
-        public bool IsValueSet { get; private set; } = false;
+        public bool IsValueSet { get; private set; }
         private T _value;
 
         public T Value

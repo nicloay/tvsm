@@ -1,12 +1,11 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using TheseusAndMinotaur.Data;
 using Unity.Mathematics;
 using UnityEngine;
 
 // to test RawBoard in the unit tests we need following attribute
 [assembly: InternalsVisibleTo(assemblyName: "TheseusAndMinotaur.Tests")]
-namespace TheseusAndMinotaur
+namespace TheseusAndMinotaur.Data.Deserializer
 {
     public static partial class BoardDeserializer
     {
