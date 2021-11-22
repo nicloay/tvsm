@@ -7,8 +7,8 @@ namespace TheseusAndMinotaur.Tests
     [RequireComponent(typeof(BoardGenerator))]
     public class SpawnTestBoard : MonoBehaviour
     {
-        private bool _spawnFirst = true;
         private BoardGenerator _boardGenerator;
+        private bool _spawnFirst = true;
 
         private void Awake()
         {
@@ -20,6 +20,11 @@ namespace TheseusAndMinotaur.Tests
             Spawn();
         }
 
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Space)) Spawn();
+        }
+
         private void Spawn()
         {
             _boardGenerator.Clear();
@@ -27,14 +32,6 @@ namespace TheseusAndMinotaur.Tests
             var board = BoardDeserializer.DeserializeFromStreamingAssets(relativePath);
             _boardGenerator.SpawnBoard(board);
             _spawnFirst = !_spawnFirst;
-        }
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                Spawn();
-            }
         }
     }
 }

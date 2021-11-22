@@ -8,7 +8,7 @@ namespace TheseusAndMinotaur.Tests
     public class GeneratorTest
     {
         /// <summary>
-        /// Theseus Minotaur Exit column, as this parameter is mandatory for all mazes now
+        ///     Theseus Minotaur Exit column, as this parameter is mandatory for all mazes now
         /// </summary>
         private const string TMEMockColumn = ". \n" +
                                              ".T\n" +
@@ -16,7 +16,7 @@ namespace TheseusAndMinotaur.Tests
                                              ".M\n" +
                                              ". \n" +
                                              ".E\n";
-        
+
         [Test]
         public void TestSingleCellConversion()
         {

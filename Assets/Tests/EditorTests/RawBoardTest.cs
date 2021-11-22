@@ -1,5 +1,5 @@
-using TheseusAndMinotaur.Data;
 using NUnit.Framework;
+using TheseusAndMinotaur.Data;
 using TheseusAndMinotaur.Data.Deserializer;
 using UnityEngine;
 
@@ -7,11 +7,12 @@ namespace TheseusAndMinotaur.Tests
 {
     public class RawBoardTest
     {
-        private static object[] _setValueSource = {
+        private static object[] _setValueSource =
+        {
             new object[] { new Vector2Int(1, 4), Direction.Down },
             new object[] { new Vector2Int(3, 6), Direction.Top },
             new object[] { new Vector2Int(4, 7), Direction.Left },
-            new object[] { new Vector2Int(5, 8), Direction.Right },
+            new object[] { new Vector2Int(5, 8), Direction.Right }
         };
 
         [Test]
@@ -27,9 +28,9 @@ namespace TheseusAndMinotaur.Tests
         public void TestCombine()
         {
             var board = new BoardDeserializer.RawBoard();
-            board.AddWall(3,2, Direction.Left);
-            board.AddWall(3,2, Direction.Right);
-            Assert.That(board[3,2], Is.EqualTo(Direction.Left | Direction.Right));
+            board.AddWall(3, 2, Direction.Left);
+            board.AddWall(3, 2, Direction.Right);
+            Assert.That(board[3, 2], Is.EqualTo(Direction.Left | Direction.Right));
         }
     }
 }
