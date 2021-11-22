@@ -1,8 +1,6 @@
-using System;
 using System.IO;
 using TheseusAndMinotaur.Data;
 using UnityEngine;
-using UnityEngine.Assertions;
 
 namespace TheseusAndMinotaur
 {
@@ -26,6 +24,19 @@ namespace TheseusAndMinotaur
             LeftWall
         }
 
+        
+        /// <summary>
+        /// Deserialize from streaming asset file
+        /// </summary>
+        /// <param name="relativePath">file path, relative to streaming assets folder</param>
+        /// <returns>board</returns>
+        public static Board DeserializeFromStreamingAssets(string relativePath)
+        {
+            var fullPath = Path.Combine(Application.streamingAssetsPath, relativePath);
+            var data = File.ReadAllText(fullPath);
+            return DeserializeFrom(data);
+        }
+        
         public static Board DeserializeFrom(string textData)
         {
 

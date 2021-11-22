@@ -6,47 +6,54 @@ namespace TheseusAndMinotaur.Tests
 {
     public class GeneratorTest
     {
+        /// <summary>
+        /// Theseus Minotaur Exit column, as this parameter is mandatory for all mazes now
+        /// </summary>
+        private const string TMEMockColumn = ". \n" +
+                                             ".T\n" +
+                                             ". \n" +
+                                             ".M\n" +
+                                             ". \n" +
+                                             ".E\n";
+        
         [Test]
         public void TestSingleCellConversion()
         {
-            var boardSrc = 
+            var boardSrc =
+                TMEMockColumn +
                 "._\n" +
                 "| ";
+
             var board = BoardDeserializer.DeserializeFrom(boardSrc);
-            Assert.That(board.Map, Is.EquivalentTo(new[,]
-            {
-                {Direction.Left | Direction.Top} 
-            }));
+
+            Assert.That(board[0, 0], Is.EqualTo(Direction.Left | Direction.Top));
         }
-        
+
         [Test]
         public void TestVerticalLines()
         {
-            var boardSrc = 
+            var boardSrc =
+                TMEMockColumn +
                 "._\n" +
                 "  \n" +
                 "._\n";
-                
+
             var board = BoardDeserializer.DeserializeFrom(boardSrc);
-            Assert.That(board.Map, Is.EquivalentTo(new[,]
-            {
-                { Direction.Top}, // as last line miss horizontal wall it must be here
-                { Direction.Vertical }  
-            }));
+            Assert.That(board.GetWallsAtRow(1), Is.EquivalentTo(new[] { Direction.Vertical }));
+            Assert.That(board.GetWallsAtRow(0), Is.EquivalentTo(new[] { Direction.Top }));
         }
-        
+
         [Test]
         public void TestHorizontalLines()
         {
             var boardSrc =
+                TMEMockColumn +
                 "._.\n" +
                 "| |\n";
 
             var board = BoardDeserializer.DeserializeFrom(boardSrc);
-            Assert.That(board.Map, Is.EquivalentTo(new[,]
-            {
-                { Direction.Horizontal | Direction.Top, Direction.Left},
-            }));
+            Assert.That(board.GetWallsAtRow(0),
+                Is.EquivalentTo(new[] { Direction.Horizontal | Direction.Top, Direction.Left }));
         }
 
         [Test]
@@ -54,41 +61,43 @@ namespace TheseusAndMinotaur.Tests
         {
             var boardSrc =
                 ". . . .\n" +
-                ". . . .\n" +
+                ".T. . .\n" +
                 ". ._. .\n" +
-                ". | | .\n" +
+                ". |M| .\n" +
                 ". ._. .\n" +
-                ". . . .\n";
+                ". . .E.\n";
 
             var board = BoardDeserializer.DeserializeFrom(boardSrc);
-            Assert.That(board.Map, Is.EquivalentTo(new[,]
-            {
-                { Direction.None, Direction.Top, Direction.None},
-                { Direction.Right, Direction.All, Direction.Left},
-                { Direction.None , Direction.Down, Direction.None}
-            }));
+            Assert.That(board.GetWallsAtRow(0),
+                Is.EquivalentTo(new[] { Direction.None, Direction.Top, Direction.None }));
+            Assert.That(board.GetWallsAtRow(1),
+                Is.EquivalentTo(new[] { Direction.Right, Direction.All, Direction.Left }));
+            Assert.That(board.GetWallsAtRow(2),
+                Is.EquivalentTo(new[] { Direction.None, Direction.Down, Direction.None }));
         }
-        
+
         [Test]
         public void TestMissedSymbols()
         {
             var boardSrc =
+                TMEMockColumn +
                 ". \n" +
                 "\n" +
                 ". ._.\n" +
                 ". | | .\n" +
                 ". ._\n";
 
-                var board = BoardDeserializer.DeserializeFrom(boardSrc);
-            Assert.That(board.Map, Is.EquivalentTo(new[,]
-            {
-                { Direction.None, Direction.Top, Direction.None},
-                { Direction.Right, Direction.All, Direction.Left},
-                { Direction.None , Direction.Down, Direction.None}
-            }));
+            var board = BoardDeserializer.DeserializeFrom(boardSrc);
+
+            Assert.That(board.GetWallsAtRow(0),
+                Is.EquivalentTo(new[] { Direction.None, Direction.Top, Direction.None }));
+            Assert.That(board.GetWallsAtRow(1),
+                Is.EquivalentTo(new[] { Direction.Right, Direction.All, Direction.Left }));
+            Assert.That(board.GetWallsAtRow(2),
+                Is.EquivalentTo(new[] { Direction.None, Direction.Down, Direction.None }));
         }
-        
-        
+
+
         [Test]
         public void TestMinotaurTheseusExitPosition()
         {
@@ -105,7 +114,7 @@ namespace TheseusAndMinotaur.Tests
             Assert.That(board.TheseusStartPosition, Is.EqualTo(new Vector2Int(1, 1)));
             Assert.That(board.Exit, Is.EqualTo(new Vector2Int(1, 2)));
         }
-        
+
         [Test]
         public void TestMinotaurTheseusExitPosition2()
         {
@@ -128,7 +137,7 @@ namespace TheseusAndMinotaur.Tests
         {
             Assert.Throws<ParseMazeException>(() => BoardDeserializer.DeserializeFrom(null));
         }
-        
+
         [Test]
         public void TestNoExitException()
         {

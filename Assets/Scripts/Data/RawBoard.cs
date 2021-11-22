@@ -14,9 +14,9 @@ namespace TheseusAndMinotaur.Data
         private readonly Dictionary<Vector2Int, Direction> _directions = new();
         private int _maxX = int.MinValue; // max x of assigned values
         private int _maxY = int.MinValue; // max y of assigned values
-        public readonly SingleTimeSetValue<Vector2Int> TheseusStartPosition = new SingleTimeSetValue<Vector2Int>();
-        public readonly SingleTimeSetValue<Vector2Int> MinotaurStartPosition = new SingleTimeSetValue<Vector2Int>();
-        public readonly SingleTimeSetValue<Vector2Int> ExitPosition = new SingleTimeSetValue<Vector2Int>();
+        public readonly SingleTimeSetValue<Vector2Int> TheseusStartPosition = new();
+        public readonly SingleTimeSetValue<Vector2Int> MinotaurStartPosition = new();
+        public readonly SingleTimeSetValue<Vector2Int> ExitPosition = new();
 
 
         public Direction this[Vector2Int position]
