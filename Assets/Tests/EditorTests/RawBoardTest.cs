@@ -10,7 +10,7 @@ namespace TheseusAndMinotaur.Tests
         private static object[] _setValueSource =
         {
             new object[] { new Vector2Int(1, 4), Direction.Down },
-            new object[] { new Vector2Int(3, 6), Direction.Top },
+            new object[] { new Vector2Int(3, 6), Direction.Up },
             new object[] { new Vector2Int(4, 7), Direction.Left },
             new object[] { new Vector2Int(5, 8), Direction.Right }
         };

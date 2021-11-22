@@ -39,7 +39,7 @@ namespace TheseusAndMinotaur.Data.Deserializer
                 // check top wall from current line
                 for (var x = 1; x < line.Length; x += 2)
                     if (line[x] == HorizontalWallChar)
-                        rawBoard[y, x / 2] |= Direction.Top;
+                        rawBoard[y, x / 2] |= Direction.Up;
 
                 // Check side walls on next line (but it can be null for the last line
                 line = reader.ReadLine();

@@ -11,7 +11,7 @@ namespace TheseusAndMinotaur.Maze
         ///     We spawn walls only on these directions (if we will spawn on all possible, some walls will be spawned twice by 2
         ///     neighbour cells)
         /// </summary>
-        private static readonly Direction[] SpawnDirections = { Direction.Left, Direction.Top };
+        private static readonly Direction[] SpawnDirections = { Direction.Left, Direction.Up };
 
         [SerializeField] private Transform top;
         [SerializeField] private Transform left;
@@ -31,7 +31,7 @@ namespace TheseusAndMinotaur.Maze
             _transformByDirection = new Dictionary<Direction, Transform>
             {
                 { Direction.Left, left },
-                { Direction.Top, top }
+                { Direction.Up, top }
             };
         }
 

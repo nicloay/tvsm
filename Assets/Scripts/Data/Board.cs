@@ -27,6 +27,12 @@ namespace TheseusAndMinotaur.Data
         /// </summary>
         public Direction this[int y, int x] => _map[y, x];
 
+        /// <summary>
+        ///     Get wall directions at specified position
+        ///     pivot point: BottomLeft
+        /// </summary>
+        public Direction this[Vector2Int boardPosition] => this[boardPosition.y, boardPosition.x];
+
         public int Height => _map.GetLength(0);
         public int Width => _map.GetLength(1);
 

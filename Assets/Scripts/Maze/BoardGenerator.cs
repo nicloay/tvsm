@@ -10,8 +10,6 @@ namespace TheseusAndMinotaur.Maze
     [RequireComponent(typeof(MazePools))]
     public class BoardGenerator : MonoBehaviour
     {
-        [SerializeField] private Vector2 cellStep;
-
         private MazePools _mazePools;
 
         private void Awake()
@@ -24,6 +22,7 @@ namespace TheseusAndMinotaur.Maze
         /// </summary>
         public void SpawnBoard(Board board)
         {
+            var cellStep = GameConfig.Instance.CellStep;
             var cellPosition = Vector2.zero;
             for (var y = 0; y < board.Height; y++)
             {
