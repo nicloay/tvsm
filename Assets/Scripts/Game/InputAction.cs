@@ -8,6 +8,7 @@ namespace TheseusAndMinotaur.Game
     /// </summary>
     public enum InputAction
     {
+        None,
         MoveLeft,
         MoveRight,
         MoveUp,

@@ -3,7 +3,8 @@ namespace TheseusAndMinotaur.Game
     public enum GameState
     {
         None,
-        Active,
+        NewGameStarted,
+        ListenUserInput,
         ActiveWithMovementOnScreen,
         GameOver,
         Victory

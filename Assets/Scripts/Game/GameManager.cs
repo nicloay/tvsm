@@ -10,17 +10,17 @@ namespace TheseusAndMinotaur.Game
     /// <summary>
     ///     Main manager responsible to handle the game
     /// </summary>
-    [RequireComponent(typeof(InputController))]
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private MovementController theseusMovementController;
         [SerializeField] private MinotaurAI minotaurAI;
         [SerializeField] private MovementController minotaurMovementController;
 
+
+        public Vector2 BoardWorldSize => _currentBoard.GetBoardWorldSize();
         public readonly UnityEvent WrongMovement = new();
         private BoardGenerator _boardGenerator;
-        private InputController _inputController;
-
+        private Board _currentBoard;
         private GameState _state;
 
         public GameStateChangedEvent GameStateChanged = new();
@@ -39,12 +39,11 @@ namespace TheseusAndMinotaur.Game
 
         private void Start()
         {
-            _inputController = GetComponent<InputController>();
             _boardGenerator = FindObjectOfType<BoardGenerator>();
-            var board = BoardDeserializer.DeserializeFromStreamingAssets("Test/test3.txt");
-            _boardGenerator.SpawnBoard(board);
-            theseusMovementController.Initialize(Vector2Int.one, board);
-            minotaurAI.Initialize(theseusMovementController, board);
+            _currentBoard = BoardDeserializer.DeserializeFromStreamingAssets("Test/test4.txt");
+            _boardGenerator.SpawnBoard(_currentBoard);
+            theseusMovementController.Initialize(_currentBoard.TheseusStartPosition, _currentBoard);
+            minotaurAI.Initialize(theseusMovementController, _currentBoard);
             minotaurMovementController = minotaurAI.GetComponent<MovementController>();
             StartGameLoop();
         }
@@ -56,13 +55,22 @@ namespace TheseusAndMinotaur.Game
             if (State == GameState.GameOver) StartGameLoop();
         }
 
+        private InputAction requestedAction;
+        
         private async Task StartGameLoop()
         {
-            State = GameState.Active;
+            State = GameState.NewGameStarted;
+            State = GameState.ListenUserInput;
             do
             {
+                requestedAction = InputAction.None;
                 // 1. Listen Input
-                var key = await _inputController.GetInput();
+                while (requestedAction == InputAction.None)
+                {
+                    await Task.Yield();
+                }
+                
+                var key = requestedAction;
                 // 2. Handle Input
 
                 if (key == InputAction.Undo)
@@ -101,6 +109,17 @@ namespace TheseusAndMinotaur.Game
             } while (true);
         }
 
+        public void RequestAction(InputAction inputAction)
+        {
+            if (State != GameState.ListenUserInput)
+            {
+                Debug.LogError($"you can only request input action in {GameState.ListenUserInput} state");
+                return;
+            }
+
+            requestedAction = inputAction;
+        }
+        
         /// <summary>
         ///     Check if Minotaur caught Theseus.
         ///     If yes - raise Event
@@ -122,7 +141,7 @@ namespace TheseusAndMinotaur.Game
             {
                 State = GameState.ActiveWithMovementOnScreen;
                 await theseusMovementController.MoveTo(direction);
-                State = GameState.Active;
+                State = GameState.ListenUserInput;
                 return MovementResultType.Complete;
             }
 
@@ -137,7 +156,7 @@ namespace TheseusAndMinotaur.Game
             {
                 State = GameState.ActiveWithMovementOnScreen;
                 await minotaurMovementController.MoveTo(direction);
-                State = GameState.Active;
+                State = GameState.ListenUserInput;
                 return MovementResultType.Complete;
             }
 

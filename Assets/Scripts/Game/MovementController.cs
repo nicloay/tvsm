@@ -25,7 +25,7 @@ namespace TheseusAndMinotaur.Game
         public void ResetToOriginalPosition()
         {
             CurrentBoardPosition = _originalBoardPosition;
-            transform.position = _originalBoardPosition.GetGlobalPosition();
+            transform.position = _originalBoardPosition.GetWorldPosition();
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace TheseusAndMinotaur.Game
             Assert.IsTrue(direction.IsBaseDirection());
             var currentPosition = transform.position;
             var targetBoardPoisition = CurrentBoardPosition.GetNeighbour(direction);
-            var targetPosition = targetBoardPoisition.GetGlobalPosition();
+            var targetPosition = targetBoardPoisition.GetWorldPosition();
             var time = GameConfig.Instance.MovementSpeed;
             var currentTime = 0f;
             do
