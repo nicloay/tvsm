@@ -38,7 +38,7 @@ namespace TheseusAndMinotaur.Maze
         /// </summary>
         public void Clear()
         {
-            _mazePools.Clear();
+            _mazePools?.Clear();
         }
     }
 }

@@ -51,7 +51,7 @@ namespace TheseusAndMinotaur.Maze
         /// </summary>
         public void Clear()
         {
-            _spawnedCells.ForEach(controller => _cellPool.Release(cell));
+            _spawnedCells.ForEach(cellController => _cellPool.Release(cellController));
             _spawnedCells.Clear();
         }
     }

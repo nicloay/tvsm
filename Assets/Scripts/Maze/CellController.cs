@@ -53,7 +53,7 @@ namespace TheseusAndMinotaur.Maze
         /// </summary>
         public void Release()
         {
-            _spawnedWalls.ForEach(o => _wallPool.Release(o));
+            _spawnedWalls.ForEach(wallObject => _wallPool.Release(wallObject));
             _spawnedWalls.Clear();
         }
     }
