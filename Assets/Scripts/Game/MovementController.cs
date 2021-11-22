@@ -24,7 +24,10 @@ namespace TheseusAndMinotaur.Game
         }
 
         /// <summary>
-        /// Should we use cancellation token and handle errors here in future? 
+        /// Move entity to target board position and update internal state for board position
+        ///
+        /// 
+        ///   FutureTask: Should we use cancellation token and handle errors 
         /// </summary>
         /// <param name="direction"></param>
         public async Task MoveTo(Direction direction)

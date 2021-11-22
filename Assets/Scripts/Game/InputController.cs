@@ -1,37 +1,26 @@
+using System;
 using System.Threading.Tasks;
 using UnityEngine;
 
 namespace TheseusAndMinotaur.Game
 {
+    /// <summary>
+    /// Listen user input defined at <see cref="InputActions"/> with the same name as in project settings in Input section
+    /// </summary>
     public class InputController : MonoBehaviour
     {
+        private static readonly InputAction[] InputActions = (InputAction[])Enum.GetValues(typeof(InputAction));
+
         public async Task<InputAction> GetInput()
         {
             do
             {
-                if (Input.GetButton(nameof(InputAction.MoveDown)))
+                foreach (var inputAction in InputActions)
                 {
-                    return InputAction.MoveDown;
-                }
-                else if (Input.GetButton(nameof(InputAction.MoveLeft)))
-                {
-                    return InputAction.MoveLeft;
-                }
-                else if (Input.GetButton(nameof(InputAction.MoveRight)))
-                {
-                    return InputAction.MoveRight;
-                }
-                else if (Input.GetButton(nameof(InputAction.MoveUp)))
-                {
-                    return InputAction.MoveUp;
-                }
-                else if (Input.GetButtonDown(nameof(InputAction.Undo)))
-                {
-                    return InputAction.Undo;
-                }
-                else if (Input.GetButtonDown(nameof(InputAction.Restart)))
-                {
-                    return InputAction.Restart;
+                    if (Input.GetButton(inputAction.ToString()))
+                    {
+                        return inputAction;
+                    }
                 }
 
                 await Task.Yield();
