@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using TheseusAndMinotaur.Data;
 using TheseusAndMinotaur.Data.Deserializer;
 using TheseusAndMinotaur.Maze;
 using UnityEngine;
@@ -13,6 +14,9 @@ namespace TheseusAndMinotaur.Game
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private MovementController theseusMovementController;
+        [SerializeField] private MinotaurAI minotaurAI;
+        [SerializeField] private MovementController minotaurMovementController;
+
         public readonly UnityEvent WrongMovement = new();
         private BoardGenerator _boardGenerator;
         private InputController _inputController;
@@ -24,6 +28,8 @@ namespace TheseusAndMinotaur.Game
             var board = BoardDeserializer.DeserializeFromStreamingAssets("Test/test3.txt");
             _boardGenerator.SpawnBoard(board);
             theseusMovementController.Initialize(Vector2Int.one, board);
+            minotaurAI.Initialize(theseusMovementController, board);
+            minotaurMovementController = minotaurAI.GetComponent<MovementController>();
             GameLoop();
         }
 
@@ -47,46 +53,64 @@ namespace TheseusAndMinotaur.Game
                 }
                 else
                 {
+                    // 2.4 move Theseus
                     var movementResult = await HandleDirectionalInput(key);
-                    if (movementResult == InputResult.WrongAction)
+                    if (movementResult == MovementResultType.NotPossible)
                     {
                         WrongMovement.Invoke();
                         continue;
                     }
+                    // 2.4.1 check game over // FIXME: add check here
                 }
 
-                // 2.4 move Theseus
-
-                // 2.4.1 check game over
 
                 // 2.5 move Minotaur
+                for (int i = 0; i < GameConfig.Instance.MinotaurStepsPerTurn; i++)
+                {
 
-                // 2.5.1 check game over
-
-                // 2.6 move Minotaur
-
-                // 2.6.1 check game over
+                    var movementResult = await HandleMinotaurMovement();
+                    if (movementResult == MovementResultType.NotPossible)
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        // 2.5.1 check game over
+                    }
+                }
             } while (true);
         }
 
-        private async Task<InputResult> HandleDirectionalInput(InputAction inputAction)
+        private async Task<MovementResultType> HandleDirectionalInput(InputAction inputAction)
         {
             var direction = inputAction.ToDirection();
             if (theseusMovementController.CanMoveTo(direction))
             {
                 await theseusMovementController.MoveTo(direction);
-                return InputResult.Complete;
+                return MovementResultType.Complete;
             }
 
             await Task.Yield();
-            return InputResult.WrongAction;
+            return MovementResultType.NotPossible;
         }
 
+        private async Task<MovementResultType> HandleMinotaurMovement()
+        {
+            var direction = minotaurAI.GetDirectionToTheTarget();
+            if (direction != Direction.None)
+            {
+                await minotaurMovementController.MoveTo(direction);
+                return MovementResultType.Complete;
+            }
 
-        private enum InputResult
+            return MovementResultType.NotPossible;
+        }
+        
+
+        private enum MovementResultType
         {
             Complete,
-            WrongAction
+            NotPossible
         }
     }
 }

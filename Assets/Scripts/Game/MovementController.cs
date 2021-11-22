@@ -12,7 +12,9 @@ namespace TheseusAndMinotaur.Game
     {
         private Board _board;
         private Vector2Int _currentBoardPosition;
-
+        public Vector2Int CurrentBoardPosition => _currentBoardPosition;
+        
+        
         public void Initialize(Vector2Int startPosition, Board board)
         {
             _board = board;
