@@ -91,19 +91,24 @@ namespace TheseusAndMinotaur.Game
 
                 var key = requestedAction;
                 
-
-
                 // 2.4 move Theseus
-                
-                var direction = key.ToDirection();
-                if (!theseusMovementController.CanMoveTo(direction))
+                if (requestedAction != InputAction.Wait)
                 {
-                    WrongMovement.Invoke();
-                    continue;
+                    var direction = key.ToDirection();
+                    if (!theseusMovementController.CanMoveTo(direction))
+                    {
+                        WrongMovement.Invoke();
+                        continue;
+                    }
+                    
+                    yield return StartCoroutine(HandleDirectionalInput(direction));
+                    
+                    if (HandleGameOver()) break;
                 }
-                yield return StartCoroutine(HandleDirectionalInput(direction));
-                
-                if (HandleGameOver()) break;
+                else
+                {
+                    // if it's Wait, we skip the turn and let Minotaur make the step after us
+                }
 
                 // 2.5 move Minotaur
                 for (var i = 0; i < GameConfig.Instance.MinotaurStepsPerTurn; i++)
@@ -124,9 +129,7 @@ namespace TheseusAndMinotaur.Game
                         break;  
                     }
                 }
-            }while (!terminateMainLoop);
-
-            State = GameState.None;
+            } while (!terminateMainLoop);
         }
 
         public void RequestAction(InputAction inputAction)

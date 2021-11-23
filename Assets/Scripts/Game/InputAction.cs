@@ -14,7 +14,8 @@ namespace TheseusAndMinotaur.Game
         MoveUp,
         MoveDown,
         Undo,
-        Restart
+        Restart,
+        Wait
     }
 
     public static class InputActionUtil
