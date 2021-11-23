@@ -1,23 +1,28 @@
 using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace TheseusAndMinotaur.Data
 {
     /// <summary>
     ///     Data class which represent original board configuration.
     /// </summary>
-    public class Board
+    public class BoardConfig
     {
-        private readonly Direction[,] _map;
+        internal readonly Direction[,] _wallMap;
         public readonly Vector2Int Exit;
         public readonly Vector2Int MinotaurStartPosition;
         public readonly Vector2Int TheseusStartPosition;
 
-        public Board(Direction[,] map, Vector2Int theseusStartPosition, Vector2Int minotaurStartPosition,
+        public BoardConfig(Direction[,] wallMap, Vector2Int theseusStartPosition, Vector2Int minotaurStartPosition,
             Vector2Int exit)
         {
+            Assert.IsTrue(theseusStartPosition != minotaurStartPosition, "theseus and minotaur position must be different");
+            Assert.IsTrue(theseusStartPosition != exit, "theseus and exit position must be different");
+            Assert.IsTrue(minotaurStartPosition != exit, "minotaur and exit position must be different");
+            
             TheseusStartPosition = theseusStartPosition;
             MinotaurStartPosition = minotaurStartPosition;
-            _map = map;
+            _wallMap = wallMap;
             Exit = exit;
         }
 
@@ -25,7 +30,7 @@ namespace TheseusAndMinotaur.Data
         ///     Get wall directions at specified position
         ///     pivot point: BottomLeft
         /// </summary>
-        public Direction this[int y, int x] => _map[y, x];
+        public Direction this[int y, int x] => _wallMap[y, x];
 
         /// <summary>
         ///     Get wall directions at specified position
@@ -33,13 +38,13 @@ namespace TheseusAndMinotaur.Data
         /// </summary>
         public Direction this[Vector2Int boardPosition] => this[boardPosition.y, boardPosition.x];
 
-        public int Height => _map.GetLength(0);
-        public int Width => _map.GetLength(1);
+        public int Height => _wallMap.GetLength(0);
+        public int Width => _wallMap.GetLength(1);
 
         public Direction[] GetWallsAtRow(int rowId)
         {
             var result = new Direction[Width];
-            for (var x = 0; x < Width; x++) result[x] = _map[rowId, x];
+            for (var x = 0; x < Width; x++) result[x] = _wallMap[rowId, x];
             return result;
         }
     }

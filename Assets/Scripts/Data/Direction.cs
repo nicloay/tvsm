@@ -76,10 +76,18 @@ namespace TheseusAndMinotaur.Data
             return direction.HasDirection(Direction.Down);
         }
 
+        /// <summary>
+        /// Return true if there is wall in target direction
+        /// </summary>
         public static bool HasWallAt(this Direction direction, Direction target)
         {
             return direction.HasDirection(target);
         }
+
+        /// <summary>
+        /// return true if the pass is clear and there is no walls in target direction
+        /// </summary>
+        public static bool HasWayTo(this Direction direction, Direction target) => !direction.HasWallAt(target);
 
         /// <summary>
         ///     Return list of base direction (Left, Right, Top, Down)

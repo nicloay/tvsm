@@ -14,11 +14,11 @@ namespace TheseusAndMinotaur.Game
     public class GameManager : MonoBehaviour
     {
         [SerializeField] private MovementController theseusMovementController;
-        [SerializeField] private MinotaurAI minotaurAI;
         [SerializeField] private MovementController minotaurMovementController;
         public readonly UnityEvent WrongMovement = new();
         private BoardGenerator _boardGenerator;
-        private Board _currentBoard;
+        private BoardConfig _currentBoardConfig;
+        private BoardGame _boardGame;
         private GameState _state;
 
         public GameStateChangedEvent GameStateChanged = new();
@@ -26,7 +26,7 @@ namespace TheseusAndMinotaur.Game
         private InputAction requestedAction;
 
 
-        public Vector2 BoardWorldSize => _currentBoard.GetBoardWorldSize();
+        public Vector2 BoardWorldSize => _currentBoardConfig.GetBoardWorldSize();
 
         private GameState State
         {
@@ -51,21 +51,20 @@ namespace TheseusAndMinotaur.Game
 
         private void StartBoard(string boardPath)
         {
-            _currentBoard = BoardDeserializer.DeserializeFromStreamingAssets(boardPath);
-            _boardGenerator.SpawnBoard(_currentBoard);
-            theseusMovementController.Initialize(_currentBoard.TheseusStartPosition, _currentBoard);
-            minotaurAI.Initialize(theseusMovementController, _currentBoard);
-            minotaurMovementController = minotaurAI.GetComponent<MovementController>();
-
+            _currentBoardConfig = BoardDeserializer.DeserializeFromStreamingAssets(boardPath);
+            _boardGame = new BoardGame(_currentBoardConfig);
+            _boardGenerator.SpawnBoard(_currentBoardConfig);
+            theseusMovementController.Initialize(_currentBoardConfig.TheseusStartPosition, _currentBoardConfig);
+            minotaurMovementController.Initialize(_currentBoardConfig.MinotaurStartPosition, _currentBoardConfig);
             StartCoroutine(StartGameLoop());
         }
 
         public void RestartBoard()
         {
             StopAllCoroutines();
+            _boardGame.Reset();
             State = GameState.TerminatingCurrentLoop;
-
-
+            
             theseusMovementController.ResetToOriginalPosition();
             minotaurMovementController.ResetToOriginalPosition();
             StartCoroutine(StartGameLoop());
@@ -74,52 +73,52 @@ namespace TheseusAndMinotaur.Game
         private IEnumerator StartGameLoop()
         {
             State = GameState.NewGameStarted;
-
-
-            bool terminateMainLoop;
             do
             {
-                terminateMainLoop = false;
-
                 // Listen Input
                 State = GameState.ListenUserInput;
                 requestedAction = InputAction.None;
                 while (requestedAction == InputAction.None) yield return null;
 
+                State = GameState.HandleInput;
                 var key = requestedAction;
 
-                // 2.4 move Theseus
-                if (requestedAction != InputAction.Wait)
+                var direction = key.ToDirection();
+                if (!_boardGame.IsMoveAvailableForTheseus(direction))
                 {
-                    var direction = key.ToDirection();
-                    if (!theseusMovementController.CanMoveTo(direction))
-                    {
-                        WrongMovement.Invoke();
-                        continue;
-                    }
-
-                    yield return StartCoroutine(HandleDirectionalInput(direction));
-
-                    if (HandleGameOver()) break;
+                    WrongMovement.Invoke();
+                    continue;
                 }
 
-                // 2.5 move Minotaur
-                for (var i = 0; i < GameConfig.Instance.MinotaurStepsPerTurn; i++)
+                var movementResult = _boardGame.MakeMovement(direction);
+
+                if (movementResult.TheseusMove != Direction.None)
                 {
-                    var minotaurDirection = minotaurAI.GetDirectionToTheTarget();
+                    yield return StartCoroutine(HandleDirectionalInput(movementResult.TheseusMove));
+                }
 
-
-                    if (minotaurDirection == Direction.None) break; // break this loop
-                    yield return StartCoroutine(HandleMinotaurMovement(minotaurDirection));
-
-
-                    if (HandleGameOver())
+                for (int i = 0; i < 2; i++)
+                {
+                    if (movementResult.Moves[i + 1] != Direction.None)
                     {
-                        terminateMainLoop = true;
-                        break;
+                        yield return StartCoroutine(HandleMinotaurMovement(movementResult.Moves[i + 1]));
                     }
                 }
-            } while (!terminateMainLoop);
+
+                if (movementResult.BoardStatus == BoardStatus.Victory)
+                {
+                    State = GameState.Victory;
+                    break;
+                }
+                else if (movementResult.BoardStatus == BoardStatus.GameOver)
+                {
+                    State = GameState.GameOver;
+                }
+                else
+                {
+                    State = GameState.Active;
+                }
+            } while (State == GameState.Active);
         }
 
         public void RequestAction(InputAction inputAction)
@@ -162,14 +161,14 @@ namespace TheseusAndMinotaur.Game
         {
             Assert.IsTrue(theseusMovementController.CanMoveTo(direction));
 
-            State = GameState.ActiveWithMovementOnScreen;
+            State = GameState.Active;
             yield return StartCoroutine(theseusMovementController.MoveTo(direction));
             State = GameState.ListenUserInput;
         }
 
         private IEnumerator HandleMinotaurMovement(Direction direction)
         {
-            State = GameState.ActiveWithMovementOnScreen;
+            State = GameState.Active;
             yield return StartCoroutine(minotaurMovementController.MoveTo(direction));
             State = GameState.ListenUserInput;
         }

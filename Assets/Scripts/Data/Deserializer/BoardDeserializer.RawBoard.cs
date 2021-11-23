@@ -57,7 +57,7 @@ namespace TheseusAndMinotaur.Data.Deserializer
             /// </summary>
             /// <returns></returns>
             /// <exception cref="ParseMazeException"></exception>
-            public Board ConvertToBoard()
+            public BoardConfig ConvertToBoard()
             {
                 if (_maxX < 0 && _maxY < 0) throw new ParseMazeException("maze contains no walls");
 
@@ -82,7 +82,7 @@ namespace TheseusAndMinotaur.Data.Deserializer
                     if (nextY <= _maxY && map[y, x].HasTop()) map[nextY, x] |= Direction.Down;
                 }
 
-                return new Board(map,
+                return new BoardConfig(map,
                     ConvertToBoardPosition(TheseusStartPosition.Value),
                     ConvertToBoardPosition(MinotaurStartPosition.Value),
                     ConvertToBoardPosition(ExitPosition.Value));

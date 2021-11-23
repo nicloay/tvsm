@@ -10,12 +10,12 @@ namespace TheseusAndMinotaur.Game
     /// </summary>
     public class MovementController : MonoBehaviour
     {
-        private Board _board;
+        private BoardConfig _board;
 
         private Vector2Int _originalBoardPosition;
         public Vector2Int CurrentBoardPosition { get; private set; }
 
-        public void Initialize(Vector2Int startPosition, Board board)
+        public void Initialize(Vector2Int startPosition, BoardConfig board)
         {
             _originalBoardPosition = startPosition;
             _board = board;

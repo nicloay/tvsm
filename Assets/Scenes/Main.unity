@@ -1283,7 +1283,6 @@ GameObject:
   - component: {fileID: 608452767}
   - component: {fileID: 608452766}
   - component: {fileID: 608452765}
-  - component: {fileID: 608452764}
   m_Layer: 0
   m_Name: Minotaur
   m_TagString: Untagged
@@ -1291,18 +1290,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &608452764
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 608452763}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 265958784aaa4b08bb04288681f018ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &608452765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2753,7 +2740,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 857b2b3f445a448e82391c7566ea606a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  action: 2
+  action: 7
 --- !u!114 &1267594527
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3632,7 +3619,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   theseusMovementController: {fileID: 1785151015}
-  minotaurAI: {fileID: 608452764}
   minotaurMovementController: {fileID: 608452765}
 --- !u!1 &1582461241
 GameObject:
