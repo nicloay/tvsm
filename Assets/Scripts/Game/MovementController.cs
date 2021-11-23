@@ -1,6 +1,4 @@
 using System.Collections;
-using System.Threading;
-using System.Threading.Tasks;
 using TheseusAndMinotaur.Data;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -49,7 +47,7 @@ namespace TheseusAndMinotaur.Game
                 currentTime += Time.unscaledDeltaTime;
                 transform.position = Vector3.Lerp(currentPosition, targetPosition, currentTime / time);
             } while (currentTime < time);
-            
+
             transform.position = targetPosition;
             CurrentBoardPosition = targetBoardPoisition;
         }

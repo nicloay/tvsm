@@ -16,15 +16,17 @@ namespace TheseusAndMinotaur.Game
         [SerializeField] private MovementController theseusMovementController;
         [SerializeField] private MinotaurAI minotaurAI;
         [SerializeField] private MovementController minotaurMovementController;
-
-
-        public Vector2 BoardWorldSize => _currentBoard.GetBoardWorldSize();
         public readonly UnityEvent WrongMovement = new();
         private BoardGenerator _boardGenerator;
         private Board _currentBoard;
         private GameState _state;
 
         public GameStateChangedEvent GameStateChanged = new();
+
+        private InputAction requestedAction;
+
+
+        public Vector2 BoardWorldSize => _currentBoard.GetBoardWorldSize();
 
         private GameState State
         {
@@ -54,7 +56,7 @@ namespace TheseusAndMinotaur.Game
             theseusMovementController.Initialize(_currentBoard.TheseusStartPosition, _currentBoard);
             minotaurAI.Initialize(theseusMovementController, _currentBoard);
             minotaurMovementController = minotaurAI.GetComponent<MovementController>();
-            
+
             StartCoroutine(StartGameLoop());
         }
 
@@ -62,35 +64,30 @@ namespace TheseusAndMinotaur.Game
         {
             StopAllCoroutines();
             State = GameState.TerminatingCurrentLoop;
-               
+
 
             theseusMovementController.ResetToOriginalPosition();
             minotaurMovementController.ResetToOriginalPosition();
             StartCoroutine(StartGameLoop());
         }
 
-        private InputAction requestedAction;
-
         private IEnumerator StartGameLoop()
         {
             State = GameState.NewGameStarted;
-            
+
 
             bool terminateMainLoop;
             do
             {
                 terminateMainLoop = false;
-                
+
                 // Listen Input
                 State = GameState.ListenUserInput;
                 requestedAction = InputAction.None;
-                while (requestedAction == InputAction.None)
-                {
-                    yield return null;
-                }
+                while (requestedAction == InputAction.None) yield return null;
 
                 var key = requestedAction;
-                
+
                 // 2.4 move Theseus
                 if (requestedAction != InputAction.Wait)
                 {
@@ -100,14 +97,10 @@ namespace TheseusAndMinotaur.Game
                         WrongMovement.Invoke();
                         continue;
                     }
-                    
+
                     yield return StartCoroutine(HandleDirectionalInput(direction));
-                    
+
                     if (HandleGameOver()) break;
-                }
-                else
-                {
-                    // if it's Wait, we skip the turn and let Minotaur make the step after us
                 }
 
                 // 2.5 move Minotaur
@@ -116,17 +109,14 @@ namespace TheseusAndMinotaur.Game
                     var minotaurDirection = minotaurAI.GetDirectionToTheTarget();
 
 
-                    if (minotaurDirection == Direction.None)
-                    {
-                        break; // break this loop
-                    }
+                    if (minotaurDirection == Direction.None) break; // break this loop
                     yield return StartCoroutine(HandleMinotaurMovement(minotaurDirection));
 
 
                     if (HandleGameOver())
                     {
                         terminateMainLoop = true;
-                        break;  
+                        break;
                     }
                 }
             } while (!terminateMainLoop);
@@ -141,10 +131,8 @@ namespace TheseusAndMinotaur.Game
             }
 
             if (inputAction == InputAction.Undo)
-            {
                 // do undo
                 return;
-            }
 
 
             if (State != GameState.ListenUserInput)
@@ -173,7 +161,7 @@ namespace TheseusAndMinotaur.Game
         private IEnumerator HandleDirectionalInput(Direction direction)
         {
             Assert.IsTrue(theseusMovementController.CanMoveTo(direction));
-            
+
             State = GameState.ActiveWithMovementOnScreen;
             yield return StartCoroutine(theseusMovementController.MoveTo(direction));
             State = GameState.ListenUserInput;

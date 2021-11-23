@@ -6,7 +6,7 @@ namespace TheseusAndMinotaur.Game
     public static class GameUtils
     {
         /// <summary>
-        /// Convert board position to world position
+        ///     Convert board position to world position
         /// </summary>
         public static Vector3 GetWorldPosition(this Vector2Int boardPosition)
         {
@@ -15,12 +15,12 @@ namespace TheseusAndMinotaur.Game
         }
 
         /// <summary>
-        /// Return size in world coordinates
+        ///     Return size in world coordinates
         /// </summary>
         public static Vector2 GetBoardWorldSize(this Board board)
         {
             var cellStep = GameConfig.Instance.CellStep;
-            return new Vector2(x: cellStep.x * board.Width, y: cellStep.y * board.Height);
+            return new Vector2(cellStep.x * board.Width, cellStep.y * board.Height);
         }
     }
 }
