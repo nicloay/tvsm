@@ -7,7 +7,7 @@ using UnityEngine.UI;
 namespace TheseusAndMinotaur.UI
 {
     /// <summary>
-    /// Listen Button click or chortcut Input event 
+    /// Listen Button click with corresponding Input.ButtonPress action 
     /// </summary>
     [RequireComponent(typeof(Button))]
     public class DirectionButtonController : MonoBehaviour, IPointerDownHandler, IPointerUpHandler

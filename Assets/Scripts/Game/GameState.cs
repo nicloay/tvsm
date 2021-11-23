@@ -7,6 +7,7 @@ namespace TheseusAndMinotaur.Game
         ListenUserInput,
         ActiveWithMovementOnScreen,
         GameOver,
-        Victory
+        Victory,
+        TerminatingCurrentLoop
     }
 }

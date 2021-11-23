@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Threading;
 using System.Threading.Tasks;
 using TheseusAndMinotaur.Data;
 using UnityEngine;
@@ -33,7 +35,7 @@ namespace TheseusAndMinotaur.Game
         ///     FutureTask: Should we use cancellation token and handle errors
         /// </summary>
         /// <param name="direction"></param>
-        public async Task MoveTo(Direction direction)
+        public IEnumerator MoveTo(Direction direction)
         {
             Assert.IsTrue(direction.IsBaseDirection());
             var currentPosition = transform.position;
@@ -43,11 +45,11 @@ namespace TheseusAndMinotaur.Game
             var currentTime = 0f;
             do
             {
-                await Task.Yield();
+                yield return null;
                 currentTime += Time.unscaledDeltaTime;
                 transform.position = Vector3.Lerp(currentPosition, targetPosition, currentTime / time);
             } while (currentTime < time);
-
+            
             transform.position = targetPosition;
             CurrentBoardPosition = targetBoardPoisition;
         }
