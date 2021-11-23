@@ -8,12 +8,14 @@ namespace TheseusAndMinotaur.Game
     /// </summary>
     public enum InputAction
     {
+        None,
         MoveLeft,
         MoveRight,
         MoveUp,
         MoveDown,
         Undo,
-        Restart
+        Restart,
+        Wait
     }
 
     public static class InputActionUtil
