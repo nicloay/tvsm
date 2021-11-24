@@ -11,16 +11,16 @@ namespace TheseusAndMinotaur.Game
     /// <summary>
     ///     Main manager responsible to handle the game
     /// </summary>
-    public class GameManager : MonoBehaviour
+    public class WorldGameController : MonoBehaviour
     {
         [SerializeField] private MovementController theseusMovementController;
         [SerializeField] private MovementController minotaurMovementController;
         public readonly UnityEvent WrongMovement = new();
         private BoardGenerator _boardGenerator;
         private BoardConfig _currentBoardConfig;
-        private BoardGame _boardGame;
+        private GameLogic _gameLogic;
         private GameState _state;
-
+        public bool HasUndo => _gameLogic.HasUndo;
         public GameStateChangedEvent GameStateChanged = new();
 
         private InputAction requestedAction;
@@ -52,27 +52,39 @@ namespace TheseusAndMinotaur.Game
         private void StartBoard(string boardPath)
         {
             _currentBoardConfig = BoardDeserializer.DeserializeFromStreamingAssets(boardPath);
-            _boardGame = new BoardGame(_currentBoardConfig);
+            _gameLogic = new GameLogic(_currentBoardConfig);
             _boardGenerator.SpawnBoard(_currentBoardConfig);
             theseusMovementController.Initialize(_currentBoardConfig.TheseusStartPosition, _currentBoardConfig);
             minotaurMovementController.Initialize(_currentBoardConfig.MinotaurStartPosition, _currentBoardConfig);
-            StartCoroutine(StartGameLoop());
+            StartNewGame();
         }
 
         public void RestartBoard()
         {
             StopAllCoroutines();
-            _boardGame.Reset();
+            _gameLogic.Reset();
             State = GameState.TerminatingCurrentLoop;
             
             theseusMovementController.ResetToOriginalPosition();
             minotaurMovementController.ResetToOriginalPosition();
-            StartCoroutine(StartGameLoop());
+            StartNewGame();
         }
 
-        private IEnumerator StartGameLoop()
+        public void RequestUndoOnFinishedGame()
+        {
+            StartCoroutine(StartGameLoop());
+            requestedAction = InputAction.Undo;
+        }
+
+
+        private void StartNewGame()
         {
             State = GameState.NewGameStarted;
+            StartCoroutine(StartGameLoop());
+        }
+        
+        private IEnumerator StartGameLoop()
+        {
             do
             {
                 // Listen Input
@@ -83,34 +95,38 @@ namespace TheseusAndMinotaur.Game
                 State = GameState.HandleInput;
                 var key = requestedAction;
 
+                if (key == InputAction.Undo)
+                {
+                    Assert.IsTrue(_gameLogic.HasUndo);
+                    var undoResult = _gameLogic.Undo();
+                    yield return StartCoroutine(MoveCharacters(undoResult));
+                    State = GameState.Active;
+                    continue;
+                }
+                
                 var direction = key.ToDirection();
-                if (!_boardGame.IsMoveAvailableForTheseus(direction))
+                if (!_gameLogic.IsMoveAvailableForTheseus(direction))
                 {
                     WrongMovement.Invoke();
                     continue;
                 }
 
-                var movementResult = _boardGame.MakeMovement(direction);
-
-                if (movementResult.TheseusMove != Direction.None)
+                var movementResult = _gameLogic.MakeMovement(direction);
+                if (!movementResult.BoardChanged)
                 {
-                    yield return StartCoroutine(HandleDirectionalInput(movementResult.TheseusMove));
+                    State = GameState.Active;
+                    continue;
                 }
-
-                for (int i = 0; i < 2; i++)
-                {
-                    if (movementResult.Moves[i + 1] != Direction.None)
-                    {
-                        yield return StartCoroutine(HandleMinotaurMovement(movementResult.Moves[i + 1]));
-                    }
-                }
+                
+                yield return StartCoroutine(MoveCharacters(movementResult));
 
                 if (movementResult.BoardStatus == BoardStatus.Victory)
                 {
                     State = GameState.Victory;
                     break;
                 }
-                else if (movementResult.BoardStatus == BoardStatus.GameOver)
+
+                if (movementResult.BoardStatus == BoardStatus.GameOver)
                 {
                     State = GameState.GameOver;
                 }
@@ -128,12 +144,7 @@ namespace TheseusAndMinotaur.Game
                 RestartBoard();
                 return;
             }
-
-            if (inputAction == InputAction.Undo)
-                // do undo
-                return;
-
-
+            
             if (State != GameState.ListenUserInput)
             {
                 Debug.LogError($"you can only request input action in {GameState.ListenUserInput} state");
@@ -143,34 +154,21 @@ namespace TheseusAndMinotaur.Game
             requestedAction = inputAction;
         }
 
-        /// <summary>
-        ///     Check if Minotaur caught Theseus.
-        ///     If yes - raise Event
-        /// </summary>
-        /// <returns>return true if Minotaur caught Theseus, false otherwise</returns>
-        private bool HandleGameOver()
-        {
-            var result = minotaurMovementController.CurrentBoardPosition ==
-                         theseusMovementController.CurrentBoardPosition;
-            if (result) State = GameState.GameOver;
 
-            return result;
+        private IEnumerator MoveCharacters(BoardMoveResult moveResult)
+        {
+            yield return StartCoroutine(MoveCharacter(theseusMovementController, moveResult.TheseusMove));
+            yield return StartCoroutine(MoveCharacter(minotaurMovementController, moveResult.MinotaurFirstMove));
+            yield return StartCoroutine(MoveCharacter(minotaurMovementController, moveResult.MinotaurSecondMove));
         }
-
-        private IEnumerator HandleDirectionalInput(Direction direction)
+        
+        private IEnumerator MoveCharacter(MovementController movementController, Direction direction)
         {
-            Assert.IsTrue(theseusMovementController.CanMoveTo(direction));
-
-            State = GameState.Active;
-            yield return StartCoroutine(theseusMovementController.MoveTo(direction));
-            State = GameState.ListenUserInput;
-        }
-
-        private IEnumerator HandleMinotaurMovement(Direction direction)
-        {
-            State = GameState.Active;
-            yield return StartCoroutine(minotaurMovementController.MoveTo(direction));
-            State = GameState.ListenUserInput;
+            if (direction == Direction.None)
+            {
+                yield break;
+            }
+            yield return StartCoroutine(movementController.MoveTo(direction));
         }
 
         public class GameStateChangedEvent : UnityEvent<GameState>
