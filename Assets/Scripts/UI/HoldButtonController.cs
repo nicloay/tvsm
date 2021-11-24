@@ -6,30 +6,31 @@ using UnityEngine.UI;
 namespace TheseusAndMinotaur.UI
 {
     /// <summary>
-    ///     Listen Button click with corresponding Input.ButtonPress action
+    ///     Listen Button Hold state,
+    ///     On Hold - send corresponding Input.ButtonPress action
     /// </summary>
     [RequireComponent(typeof(Button))]
-    public class DirectionButtonController : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
+    public class HoldButtonController : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
-        [Tooltip("Action which will be requested on " + nameof(GameManager))] [SerializeField]
+        [Tooltip("Action which will be requested on " + nameof(WorldGameController))] [SerializeField]
         private InputAction action;
 
         private Button _button;
 
-        private GameManager _gameManager;
+        private WorldGameController _worldGameController;
 
         public bool IsPressed { get; private set; }
 
         private void Awake()
         {
-            _gameManager = FindObjectOfType<GameManager>();
+            _worldGameController = FindObjectOfType<WorldGameController>();
             _button = GetComponent<Button>();
         }
 
         private void Update()
         {
             if (_button.interactable && (IsPressed || Input.GetButton(action.ToString())))
-                _gameManager.RequestAction(action);
+                _worldGameController.RequestAction(action);
         }
 
         public void OnPointerDown(PointerEventData eventData)

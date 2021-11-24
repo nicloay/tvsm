@@ -1902,8 +1902,8 @@ GameObject:
   - component: {fileID: 789838003}
   - component: {fileID: 789838002}
   - component: {fileID: 789838001}
-  - component: {fileID: 789838004}
   - component: {fileID: 789838005}
+  - component: {fileID: 789838004}
   m_Layer: 5
   m_Name: UndoButton
   m_TagString: Untagged
@@ -2023,10 +2023,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 789837999}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3349b255bd50482381033cb0ecf2c949, type: 3}
+  m_Script: {fileID: 11500000, guid: 857b2b3f445a448e82391c7566ea606a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowedState: 2
+  action: 5
 --- !u!114 &789838005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2036,10 +2036,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 789837999}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 546e44db6bed41adae6500569f8a70c5, type: 3}
+  m_Script: {fileID: 11500000, guid: b2c4f5e0fa434464aec6146954e13473, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inputAction: 5
 --- !u!1 &809317860
 GameObject:
   m_ObjectHideFlags: 0
@@ -2302,7 +2301,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3349b255bd50482381033cb0ecf2c949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowedState: 2
 --- !u!114 &1116631651
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2671,7 +2669,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3349b255bd50482381033cb0ecf2c949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowedState: 2
 --- !u!114 &1215306500
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2753,7 +2750,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3349b255bd50482381033cb0ecf2c949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowedState: 2
 --- !u!114 &1267594528
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2972,7 +2968,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3349b255bd50482381033cb0ecf2c949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowedState: 2
 --- !u!114 &1268890710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3888,7 +3883,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3349b255bd50482381033cb0ecf2c949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowedState: 2
 --- !u!114 &1800472901
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -50,11 +50,23 @@ namespace TheseusAndMinotaur.Data
             { Direction.Down, new Vector2Int(0, -1) }
         };
 
+
+        private static readonly Dictionary<Direction, Direction> Opposites = new()
+        {
+            { Direction.Left, Direction.Right },
+            { Direction.Right, Direction.Left },
+            { Direction.Up, Direction.Down },
+            { Direction.Down, Direction.Up },
+            { Direction.None, Direction.None }
+        };
+
         public static bool HasDirection(this Direction direction, Direction targetDirection)
         {
             if (((byte)direction & (byte)targetDirection) == (byte)targetDirection) return true;
             return false;
         }
+
+        public static Direction GetOpposite(this Direction direction) => Opposites[direction];
 
         public static bool HasLeft(this Direction direction)
         {
@@ -70,6 +82,7 @@ namespace TheseusAndMinotaur.Data
         {
             return direction.HasDirection(Direction.Up);
         }
+
 
         public static bool HasDown(this Direction direction)
         {
@@ -126,6 +139,11 @@ namespace TheseusAndMinotaur.Data
         /// <returns></returns>
         public static Vector2Int GetNeighbour(this Vector2Int boardPosition, Direction direction)
         {
+            if (direction == Direction.None)
+            {
+                return boardPosition;
+            }
+
             Assert.IsTrue(direction.IsBaseDirection());
             return boardPosition + OffsetByDirection[direction];
         }

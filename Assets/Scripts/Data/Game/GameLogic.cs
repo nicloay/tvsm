@@ -7,7 +7,7 @@ namespace TheseusAndMinotaur.Data
     /// <summary>
     /// This class implement game logic for the Theseus and Minotaur Game
     /// </summary>
-    public class BoardGame
+    public class GameLogic
     {
         private Stack<Direction> _history = new Stack<Direction>(); 
         
@@ -18,9 +18,9 @@ namespace TheseusAndMinotaur.Data
 
         public BoardStatus Staus { get; private set; }
 
-        public bool CanUndo() => _history.Count > 0;
+        public bool HasUndo => _history.Count > 0;
 
-        public BoardGame(BoardConfig config)
+        public GameLogic(BoardConfig config)
         {
             _config = config;
             Staus = BoardStatus.Active;
@@ -38,8 +38,6 @@ namespace TheseusAndMinotaur.Data
             _theseusCurrentPosition = _config.TheseusStartPosition;
             _minotaurCurrentPosition = _config.MinotaurStartPosition;
         }
-
-        private static readonly Vector2Int[] EmptyArray = new Vector2Int[0];
 
         /// <summary>
         /// Move theseus to the direction
@@ -89,21 +87,28 @@ namespace TheseusAndMinotaur.Data
         public BoardMoveResult Undo()
         {
             Staus = BoardStatus.Active;
-            Assert.IsTrue(CanUndo());
-            var mLastMove = _history.Pop();
-            var mFirstMove = _history.Pop();
-            var tMove = _history.Pop();
-            return new BoardMoveResult(BoardStatus.Active, new[] { tMove, mFirstMove, mLastMove });
+            Assert.IsTrue(HasUndo);
+            var mFirstMove = _history.Pop().GetOpposite();
+            var mLastMove = _history.Pop().GetOpposite();
+            var tMove = _history.Pop().GetOpposite();
+            _theseusCurrentPosition = _theseusCurrentPosition.GetNeighbour(tMove);
+            _minotaurCurrentPosition = _minotaurCurrentPosition.GetNeighbour(mFirstMove);
+            _minotaurCurrentPosition = _minotaurCurrentPosition.GetNeighbour(mLastMove);
+            return new BoardMoveResult(BoardStatus.Active, new[] { tMove, mFirstMove, mLastMove }, true);
         }
 
         private BoardMoveResult GetResult(BoardStatus status, Direction[] moves)
         {
             Staus = status;
-            for (int i = 0; i < moves.Length; i++)
+            bool changed = moves[0] != Direction.None || moves[1] != Direction.None || moves[2] != Direction.None;
+            if (changed)
             {
-                _history.Push(moves[i]);
+                for (int i = 0; i < moves.Length; i++)
+                {
+                    _history.Push(moves[i]);
+                }
             }
-            return new BoardMoveResult(status, moves);
+            return new BoardMoveResult(status, moves, changed);
         }
 
         private Direction GetMinotaurDirection()
