@@ -27,6 +27,8 @@ namespace TheseusAndMinotaur.Data
 
         public bool HasUndo => _history.Count > 0;
 
+        public Vector2Int GridSize => _config.GridSize;
+        
         /// <summary>
         ///     Reset Game to initial state
         ///     Theseus and Minotaur goes back to original positions

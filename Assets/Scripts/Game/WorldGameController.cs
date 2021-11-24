@@ -16,17 +16,15 @@ namespace TheseusAndMinotaur.Game
         [SerializeField] private MovementController theseusMovementController;
         [SerializeField] private MovementController minotaurMovementController;
         public readonly UnityEvent WrongMovement = new();
-        private BoardGenerator _boardGenerator;
-        private BoardConfig _currentBoardConfig;
+        private BoardGridSpawner _boardGridSpawner;
         private GameLogic _gameLogic;
         private GameState _state;
         public GameStateChangedEvent GameStateChanged = new();
 
         private InputAction requestedAction;
         public bool HasUndo => _gameLogic.HasUndo;
-
-
-        public Vector2 BoardWorldSize => _currentBoardConfig.GetBoardWorldSize();
+        
+        public Vector2 BoardWorldSize => _gameLogic.GridSize.ToWorldSize();
 
         private GameState State
         {
@@ -41,7 +39,7 @@ namespace TheseusAndMinotaur.Game
 
         private void Awake()
         {
-            _boardGenerator = FindObjectOfType<BoardGenerator>();
+            _boardGridSpawner = FindObjectOfType<BoardGridSpawner>();
         }
 
         private void Start()
@@ -51,11 +49,11 @@ namespace TheseusAndMinotaur.Game
 
         private void StartBoard(string boardPath)
         {
-            _currentBoardConfig = BoardDeserializer.DeserializeFromStreamingAssets(boardPath);
-            _gameLogic = new GameLogic(_currentBoardConfig);
-            _boardGenerator.SpawnBoard(_currentBoardConfig);
-            theseusMovementController.Initialize(_currentBoardConfig.TheseusStartPosition, _currentBoardConfig);
-            minotaurMovementController.Initialize(_currentBoardConfig.MinotaurStartPosition, _currentBoardConfig);
+            var currentBoardConfig = BoardDeserializer.DeserializeFromStreamingAssets(boardPath);
+            _gameLogic = new GameLogic(currentBoardConfig);
+            _boardGridSpawner.SpawnBoard(currentBoardConfig);
+            theseusMovementController.Initialize(currentBoardConfig.TheseusStartPosition);
+            minotaurMovementController.Initialize(currentBoardConfig.MinotaurStartPosition);
             StartNewGame();
         }
 

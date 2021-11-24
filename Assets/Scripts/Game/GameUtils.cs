@@ -17,10 +17,10 @@ namespace TheseusAndMinotaur.Game
         /// <summary>
         ///     Return size in world coordinates
         /// </summary>
-        public static Vector2 GetBoardWorldSize(this BoardConfig board)
+        public static Vector2 ToWorldSize(this Vector2Int size)
         {
             var cellStep = GameConfig.Instance.CellStep;
-            return new Vector2(cellStep.x * board.Width, cellStep.y * board.Height);
+            return new Vector2(cellStep.x * size.x, cellStep.y * size.y);
         }
     }
 }

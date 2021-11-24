@@ -10,15 +10,12 @@ namespace TheseusAndMinotaur.Game
     /// </summary>
     public class MovementController : MonoBehaviour
     {
-        private BoardConfig _board;
-
         private Vector2Int _originalBoardPosition;
         public Vector2Int CurrentBoardPosition { get; private set; }
 
-        public void Initialize(Vector2Int startPosition, BoardConfig board)
+        public void Initialize(Vector2Int startPosition)
         {
             _originalBoardPosition = startPosition;
-            _board = board;
             ResetToOriginalPosition();
         }
 
@@ -50,16 +47,6 @@ namespace TheseusAndMinotaur.Game
 
             transform.position = targetPosition;
             CurrentBoardPosition = targetBoardPoisition;
-        }
-
-        public bool CanMoveTo(Direction direction)
-        {
-            var targetBoardPosition = CurrentBoardPosition.GetNeighbour(direction);
-            return !_board[CurrentBoardPosition].HasWallAt(direction)
-                   && targetBoardPosition.x >= 0
-                   && targetBoardPosition.y >= 0
-                   && targetBoardPosition.x <= _board.Width
-                   && targetBoardPosition.y <= _board.Height;
         }
     }
 }

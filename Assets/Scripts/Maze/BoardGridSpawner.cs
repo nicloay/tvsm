@@ -8,7 +8,7 @@ namespace TheseusAndMinotaur.Maze
     ///     place cells to proper positions.
     /// </summary>
     [RequireComponent(typeof(MazePools))]
-    public class BoardGenerator : MonoBehaviour
+    public class BoardGridSpawner : MonoBehaviour
     {
         private MazePools _mazePools;
 

@@ -12,7 +12,8 @@ namespace TheseusAndMinotaur.Data
         public readonly Vector2Int Exit;
         public readonly Vector2Int MinotaurStartPosition;
         public readonly Vector2Int TheseusStartPosition;
-
+        
+        
         public BoardConfig(Direction[,] wallMap, Vector2Int theseusStartPosition, Vector2Int minotaurStartPosition,
             Vector2Int exit)
         {
@@ -42,6 +43,8 @@ namespace TheseusAndMinotaur.Data
         public int Height => _wallMap.GetLength(0);
         public int Width => _wallMap.GetLength(1);
 
+        public Vector2Int GridSize => new Vector2Int(Width, Height);
+        
         public Direction[] GetWallsAtRow(int rowId)
         {
             var result = new Direction[Width];

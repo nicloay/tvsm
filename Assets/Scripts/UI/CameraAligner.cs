@@ -12,10 +12,10 @@ namespace TheseusAndMinotaur.UI
     [RequireComponent(typeof(Camera))]
     public class CameraAligner : MonoBehaviour
     {
-        [Tooltip("If board size is 10f, and mutliplier 1.4 the result camera size is 14f")] [SerializeField]
+        [Tooltip("If board world size is 10f, and mutliplier 1.4 the result camera size is 14f")] [SerializeField]
         private float cameraSizeMultiplier = 1.4f;
 
-        [Tooltip("If board size is 10f and offset 0.2f, camera vertical position will be 10/2+(10*0.2)")]
+        [Tooltip("If board world size is 10f and offset 0.2f, camera vertical position will be 10/2+(10*0.2)")]
         [SerializeField]
         private float cameraVerticalExtraOffset = 0.2f;
 
