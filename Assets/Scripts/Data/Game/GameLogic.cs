@@ -12,11 +12,9 @@ namespace TheseusAndMinotaur.Data.Game
     {
         private readonly BoardConfig _config;
         private readonly Stack<Direction> _history = new();
-        public Vector2Int MinotaurCurrentPosition { get; private set; }
-        public Vector2Int TheseusCurrentPosition { get; private set; }
         public readonly Vector2Int ExitPosition;
-        
-        
+
+
         public GameLogic(BoardConfig config)
         {
             _config = config;
@@ -25,7 +23,9 @@ namespace TheseusAndMinotaur.Data.Game
             Reset();
         }
 
-        
+        public Vector2Int MinotaurCurrentPosition { get; private set; }
+        public Vector2Int TheseusCurrentPosition { get; private set; }
+
 
         public BoardStatus Status { get; private set; }
 

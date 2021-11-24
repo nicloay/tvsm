@@ -40,14 +40,13 @@ namespace TheseusAndMinotaur.Data
             { Direction.Left, Direction.Right, Direction.Up, Direction.Down };
 
         /// <summary>
-        /// List of all directions which can be made on board
-        /// Direction.None = for Wait
+        ///     List of all directions which can be made on board
+        ///     Direction.None = for Wait
         /// </summary>
         public static readonly Direction[] MovementDirections =
             { Direction.Left, Direction.Right, Direction.Up, Direction.Down, Direction.None };
 
-        
-        
+
         public static readonly HashSet<Direction> BaseDirectionsHashSet = new(BaseDirections);
 
 
