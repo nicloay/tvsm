@@ -22,6 +22,7 @@ namespace TheseusAndMinotaur.Maze
         /// </summary>
         public void SpawnBoard(BoardConfig boardConfig)
         {
+            Clear();
             var cellStep = GameConfig.Instance.CellStep;
             var cellPosition = Vector2.zero;
             for (var y = 0; y < boardConfig.Height; y++)
@@ -40,7 +41,7 @@ namespace TheseusAndMinotaur.Maze
         /// <summary>
         ///     Clear Board (hide all cells)
         /// </summary>
-        public void Clear()
+        private void Clear()
         {
             _mazePools.Clear();
         }

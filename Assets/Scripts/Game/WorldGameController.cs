@@ -15,6 +15,7 @@ namespace TheseusAndMinotaur.Game
     {
         [SerializeField] private MovementController theseusMovementController;
         [SerializeField] private MovementController minotaurMovementController;
+        [SerializeField] private MovementController exitController;
         public readonly UnityEvent WrongMovement = new();
         private BoardGridSpawner _boardGridSpawner;
         private GameLogic _gameLogic;
@@ -23,7 +24,7 @@ namespace TheseusAndMinotaur.Game
 
         private InputAction requestedAction;
         public bool HasUndo => _gameLogic.HasUndo;
-        
+
         public Vector2 BoardWorldSize => _gameLogic.GridSize.ToWorldSize();
 
         private GameState State
@@ -42,18 +43,19 @@ namespace TheseusAndMinotaur.Game
             _boardGridSpawner = FindObjectOfType<BoardGridSpawner>();
         }
 
-        private void Start()
-        {
-            StartBoard("Test/test4.txt");
-        }
 
-        private void StartBoard(string boardPath)
+        /// <summary>
+        ///     Open new Board
+        /// </summary>
+        /// <param name="boardPath"></param>
+        public void OpenBoard(string boardPath)
         {
             var currentBoardConfig = BoardDeserializer.DeserializeFromStreamingAssets(boardPath);
             _gameLogic = new GameLogic(currentBoardConfig);
             _boardGridSpawner.SpawnBoard(currentBoardConfig);
             theseusMovementController.Initialize(currentBoardConfig.TheseusStartPosition);
             minotaurMovementController.Initialize(currentBoardConfig.MinotaurStartPosition);
+            exitController.Initialize(currentBoardConfig.Exit);
             StartNewGame();
         }
 
