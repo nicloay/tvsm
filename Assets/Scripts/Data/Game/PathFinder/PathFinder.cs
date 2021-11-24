@@ -7,12 +7,10 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
     /// <summary>
     ///     This pathfinder is based on A*, it search for the path of the Minotaur to the exit)
     ///     Minotaur position is taken from the GameLogic game
-    ///     it use normal methods to move minotaur to evaluate new positions on this movement and then undo this actions.
     /// </summary>
     public class PathFinder
     {
         private readonly GameLogic _gameLogic;
-        private Vector2Int _theseusStartPosition;
 
         public PathFinder(GameLogic gameLogic)
         {
@@ -30,10 +28,11 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
         /// </returns>
         public (bool, List<Direction>) FindPath()
         {
-            _theseusStartPosition = _gameLogic.TheseusCurrentPosition;
+            var theseusCurrentPosition = _gameLogic.TheseusCurrentPosition;
+            var minotaurCurrentPosition = _gameLogic.MinotaurCurrentPosition;
             var currentNodes = new List<Node>
             {
-                GetNode()
+                GetNode(theseusCurrentPosition, minotaurCurrentPosition)
             };
 
             var isFirst = true;
@@ -41,37 +40,31 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
 
             while (currentNodes.Count > 0)
             {
-                var node = currentNodes.OrderBy(node => node.Cost).First();
+                var node = currentNodes.OrderBy(node => node.TotalCost).First();
 
-                // we have to make move here (but we need to skip for the first)
                 currentNodes.Remove(node);
                 visitedNodes.Add(node);
 
-                if (isFirst)
-                {
-                    isFirst = false;
-                }
-                else
-                {
-                    _gameLogic.MakeMovement(node.DirectionFromPreviousNode);
-                }
-
-                if (node.MinotaurPosition == _gameLogic.ExitPosition) return (true, BuildPath(node));
-
                 foreach (var direction in DirectionUtils.MovementDirections)
                 {
-                    if (!_gameLogic.IsMoveAvailableForTheseus(direction)) continue;
+                    if (!_gameLogic.IsMovementAvailable(node.TheseusPosition, direction)) continue;
 
-                    var result = _gameLogic.MakeMovement(direction);
+                    var result = _gameLogic.EvaluateMovement(node.TheseusPosition, node.MinotaurPosition, direction);
                     if (!result.BoardChanged) continue;
-                    
-                    var newNode = GetNode(node, direction);
-                    _gameLogic.Undo();
+                    if (result.BoardStatus == BoardStatus.GameOver)
+                    {
+                        continue;
+                    }
 
-                    if (result.BoardStatus == BoardStatus.GameOver) continue;
+                    if (result.BoardStatus == BoardStatus.Victory)
+                    {
+                        return (true, BuildPath(direction, node));
+                    }
+
+                    var newNode = GetNode(result.TheseusNewPosition, result.MinotaurNewPosition, node, direction);
 
                     if (visitedNodes.Contains(newNode)) continue;
-                    // we can check also win condition here, but anyway it will be triggered on next iteration, so let's save some lines 
+
                     currentNodes.Add(newNode);
                 }
             }
@@ -79,12 +72,12 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
             return (false, null);
         }
 
-        private List<Direction> BuildPath(Node node)
+        private List<Direction> BuildPath(Direction lastDirection, Node node)
         {
-            var result = new List<Direction>();
+            var result = new List<Direction>() { lastDirection };
             while (node.PreviousNode != null)
             {
-                result.Add(node.DirectionFromPreviousNode);
+                result.Add(node.Direction);
                 node = node.PreviousNode;
             }
 
@@ -97,20 +90,19 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
         ///     return node which contains current minotaur and theseus position,
         ///     also calculate the cost for this position
         /// </summary>
-        /// <returns></returns>
-        private Node GetNode(Node previousNode = null, Direction directionFromPreviousNode = Direction.None)
+        private Node GetNode(Vector2Int theseusPosition, Vector2Int minotaurPosition, Node previousNode = null,
+            Direction direction = Direction.None)
         {
-            return new Node(_gameLogic.TheseusCurrentPosition, _gameLogic.MinotaurCurrentPosition,
-                GetCurrentPositionsCost(), directionFromPreviousNode, previousNode);
+            return new Node(theseusPosition, minotaurPosition,
+                GetReachExitCost(theseusPosition), direction, previousNode);
         }
 
 
-        private int GetCurrentPositionsCost()
+        private int GetReachExitCost(Vector2Int theseusPosition)
         {
             // TODO: check maybe instead of path to start node, consider how many steps was made for this node.
-            var theseus = _gameLogic.ExitPosition - _gameLogic.TheseusCurrentPosition;
-            var minotaur = _theseusStartPosition - _gameLogic.TheseusCurrentPosition;
-            return Mathf.Abs(theseus.x) + Mathf.Abs(theseus.y) + Mathf.Abs(minotaur.x) + Mathf.Abs(minotaur.y);
+            var theseus = _gameLogic.ExitPosition - theseusPosition;
+            return Mathf.Abs(theseus.x) + Mathf.Abs(theseus.y);
         }
     }
 }

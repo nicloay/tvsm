@@ -70,7 +70,7 @@ namespace TheseusAndMinotaur.Data.Game
         public BoardMoveResult EvaluateMovement(Vector2Int theseusEvalPosition, Vector2Int minotaurEvalPosition,
             Direction direction)
         {
-            Assert.IsTrue(IsPathFree(theseusEvalPosition, direction),
+            Assert.IsTrue(IsMovementAvailable(theseusEvalPosition, direction),
                 $"theseus are not able to make {direction} move from {theseusEvalPosition}");
             Direction[] moves = { direction, Direction.None, Direction.None };
 
@@ -184,24 +184,23 @@ namespace TheseusAndMinotaur.Data.Game
         /// <returns></returns>
         public bool IsMoveAvailableForTheseus(Direction direction)
         {
-            return IsPathFree(TheseusCurrentPosition, direction);
+            return IsMovementAvailable(TheseusCurrentPosition, direction);
         }
-
-
+        
         /// <summary>
         ///     Check if it's possible to step into direction from provided position
         ///     - no walls
         ///     - not on the edge
         /// </summary>
-        public bool IsPathFree(Vector2Int position, Direction direction)
+        public bool IsMovementAvailable(Vector2Int sourcePosition, Direction direction)
         {
             if (direction == Direction.None)
             {
                 return true;
             }
-
-            var targetBoardPosition = position.GetNeighbour(direction);
-            return _config[TheseusCurrentPosition].HasWayTo(direction)
+            
+            var targetBoardPosition = sourcePosition.GetNeighbour(direction);
+            return _config[sourcePosition].HasWayTo(direction) 
                    && targetBoardPosition.x >= 0
                    && targetBoardPosition.y >= 0
                    && targetBoardPosition.x <= _config.Width

@@ -11,13 +11,48 @@ namespace TheseusAndMinotaur.Tests
 {
     public class PathFindingTest
     {
-        [Test, MaxTime(1000)]
+        [Test]
         public void Test1()
         {
             var game = CreateGame("PathFinding1");
             var pathFinder = new PathFinder(game);
-            var result = pathFinder.FindPath();
-            Assert.That(result, Is.EqualTo(new []{Direction.Right, Direction.Up, Direction.Left}));
+            var (result, directions) = pathFinder.FindPath();
+            Assert.That(result, Is.EqualTo(true));
+            Assert.That(directions, Is.EqualTo(new[] { Direction.Right, Direction.Up, Direction.Left }));
+        }
+
+        [Test]
+        public void Test2()
+        {
+            var game = CreateGame("PathFinding2");
+            var pathFinder = new PathFinder(game);
+            var (result, directions) = pathFinder.FindPath();
+            Debug.Log(string.Join(",", directions));
+            Assert.That(result, Is.EqualTo(true));
+            Assert.That(directions,
+                Is.EqualTo(new[]
+                {
+                    Direction.Right,
+                    Direction.Right,
+                    Direction.Up,
+                    Direction.Right,
+                    Direction.Right,
+                    Direction.Down,
+                    Direction.Right,
+                    Direction.Right,
+                    Direction.Up,
+                    Direction.Up,
+                    Direction.Left,
+                    Direction.Left,
+                    Direction.Up,
+                    Direction.Left,
+                    Direction.Left,
+                    Direction.Left,
+                    Direction.Left,
+                    Direction.Down,
+                    Direction.Down,
+                    Direction.Right
+                }));
         }
 
 
