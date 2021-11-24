@@ -33,7 +33,7 @@ namespace TheseusAndMinotaur.Game
             _worldGameController.OpenBoard(levels[0]);
         }
 
-        public void OpenNext()
+        public void StartNext()
         {
             Assert.IsTrue(HasMoreLevel);
             _worldGameController.OpenBoard(levels[++_currentLevel]);
