@@ -50,10 +50,25 @@ namespace TheseusAndMinotaur.Data
             { Direction.Down, new Vector2Int(0, -1) }
         };
 
+
+        private static readonly Dictionary<Direction, Direction> Opposites = new()
+        {
+            { Direction.Left, Direction.Right },
+            { Direction.Right, Direction.Left },
+            { Direction.Up, Direction.Down },
+            { Direction.Down, Direction.Up },
+            { Direction.None, Direction.None }
+        };
+
         public static bool HasDirection(this Direction direction, Direction targetDirection)
         {
             if (((byte)direction & (byte)targetDirection) == (byte)targetDirection) return true;
             return false;
+        }
+
+        public static Direction GetOpposite(this Direction direction)
+        {
+            return Opposites[direction];
         }
 
         public static bool HasLeft(this Direction direction)
@@ -71,14 +86,26 @@ namespace TheseusAndMinotaur.Data
             return direction.HasDirection(Direction.Up);
         }
 
+
         public static bool HasDown(this Direction direction)
         {
             return direction.HasDirection(Direction.Down);
         }
 
+        /// <summary>
+        ///     Return true if there is wall in target direction
+        /// </summary>
         public static bool HasWallAt(this Direction direction, Direction target)
         {
             return direction.HasDirection(target);
+        }
+
+        /// <summary>
+        ///     return true if the pass is clear and there is no walls in target direction
+        /// </summary>
+        public static bool HasWayTo(this Direction direction, Direction target)
+        {
+            return !direction.HasWallAt(target);
         }
 
         /// <summary>
@@ -118,6 +145,8 @@ namespace TheseusAndMinotaur.Data
         /// <returns></returns>
         public static Vector2Int GetNeighbour(this Vector2Int boardPosition, Direction direction)
         {
+            if (direction == Direction.None) return boardPosition;
+
             Assert.IsTrue(direction.IsBaseDirection());
             return boardPosition + OffsetByDirection[direction];
         }

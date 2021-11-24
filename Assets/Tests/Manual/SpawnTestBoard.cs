@@ -4,15 +4,15 @@ using UnityEngine;
 
 namespace TheseusAndMinotaur.Tests
 {
-    [RequireComponent(typeof(BoardGenerator))]
+    [RequireComponent(typeof(BoardGridSpawner))]
     public class SpawnTestBoard : MonoBehaviour
     {
-        private BoardGenerator _boardGenerator;
+        private BoardGridSpawner _boardGridSpawner;
         private bool _spawnFirst = true;
 
         private void Awake()
         {
-            _boardGenerator = GetComponent<BoardGenerator>();
+            _boardGridSpawner = GetComponent<BoardGridSpawner>();
         }
 
         private void Start()
@@ -27,10 +27,10 @@ namespace TheseusAndMinotaur.Tests
 
         private void Spawn()
         {
-            _boardGenerator.Clear();
+            _boardGridSpawner.Clear();
             var relativePath = $"Test/test{(_spawnFirst ? 1 : 2)}.txt";
             var board = BoardDeserializer.DeserializeFromStreamingAssets(relativePath);
-            _boardGenerator.SpawnBoard(board);
+            _boardGridSpawner.SpawnBoard(board);
             _spawnFirst = !_spawnFirst;
         }
     }

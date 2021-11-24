@@ -7,18 +7,18 @@ namespace TheseusAndMinotaur.UI
     /// <summary>
     ///     Listen only single even like Click or Input.ButtonPressUp() and forward it to the GameManager
     /// </summary>
-    public class InstantButtonController : MonoBehaviour
+    public class PressButtonController : MonoBehaviour
     {
         [SerializeField] private InputAction inputAction;
         private Button _button;
 
-        private GameManager _gameManager;
+        private WorldGameController _worldGameController;
 
         private void Awake()
         {
             _button = GetComponent<Button>();
             _button.onClick.AddListener(RequestAction);
-            _gameManager = FindObjectOfType<GameManager>();
+            _worldGameController = FindObjectOfType<WorldGameController>();
         }
 
         private void Update()
@@ -28,7 +28,7 @@ namespace TheseusAndMinotaur.UI
 
         private void RequestAction()
         {
-            _gameManager.RequestAction(inputAction);
+            _worldGameController.RequestAction(inputAction);
         }
     }
 }

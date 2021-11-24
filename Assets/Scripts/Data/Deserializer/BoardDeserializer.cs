@@ -16,14 +16,14 @@ namespace TheseusAndMinotaur.Data.Deserializer
         /// </summary>
         /// <param name="relativePath">file path, relative to streaming assets folder</param>
         /// <returns>board</returns>
-        public static Board DeserializeFromStreamingAssets(string relativePath)
+        public static BoardConfig DeserializeFromStreamingAssets(string relativePath)
         {
             var fullPath = Path.Combine(Application.streamingAssetsPath, relativePath);
             var data = File.ReadAllText(fullPath);
             return DeserializeFrom(data);
         }
 
-        public static Board DeserializeFrom(string textData)
+        public static BoardConfig DeserializeFrom(string textData)
         {
             if (string.IsNullOrEmpty(textData))
                 throw new ParseMazeException("string is empty or null, you must provide something");

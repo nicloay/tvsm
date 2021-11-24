@@ -6,15 +6,16 @@ namespace TheseusAndMinotaur.UI
 {
     public class GameOverPopUpController : MonoBehaviour
     {
-        [SerializeField] private GameManager gameManager;
         [SerializeField] private Canvas canvas;
         [SerializeField] private Button restartButton;
         [SerializeField] private Button undoButton;
+        private WorldGameController _worldGameController;
 
 
         private void Awake()
         {
-            gameManager.GameStateChanged.AddListener(GameStateChanged);
+            _worldGameController = FindObjectOfType<WorldGameController>();
+            _worldGameController.GameStateChanged.AddListener(GameStateChanged);
             restartButton.onClick.AddListener(RestartBoard);
             undoButton.onClick.AddListener(UndoLastTurn);
         }
@@ -22,8 +23,12 @@ namespace TheseusAndMinotaur.UI
         private void Update()
         {
             if (canvas.enabled)
+            {
                 if (Input.GetButtonUp(nameof(InputAction.Restart)))
-                    gameManager.RestartBoard();
+                    RestartBoard();
+                if (Input.GetButtonUp(nameof(InputAction.Undo)))
+                    UndoLastTurn();
+            }
         }
 
         private void GameStateChanged(GameState gameState)
@@ -33,11 +38,12 @@ namespace TheseusAndMinotaur.UI
 
         private void UndoLastTurn()
         {
+            _worldGameController.RequestUndoOnFinishedGame();
         }
 
         private void RestartBoard()
         {
-            gameManager.RestartBoard();
+            _worldGameController.RestartBoard();
         }
     }
 }
