@@ -6,8 +6,8 @@ using UnityEngine.UI;
 namespace TheseusAndMinotaur.UI
 {
     /// <summary>
-    ///     Listen Button Hold state,
-    ///     On Hold - send corresponding Input.ButtonPress action
+    ///     Listen Button Hold state together with Input.ButtonPress
+    ///     On Hold - send corresponding action to gameController
     /// </summary>
     [RequireComponent(typeof(Button))]
     public class HoldButtonController : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
