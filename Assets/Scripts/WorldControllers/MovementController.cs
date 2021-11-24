@@ -3,7 +3,7 @@ using TheseusAndMinotaur.Data;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace TheseusAndMinotaur.Game
+namespace TheseusAndMinotaur.WorldControllers
 {
     /// <summary>
     ///     This controller is responsible in movement maze entities on the screen

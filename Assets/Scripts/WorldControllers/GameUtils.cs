@@ -1,7 +1,7 @@
 using TheseusAndMinotaur.Data;
 using UnityEngine;
 
-namespace TheseusAndMinotaur.Game
+namespace TheseusAndMinotaur.WorldControllers
 {
     public static class GameUtils
     {

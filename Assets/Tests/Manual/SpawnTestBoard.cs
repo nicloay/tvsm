@@ -1,5 +1,5 @@
 using TheseusAndMinotaur.Data.Deserializer;
-using TheseusAndMinotaur.Maze;
+using TheseusAndMinotaur.WorldControllers.Maze;
 using UnityEngine;
 
 namespace TheseusAndMinotaur.Tests

@@ -1,12 +1,13 @@
 using System.Collections;
 using TheseusAndMinotaur.Data;
 using TheseusAndMinotaur.Data.Deserializer;
-using TheseusAndMinotaur.Maze;
+using TheseusAndMinotaur.Data.Game;
+using TheseusAndMinotaur.WorldControllers.Maze;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
 
-namespace TheseusAndMinotaur.Game
+namespace TheseusAndMinotaur.WorldControllers
 {
     /// <summary>
     ///     Main manager responsible to handle the game

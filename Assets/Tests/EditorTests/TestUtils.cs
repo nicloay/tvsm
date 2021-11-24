@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using TheseusAndMinotaur.Game;
+using TheseusAndMinotaur.WorldControllers;
 using UnityEngine;
 
 namespace TheseusAndMinotaur.Tests

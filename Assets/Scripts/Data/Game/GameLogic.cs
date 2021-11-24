@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Assertions;
 
-namespace TheseusAndMinotaur.Data
+namespace TheseusAndMinotaur.Data.Game
 {
     /// <summary>
     ///     This class implement game logic for the Theseus and Minotaur Game

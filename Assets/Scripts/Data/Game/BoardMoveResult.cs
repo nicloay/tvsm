@@ -1,4 +1,4 @@
-namespace TheseusAndMinotaur.Data
+namespace TheseusAndMinotaur.Data.Game
 {
     public class BoardMoveResult
     {

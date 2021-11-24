@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using TheseusAndMinotaur.Data;
 
-namespace TheseusAndMinotaur.Game
+namespace TheseusAndMinotaur.WorldControllers
 {
     /// <summary>
     ///     AvailableInputAction
