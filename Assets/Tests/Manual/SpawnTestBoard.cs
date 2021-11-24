@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace TheseusAndMinotaur.Tests
 {
+    // Test spawning new board (just grid, not the whole game)
     [RequireComponent(typeof(BoardGridSpawner))]
     public class SpawnTestBoard : MonoBehaviour
     {
@@ -27,7 +28,6 @@ namespace TheseusAndMinotaur.Tests
 
         private void Spawn()
         {
-            _boardGridSpawner.Clear();
             var relativePath = $"Test/test{(_spawnFirst ? 1 : 2)}.txt";
             var board = BoardDeserializer.DeserializeFromStreamingAssets(relativePath);
             _boardGridSpawner.SpawnBoard(board);
