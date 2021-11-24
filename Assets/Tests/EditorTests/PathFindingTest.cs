@@ -27,7 +27,6 @@ namespace TheseusAndMinotaur.Tests
             var game = CreateGame("PathFinding2");
             var pathFinder = new PathFinder(game);
             var (result, directions) = pathFinder.FindPath();
-            Debug.Log(string.Join(",", directions));
             Assert.That(result, Is.EqualTo(true));
             Assert.That(directions,
                 Is.EqualTo(new[]
@@ -55,6 +54,55 @@ namespace TheseusAndMinotaur.Tests
                 }));
         }
 
+        [Test]
+        public void Estivalet1()
+        {
+            var game = CreateGame("estivalet1");
+            var pathFinder = new PathFinder(game);
+            var (result, directions) = pathFinder.FindPath();
+            Debug.Log(string.Join(",", directions));
+            Assert.That(result, Is.EqualTo(true));
+            Assert.That(directions,
+                Is.EqualTo(new[]
+                    { Direction.Left, Direction.Right, Direction.Right, Direction.Down, Direction.Right }));
+        }
+
+        [Test]
+        public void Estivalet2()
+        {
+            var game = CreateGame("estivalet2");
+            var pathFinder = new PathFinder(game);
+            var (result, directions) = pathFinder.FindPath();
+            Debug.Log(string.Join(",", directions));
+            Assert.That(result, Is.EqualTo(true));
+            Assert.That(directions, Is.EqualTo(new[]
+            {
+                Direction.Right, Direction.Right, Direction.Right, Direction.Right,
+                Direction.Up,
+                Direction.Down, Direction.Down, Direction.Down,
+                Direction.Left, Direction.Left, Direction.Left, Direction.Left, Direction.Left,
+                Direction.Down
+            }));
+        }
+
+        [Test]
+        public void Estivalet3()
+        {
+            var game = CreateGame("estivalet3");
+            var pathFinder = new PathFinder(game);
+            var (result, directions) = pathFinder.FindPath();
+            Debug.Log(string.Join(",", directions));
+            Assert.That(result, Is.EqualTo(true));
+            Assert.That(directions, Is.EqualTo(new[]
+            {
+                Direction.Down, Direction.Down,
+                Direction.Left,
+                Direction.None,
+                Direction.Right, Direction.Right,
+                Direction.Up, Direction.Up,
+                Direction.Right
+            }));
+        }
 
         [Test]
         public void NodeHashTest()
