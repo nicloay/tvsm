@@ -4,6 +4,10 @@ using UnityEngine.UI;
 
 namespace TheseusAndMinotaur.UI
 {
+    /// <summary>
+    /// This controller handle the end screen when player won or failed
+    /// If player won and there is next leve, the corresponding button will be shown.
+    /// </summary>
     public class GameOverPopUpController : MonoBehaviour
     {
         [SerializeField] private Canvas canvas;

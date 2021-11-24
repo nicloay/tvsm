@@ -17,6 +17,7 @@ namespace TheseusAndMinotaur.Game
         {
             _originalBoardPosition = startPosition;
             ResetToOriginalPosition();
+            
         }
 
         public void ResetToOriginalPosition()
