@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace TheseusAndMinotaur.Data.Game.PathFinder
@@ -20,9 +21,23 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
             PreviousNode = previousNode;
         }
 
-        public override int GetHashCode()
+        private sealed class NodeEqualityComparer : IEqualityComparer<Node>
         {
-            return HashCode.Combine(TheseusPosition, MinotaurPosition);
+            public bool Equals(Node x, Node y)
+            {
+                if (ReferenceEquals(x, y)) return true;
+                if (ReferenceEquals(x, null)) return false;
+                if (ReferenceEquals(y, null)) return false;
+                if (x.GetType() != y.GetType()) return false;
+                return x.MinotaurPosition.Equals(y.MinotaurPosition) && x.TheseusPosition.Equals(y.TheseusPosition);
+            }
+
+            public int GetHashCode(Node obj)
+            {
+                return HashCode.Combine(obj.MinotaurPosition, obj.TheseusPosition);
+            }
         }
+
+        public static IEqualityComparer<Node> NodeComparer { get; } = new NodeEqualityComparer();
     }
 }

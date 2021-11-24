@@ -16,7 +16,8 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
 
         public PathFinder(GameLogic gameLogic)
         {
-            _gameLogic = gameLogic;
+            _gameLogic =
+                gameLogic; // TODO: as it move theseus and minotaur it's modify board, so we need to clone it first.
         }
 
 
@@ -25,6 +26,7 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
         /// <returns>
         ///     true or false - for the first parameter if path is found
         ///     List<direction> - set of actions required to reach the target
+        ///
         /// </returns>
         public (bool, List<Direction>) FindPath()
         {
@@ -34,13 +36,26 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
                 GetNode()
             };
 
-            var visitedNodes = new HashSet<Node>();
+            var isFirst = true;
+            var visitedNodes = new HashSet<Node>(comparer: Node.NodeComparer);
 
             while (currentNodes.Count > 0)
             {
                 var node = currentNodes.OrderBy(node => node.Cost).First();
+
+                // we have to make move here (but we need to skip for the first)
                 currentNodes.Remove(node);
                 visitedNodes.Add(node);
+
+                if (isFirst)
+                {
+                    isFirst = false;
+                }
+                else
+                {
+                    _gameLogic.MakeMovement(node.DirectionFromPreviousNode);
+                }
+
                 if (node.MinotaurPosition == _gameLogic.ExitPosition) return (true, BuildPath(node));
 
                 foreach (var direction in DirectionUtils.MovementDirections)
@@ -48,12 +63,13 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
                     if (!_gameLogic.IsMoveAvailableForTheseus(direction)) continue;
 
                     var result = _gameLogic.MakeMovement(direction);
-                    _gameLogic.Undo();
                     if (!result.BoardChanged) continue;
+                    
+                    var newNode = GetNode(node, direction);
+                    _gameLogic.Undo();
 
                     if (result.BoardStatus == BoardStatus.GameOver) continue;
 
-                    var newNode = GetNode(node, direction);
                     if (visitedNodes.Contains(newNode)) continue;
                     // we can check also win condition here, but anyway it will be triggered on next iteration, so let's save some lines 
                     currentNodes.Add(newNode);
