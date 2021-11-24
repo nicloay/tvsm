@@ -1,34 +1,32 @@
-using System;
 using UnityEngine;
 using UnityEngine.Assertions;
 
 namespace TheseusAndMinotaur.Game
 {
     /// <summary>
-    /// contains list to the levels
+    ///     contains list to the levels
     /// </summary>
     public class LevelManager : MonoBehaviour
     {
-
         [SerializeField] private string[] levels =
         {
             "Levels/level1.txt",
             "Levels/level2.txt",
-            "Levels/level3.txt",
+            "Levels/level3.txt"
         };
-        
-        private int _currentLevel = 0;
 
-        public bool HasMoreLevel => _currentLevel < (levels.Length - 1);
-        
+        private int _currentLevel;
+
         private WorldGameController _worldGameController;
+
+        public bool HasMoreLevel => _currentLevel < levels.Length - 1;
 
         private void Awake()
         {
             _worldGameController = FindObjectOfType<WorldGameController>();
         }
 
-        void Start()
+        private void Start()
         {
             _worldGameController.OpenBoard(levels[0]);
         }

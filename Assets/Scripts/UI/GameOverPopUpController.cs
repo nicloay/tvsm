@@ -13,10 +13,10 @@ namespace TheseusAndMinotaur.UI
 
         [SerializeField] private GameObject gameOverHeader;
         [SerializeField] private GameObject victoryHeader;
-        
-        
-        private WorldGameController _worldGameController;
         private LevelManager _levelManager;
+
+
+        private WorldGameController _worldGameController;
 
         private void Awake()
         {
@@ -37,7 +37,7 @@ namespace TheseusAndMinotaur.UI
                     UndoLastTurn();
                 if (nextLevelButton.interactable && Input.GetButtonUp(nameof(InputAction.Next)))
                     StartNext();
-            }       
+            }
         }
 
         private void StartNext()

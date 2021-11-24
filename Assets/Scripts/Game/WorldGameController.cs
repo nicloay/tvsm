@@ -24,7 +24,7 @@ namespace TheseusAndMinotaur.Game
 
         private InputAction requestedAction;
         public bool HasUndo => _gameLogic.HasUndo;
-        
+
         public Vector2 BoardWorldSize => _gameLogic.GridSize.ToWorldSize();
 
         private GameState State
@@ -42,10 +42,10 @@ namespace TheseusAndMinotaur.Game
         {
             _boardGridSpawner = FindObjectOfType<BoardGridSpawner>();
         }
-        
+
 
         /// <summary>
-        /// Open new Board
+        ///     Open new Board
         /// </summary>
         /// <param name="boardPath"></param>
         public void OpenBoard(string boardPath)
