@@ -6,22 +6,26 @@ namespace TheseusAndMinotaur.Data.Game
 {
     /// <summary>
     ///     This class implement game logic for the Theseus and Minotaur Game
+    ///     TODO: rename Data namespace as it contains also logic
     /// </summary>
     public class GameLogic
     {
         private readonly BoardConfig _config;
         private readonly Stack<Direction> _history = new();
-        private Vector2Int _minotaurCurrentPosition;
-        private Vector2Int _theseusCurrentPosition;
-
+        public Vector2Int MinotaurCurrentPosition { get; private set; }
+        public Vector2Int TheseusCurrentPosition { get; private set; }
+        public readonly Vector2Int ExitPosition;
+        
+        
         public GameLogic(BoardConfig config)
         {
             _config = config;
             Status = BoardStatus.Active;
+            ExitPosition = config.Exit;
             Reset();
         }
 
-        private Vector2Int ExitPosition => _config.Exit;
+        
 
         public BoardStatus Status { get; private set; }
 
@@ -37,8 +41,8 @@ namespace TheseusAndMinotaur.Data.Game
         {
             _history.Clear();
             Status = BoardStatus.Active;
-            _theseusCurrentPosition = _config.TheseusStartPosition;
-            _minotaurCurrentPosition = _config.MinotaurStartPosition;
+            TheseusCurrentPosition = _config.TheseusStartPosition;
+            MinotaurCurrentPosition = _config.MinotaurStartPosition;
         }
 
         /// <summary>
@@ -52,11 +56,11 @@ namespace TheseusAndMinotaur.Data.Game
             Assert.IsTrue(IsMoveAvailableForTheseus(direction), $"theseus are not able to make {direction} move");
             Direction[] moves = { direction, Direction.None, Direction.None };
 
-            if (direction != Direction.None) _theseusCurrentPosition = _theseusCurrentPosition.GetNeighbour(direction);
+            if (direction != Direction.None) TheseusCurrentPosition = TheseusCurrentPosition.GetNeighbour(direction);
 
-            if (_theseusCurrentPosition == ExitPosition) return GetResult(BoardStatus.Victory, moves);
+            if (TheseusCurrentPosition == ExitPosition) return GetResult(BoardStatus.Victory, moves);
 
-            if (_theseusCurrentPosition == _minotaurCurrentPosition) return GetResult(BoardStatus.GameOver, moves);
+            if (TheseusCurrentPosition == MinotaurCurrentPosition) return GetResult(BoardStatus.GameOver, moves);
 
             for (var i = 0; i < 2; i++)
             {
@@ -64,8 +68,8 @@ namespace TheseusAndMinotaur.Data.Game
                 moves[i + 1] = minotaurDirection;
                 if (minotaurDirection == Direction.None) break; // no point to wait another turns
 
-                _minotaurCurrentPosition = _minotaurCurrentPosition.GetNeighbour(minotaurDirection);
-                if (_theseusCurrentPosition == _minotaurCurrentPosition) return GetResult(BoardStatus.GameOver, moves);
+                MinotaurCurrentPosition = MinotaurCurrentPosition.GetNeighbour(minotaurDirection);
+                if (TheseusCurrentPosition == MinotaurCurrentPosition) return GetResult(BoardStatus.GameOver, moves);
             }
 
             return GetResult(BoardStatus.Active, moves);
@@ -78,9 +82,9 @@ namespace TheseusAndMinotaur.Data.Game
             var mFirstMove = _history.Pop().GetOpposite();
             var mLastMove = _history.Pop().GetOpposite();
             var tMove = _history.Pop().GetOpposite();
-            _theseusCurrentPosition = _theseusCurrentPosition.GetNeighbour(tMove);
-            _minotaurCurrentPosition = _minotaurCurrentPosition.GetNeighbour(mFirstMove);
-            _minotaurCurrentPosition = _minotaurCurrentPosition.GetNeighbour(mLastMove);
+            TheseusCurrentPosition = TheseusCurrentPosition.GetNeighbour(tMove);
+            MinotaurCurrentPosition = MinotaurCurrentPosition.GetNeighbour(mFirstMove);
+            MinotaurCurrentPosition = MinotaurCurrentPosition.GetNeighbour(mLastMove);
             return new BoardMoveResult(BoardStatus.Active, new[] { tMove, mFirstMove, mLastMove }, true);
         }
 
@@ -96,9 +100,9 @@ namespace TheseusAndMinotaur.Data.Game
 
         private Direction GetMinotaurDirection()
         {
-            var diff = _theseusCurrentPosition - _minotaurCurrentPosition;
+            var diff = TheseusCurrentPosition - MinotaurCurrentPosition;
 
-            var minotaurDirections = _config[_minotaurCurrentPosition];
+            var minotaurDirections = _config[MinotaurCurrentPosition];
             if (diff.x < 0 && minotaurDirections.HasWayTo(Direction.Left)) return Direction.Left;
 
             if (diff.x > 0 && minotaurDirections.HasWayTo(Direction.Right)) return Direction.Right;
@@ -120,8 +124,8 @@ namespace TheseusAndMinotaur.Data.Game
         {
             if (direction == Direction.None) return true;
 
-            var targetBoardPosition = _theseusCurrentPosition.GetNeighbour(direction);
-            return _config[_theseusCurrentPosition].HasWayTo(direction)
+            var targetBoardPosition = TheseusCurrentPosition.GetNeighbour(direction);
+            return _config[TheseusCurrentPosition].HasWayTo(direction)
                    && targetBoardPosition.x >= 0
                    && targetBoardPosition.y >= 0
                    && targetBoardPosition.x <= _config.Width
