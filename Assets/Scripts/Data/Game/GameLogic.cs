@@ -5,88 +5,73 @@ using UnityEngine.Assertions;
 namespace TheseusAndMinotaur.Data
 {
     /// <summary>
-    /// This class implement game logic for the Theseus and Minotaur Game
+    ///     This class implement game logic for the Theseus and Minotaur Game
     /// </summary>
     public class GameLogic
     {
-        private Stack<Direction> _history = new Stack<Direction>(); 
-        
         private readonly BoardConfig _config;
-        private Vector2Int _theseusCurrentPosition;
+        private readonly Stack<Direction> _history = new();
         private Vector2Int _minotaurCurrentPosition;
-        private Vector2Int ExitPosition => _config.Exit;
-
-        public BoardStatus Staus { get; private set; }
-
-        public bool HasUndo => _history.Count > 0;
+        private Vector2Int _theseusCurrentPosition;
 
         public GameLogic(BoardConfig config)
         {
             _config = config;
-            Staus = BoardStatus.Active;
+            Status = BoardStatus.Active;
             Reset();
         }
 
+        private Vector2Int ExitPosition => _config.Exit;
+
+        public BoardStatus Status { get; private set; }
+
+        public bool HasUndo => _history.Count > 0;
+
         /// <summary>
-        /// Reset Game to initial state
-        /// Theseus and Minotaur goes back to original positions
+        ///     Reset Game to initial state
+        ///     Theseus and Minotaur goes back to original positions
         /// </summary>
         public void Reset()
         {
             _history.Clear();
-            Staus = BoardStatus.Active;
+            Status = BoardStatus.Active;
             _theseusCurrentPosition = _config.TheseusStartPosition;
             _minotaurCurrentPosition = _config.MinotaurStartPosition;
         }
 
         /// <summary>
-        /// Move theseus to the direction
-        /// if direction = Direction.None, theseus skip the turn
+        ///     Move theseus to the direction
+        ///     if direction = Direction.None, theseus skip the turn
         /// </summary>
         /// <param name="direction"></param>
         /// <returns></returns>
         public BoardMoveResult MakeMovement(Direction direction)
         {
             Assert.IsTrue(IsMoveAvailableForTheseus(direction), $"theseus are not able to make {direction} move");
-            Direction[] moves = new [] { direction, Direction.None, Direction.None };
-            
-            if (direction != Direction.None)
-            {
-                _theseusCurrentPosition = _theseusCurrentPosition.GetNeighbour(direction);
-            }
+            Direction[] moves = { direction, Direction.None, Direction.None };
 
-            if (_theseusCurrentPosition == ExitPosition)
-            {
-                return GetResult(BoardStatus.Victory, moves);
-            }
+            if (direction != Direction.None) _theseusCurrentPosition = _theseusCurrentPosition.GetNeighbour(direction);
 
-            if (_theseusCurrentPosition == _minotaurCurrentPosition)
-            {
-                return GetResult(BoardStatus.GameOver, moves);
-            }
+            if (_theseusCurrentPosition == ExitPosition) return GetResult(BoardStatus.Victory, moves);
 
-            for (int i = 0; i < 2; i++)
+            if (_theseusCurrentPosition == _minotaurCurrentPosition) return GetResult(BoardStatus.GameOver, moves);
+
+            for (var i = 0; i < 2; i++)
             {
                 var minotaurDirection = GetMinotaurDirection();
                 moves[i + 1] = minotaurDirection;
-                if (minotaurDirection == Direction.None)
-                {
-                    break; // no point to wait another turns
-                }
+                if (minotaurDirection == Direction.None) break; // no point to wait another turns
 
                 _minotaurCurrentPosition = _minotaurCurrentPosition.GetNeighbour(minotaurDirection);
-                if (_theseusCurrentPosition == _minotaurCurrentPosition)
-                {
-                    return GetResult(BoardStatus.GameOver, moves);
-                }
+                if (_theseusCurrentPosition == _minotaurCurrentPosition) return GetResult(BoardStatus.GameOver, moves);
             }
 
             return GetResult(BoardStatus.Active, moves);
         }
-        
+
         public BoardMoveResult Undo()
         {
-            Staus = BoardStatus.Active;
+            Status = BoardStatus.Active;
             Assert.IsTrue(HasUndo);
             var mFirstMove = _history.Pop().GetOpposite();
             var mLastMove = _history.Pop().GetOpposite();
@@ -99,21 +84,17 @@ namespace TheseusAndMinotaur.Data
 
         private BoardMoveResult GetResult(BoardStatus status, Direction[] moves)
         {
-            Staus = status;
-            bool changed = moves[0] != Direction.None || moves[1] != Direction.None || moves[2] != Direction.None;
+            Status = status;
+            var changed = moves[0] != Direction.None || moves[1] != Direction.None || moves[2] != Direction.None;
             if (changed)
-            {
-                for (int i = 0; i < moves.Length; i++)
-                {
+                for (var i = 0; i < moves.Length; i++)
                     _history.Push(moves[i]);
-                }
-            }
             return new BoardMoveResult(status, moves, changed);
         }
 
         private Direction GetMinotaurDirection()
         {
-            var diff =   _theseusCurrentPosition - _minotaurCurrentPosition;
+            var diff = _theseusCurrentPosition - _minotaurCurrentPosition;
 
             var minotaurDirections = _config[_minotaurCurrentPosition];
             if (diff.x < 0 && minotaurDirections.HasWayTo(Direction.Left)) return Direction.Left;
@@ -126,19 +107,16 @@ namespace TheseusAndMinotaur.Data
 
             return Direction.None;
         }
-        
-        
+
+
         /// <summary>
-        /// Check if this move available for Theseus
+        ///     Check if this move available for Theseus
         /// </summary>
         /// <param name="direction"></param>
         /// <returns></returns>
         public bool IsMoveAvailableForTheseus(Direction direction)
         {
-            if (direction == Direction.None)
-            {
-                return true;
-            }
+            if (direction == Direction.None) return true;
 
             var targetBoardPosition = _theseusCurrentPosition.GetNeighbour(direction);
             return _config[_theseusCurrentPosition].HasWayTo(direction)

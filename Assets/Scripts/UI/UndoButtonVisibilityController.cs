@@ -5,12 +5,11 @@ using UnityEngine.UI;
 namespace TheseusAndMinotaur.UI
 {
     /// <summary>
-    /// Make button interactable only when game is in ListenUserInput state and has undo layer 
+    ///     Make button interactable only when game is in ListenUserInput state and has undo layer
     /// </summary>
     [RequireComponent(typeof(Button))]
     public class UndoButtonVisibilityController : MonoBehaviour
     {
-        
         private const GameState AllowedState = GameState.ListenUserInput;
 
         private void Awake()

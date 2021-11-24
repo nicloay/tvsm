@@ -1,4 +1,3 @@
-
 namespace TheseusAndMinotaur.Data
 {
     public enum BoardStatus

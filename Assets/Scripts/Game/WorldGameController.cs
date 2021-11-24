@@ -20,10 +20,10 @@ namespace TheseusAndMinotaur.Game
         private BoardConfig _currentBoardConfig;
         private GameLogic _gameLogic;
         private GameState _state;
-        public bool HasUndo => _gameLogic.HasUndo;
         public GameStateChangedEvent GameStateChanged = new();
 
         private InputAction requestedAction;
+        public bool HasUndo => _gameLogic.HasUndo;
 
 
         public Vector2 BoardWorldSize => _currentBoardConfig.GetBoardWorldSize();
@@ -64,7 +64,7 @@ namespace TheseusAndMinotaur.Game
             StopAllCoroutines();
             _gameLogic.Reset();
             State = GameState.TerminatingCurrentLoop;
-            
+
             theseusMovementController.ResetToOriginalPosition();
             minotaurMovementController.ResetToOriginalPosition();
             StartNewGame();
@@ -82,7 +82,7 @@ namespace TheseusAndMinotaur.Game
             State = GameState.NewGameStarted;
             StartCoroutine(StartGameLoop());
         }
-        
+
         private IEnumerator StartGameLoop()
         {
             do
@@ -103,7 +103,7 @@ namespace TheseusAndMinotaur.Game
                     State = GameState.Active;
                     continue;
                 }
-                
+
                 var direction = key.ToDirection();
                 if (!_gameLogic.IsMoveAvailableForTheseus(direction))
                 {
@@ -117,7 +117,7 @@ namespace TheseusAndMinotaur.Game
                     State = GameState.Active;
                     continue;
                 }
-                
+
                 yield return StartCoroutine(MoveCharacters(movementResult));
 
                 if (movementResult.BoardStatus == BoardStatus.Victory)
@@ -127,13 +127,9 @@ namespace TheseusAndMinotaur.Game
                 }
 
                 if (movementResult.BoardStatus == BoardStatus.GameOver)
-                {
                     State = GameState.GameOver;
-                }
                 else
-                {
                     State = GameState.Active;
-                }
             } while (State == GameState.Active);
         }
 
@@ -144,7 +140,7 @@ namespace TheseusAndMinotaur.Game
                 RestartBoard();
                 return;
             }
-            
+
             if (State != GameState.ListenUserInput)
             {
                 Debug.LogError($"you can only request input action in {GameState.ListenUserInput} state");
@@ -161,13 +157,10 @@ namespace TheseusAndMinotaur.Game
             yield return StartCoroutine(MoveCharacter(minotaurMovementController, moveResult.MinotaurFirstMove));
             yield return StartCoroutine(MoveCharacter(minotaurMovementController, moveResult.MinotaurSecondMove));
         }
-        
+
         private IEnumerator MoveCharacter(MovementController movementController, Direction direction)
         {
-            if (direction == Direction.None)
-            {
-                yield break;
-            }
+            if (direction == Direction.None) yield break;
             yield return StartCoroutine(movementController.MoveTo(direction));
         }
 

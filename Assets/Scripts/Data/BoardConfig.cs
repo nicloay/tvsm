@@ -16,10 +16,11 @@ namespace TheseusAndMinotaur.Data
         public BoardConfig(Direction[,] wallMap, Vector2Int theseusStartPosition, Vector2Int minotaurStartPosition,
             Vector2Int exit)
         {
-            Assert.IsTrue(theseusStartPosition != minotaurStartPosition, "theseus and minotaur position must be different");
+            Assert.IsTrue(theseusStartPosition != minotaurStartPosition,
+                "theseus and minotaur position must be different");
             Assert.IsTrue(theseusStartPosition != exit, "theseus and exit position must be different");
             Assert.IsTrue(minotaurStartPosition != exit, "minotaur and exit position must be different");
-            
+
             TheseusStartPosition = theseusStartPosition;
             MinotaurStartPosition = minotaurStartPosition;
             _wallMap = wallMap;

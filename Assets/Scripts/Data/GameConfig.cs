@@ -18,7 +18,7 @@ namespace TheseusAndMinotaur.Data
 
         [Tooltip("Seconds per cell speed for Theseus, Minotaur and Undo back movement")] [SerializeField]
         private float movementSpeed = 0.3f;
-        
+
 
         public static GameConfig Instance
         {

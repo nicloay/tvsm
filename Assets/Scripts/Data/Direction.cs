@@ -66,7 +66,10 @@ namespace TheseusAndMinotaur.Data
             return false;
         }
 
-        public static Direction GetOpposite(this Direction direction) => Opposites[direction];
+        public static Direction GetOpposite(this Direction direction)
+        {
+            return Opposites[direction];
+        }
 
         public static bool HasLeft(this Direction direction)
         {
@@ -90,7 +93,7 @@ namespace TheseusAndMinotaur.Data
         }
 
         /// <summary>
-        /// Return true if there is wall in target direction
+        ///     Return true if there is wall in target direction
         /// </summary>
         public static bool HasWallAt(this Direction direction, Direction target)
         {
@@ -98,9 +101,12 @@ namespace TheseusAndMinotaur.Data
         }
 
         /// <summary>
-        /// return true if the pass is clear and there is no walls in target direction
+        ///     return true if the pass is clear and there is no walls in target direction
         /// </summary>
-        public static bool HasWayTo(this Direction direction, Direction target) => !direction.HasWallAt(target);
+        public static bool HasWayTo(this Direction direction, Direction target)
+        {
+            return !direction.HasWallAt(target);
+        }
 
         /// <summary>
         ///     Return list of base direction (Left, Right, Top, Down)
@@ -139,10 +145,7 @@ namespace TheseusAndMinotaur.Data
         /// <returns></returns>
         public static Vector2Int GetNeighbour(this Vector2Int boardPosition, Direction direction)
         {
-            if (direction == Direction.None)
-            {
-                return boardPosition;
-            }
+            if (direction == Direction.None) return boardPosition;
 
             Assert.IsTrue(direction.IsBaseDirection());
             return boardPosition + OffsetByDirection[direction];

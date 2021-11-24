@@ -26,8 +26,7 @@ namespace TheseusAndMinotaur.Game
             { InputAction.MoveLeft, Direction.Left },
             { InputAction.MoveRight, Direction.Right },
             { InputAction.MoveUp, Direction.Up },
-            { InputAction.Wait, Direction.None}
-            
+            { InputAction.Wait, Direction.None }
         };
 
         /// <summary>

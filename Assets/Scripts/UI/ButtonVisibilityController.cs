@@ -5,7 +5,7 @@ using UnityEngine.UI;
 namespace TheseusAndMinotaur.UI
 {
     /// <summary>
-    /// Enable button only when GameState is in ListenUserInputState
+    ///     Enable button only when GameState is in ListenUserInputState
     /// </summary>
     [RequireComponent(typeof(Button))]
     public class ButtonVisibilityController : MonoBehaviour

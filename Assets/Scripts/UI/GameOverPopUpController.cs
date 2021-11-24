@@ -9,7 +9,7 @@ namespace TheseusAndMinotaur.UI
         [SerializeField] private Canvas canvas;
         [SerializeField] private Button restartButton;
         [SerializeField] private Button undoButton;
-         private WorldGameController _worldGameController;
+        private WorldGameController _worldGameController;
 
 
         private void Awake()
