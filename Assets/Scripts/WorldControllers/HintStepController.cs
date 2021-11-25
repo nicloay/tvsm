@@ -6,20 +6,18 @@ using UnityEngine;
 namespace TheseusAndMinotaur.WorldControllers
 {
     /// <summary>
-    /// Controll visual element of the single step hint path
+    ///     Controll visual element of the single step hint path
     /// </summary>
     [RequireComponent(typeof(TextMeshPro))]
     public class HintStepController : MonoBehaviour
     {
-        private TextMeshPro _text;
-
         private static readonly Dictionary<Direction, string> signByDirection = new()
         {
             { Direction.Left, "←" },
             { Direction.Right, "→" },
             { Direction.Up, "↑" },
             { Direction.Down, "↓" },
-            { Direction.None, "]" },
+            { Direction.None, "]" }
         };
 
         private static readonly Dictionary<Direction, Quaternion> RotationByDirection = new()
@@ -28,9 +26,11 @@ namespace TheseusAndMinotaur.WorldControllers
             { Direction.Right, Quaternion.identity },
             { Direction.Up, Quaternion.identity },
             { Direction.Down, Quaternion.identity },
-            { Direction.None, Quaternion.Euler(0, 0, -90) },
+            { Direction.None, Quaternion.Euler(0, 0, -90) }
         };
-        
+
+        private TextMeshPro _text;
+
         private void Awake()
         {
             _text = GetComponent<TextMeshPro>();

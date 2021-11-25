@@ -23,7 +23,10 @@ namespace TheseusAndMinotaur.Tests
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space)) Spawn();
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Spawn();
+            }
         }
 
         private void Spawn()

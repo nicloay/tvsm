@@ -70,7 +70,11 @@ namespace TheseusAndMinotaur.Data
 
         public static bool HasDirection(this Direction direction, Direction targetDirection)
         {
-            if (((byte)direction & (byte)targetDirection) == (byte)targetDirection) return true;
+            if (((byte)direction & (byte)targetDirection) == (byte)targetDirection)
+            {
+                return true;
+            }
+
             return false;
         }
 
@@ -153,7 +157,10 @@ namespace TheseusAndMinotaur.Data
         /// <returns></returns>
         public static Vector2Int GetNeighbour(this Vector2Int boardPosition, Direction direction)
         {
-            if (direction == Direction.None) return boardPosition;
+            if (direction == Direction.None)
+            {
+                return boardPosition;
+            }
 
             Assert.IsTrue(direction.IsBaseDirection());
             return boardPosition + OffsetByDirection[direction];

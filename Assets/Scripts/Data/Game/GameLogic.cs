@@ -123,7 +123,7 @@ namespace TheseusAndMinotaur.Data.Game
             MinotaurCurrentPosition = MinotaurCurrentPosition.GetNeighbour(mFirstMove);
             MinotaurCurrentPosition = MinotaurCurrentPosition.GetNeighbour(mLastMove);
             return new BoardMoveResult(BoardStatus.Active, new[] { tMove, mFirstMove, mLastMove },
-                TheseusCurrentPosition, MinotaurCurrentPosition);;
+                TheseusCurrentPosition, MinotaurCurrentPosition);
         }
 
 
@@ -186,7 +186,7 @@ namespace TheseusAndMinotaur.Data.Game
         {
             return IsMovementAvailable(TheseusCurrentPosition, direction);
         }
-        
+
         /// <summary>
         ///     Check if it's possible to step into direction from provided position
         ///     - no walls
@@ -198,9 +198,9 @@ namespace TheseusAndMinotaur.Data.Game
             {
                 return true;
             }
-            
+
             var targetBoardPosition = sourcePosition.GetNeighbour(direction);
-            return _config[sourcePosition].HasWayTo(direction) 
+            return _config[sourcePosition].HasWayTo(direction)
                    && targetBoardPosition.x >= 0
                    && targetBoardPosition.y >= 0
                    && targetBoardPosition.x <= _config.Width

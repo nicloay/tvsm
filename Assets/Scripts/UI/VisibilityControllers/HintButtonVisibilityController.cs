@@ -5,13 +5,14 @@ using UnityEngine.UI;
 namespace TheseusAndMinotaur.UI
 {
     /// <summary>
-    /// Make button available only when it's user input and hint is not yet shown on the screen
+    ///     Make button available only when it's user input and hint is not yet shown on the screen
     /// </summary>
     public class HintButtonVisibilityController : MonoBehaviour
     {
         private Button _button;
-        private WorldGameController _worldGameController;
         private HintController _hintController;
+        private WorldGameController _worldGameController;
+
         private void Awake()
         {
             _button = GetComponent<Button>();

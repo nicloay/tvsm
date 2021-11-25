@@ -48,7 +48,11 @@ namespace TheseusAndMinotaur.Data
         public Direction[] GetWallsAtRow(int rowId)
         {
             var result = new Direction[Width];
-            for (var x = 0; x < Width; x++) result[x] = _wallMap[rowId, x];
+            for (var x = 0; x < Width; x++)
+            {
+                result[x] = _wallMap[rowId, x];
+            }
+
             return result;
         }
     }

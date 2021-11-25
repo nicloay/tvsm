@@ -30,7 +30,9 @@ namespace TheseusAndMinotaur.UI
         private void Update()
         {
             if (_button.interactable && (IsPressed || Input.GetButton(action.ToString())))
+            {
                 _worldGameController.RequestAction(action);
+            }
         }
 
         public void OnPointerDown(PointerEventData eventData)

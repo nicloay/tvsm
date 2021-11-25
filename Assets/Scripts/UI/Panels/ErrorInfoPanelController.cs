@@ -11,17 +11,17 @@ namespace TheseusAndMinotaur.UI
         [SerializeField] private GameObject textHolder;
         [SerializeField] private string wrongMovementText = "ERROR: You can't move there";
         [SerializeField] private string pathNotFound = "ERROR: path not found";
-        
-        
+
+
         private TextMeshProUGUI _textMeshPro;
-        
+
         private void Awake()
         {
             _textMeshPro = GetComponentInChildren<TextMeshProUGUI>();
             textHolder.SetActive(false);
             var gameController = FindObjectOfType<WorldGameController>();
-            gameController.WrongMovement.AddListener(()=>ShowError(wrongMovementText));
-            gameController.PathNotFound.AddListener(()=>ShowError(pathNotFound));
+            gameController.WrongMovement.AddListener(() => ShowError(wrongMovementText));
+            gameController.PathNotFound.AddListener(() => ShowError(pathNotFound));
         }
 
         private void ShowError(string text)
@@ -33,7 +33,7 @@ namespace TheseusAndMinotaur.UI
         private IEnumerator ShowTextBox(string text)
         {
             _textMeshPro.text = text;
-            textHolder.SetActive(true); 
+            textHolder.SetActive(true);
             yield return new WaitForSeconds(timeOnScreen); // don't cache to adjust values in runtime
             textHolder.SetActive(false);
         }

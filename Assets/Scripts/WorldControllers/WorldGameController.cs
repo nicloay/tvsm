@@ -19,16 +19,16 @@ namespace TheseusAndMinotaur.WorldControllers
         [SerializeField] private MovementController theseusMovementController;
         [SerializeField] private MovementController minotaurMovementController;
         [SerializeField] private MovementController exitController;
-        
-        public readonly UnityEvent WrongMovement = new();
         public readonly UnityEvent PathNotFound = new();
         public readonly ShowHintEvent ShowHint = new();
+
+        public readonly UnityEvent WrongMovement = new();
         private BoardGridSpawner _boardGridSpawner;
         private GameLogic _gameLogic;
         private GameState _state;
-        public GameStateChangedEvent GameStateChanged = new();
+        public readonly GameStateChangedEvent GameStateChanged = new();
 
-        private InputAction requestedAction;
+        private InputAction _requestedAction;
         public bool HasUndo => _gameLogic.HasUndo;
 
         public Vector2 BoardWorldSize => _gameLogic.GridSize.ToWorldSize();
@@ -38,7 +38,11 @@ namespace TheseusAndMinotaur.WorldControllers
             get => _state;
             set
             {
-                if (value == _state) return;
+                if (value == _state)
+                {
+                    return;
+                }
+
                 _state = value;
                 GameStateChanged.Invoke(_state);
             }
@@ -78,7 +82,7 @@ namespace TheseusAndMinotaur.WorldControllers
         public void RequestUndoOnFinishedGame()
         {
             StartCoroutine(StartGameLoop());
-            requestedAction = InputAction.Undo;
+            _requestedAction = InputAction.Undo;
         }
 
 
@@ -94,11 +98,14 @@ namespace TheseusAndMinotaur.WorldControllers
             {
                 // Listen Input
                 State = GameState.ListenUserInput;
-                requestedAction = InputAction.None;
-                while (requestedAction == InputAction.None) yield return null;
+                _requestedAction = InputAction.None;
+                while (_requestedAction == InputAction.None)
+                {
+                    yield return null;
+                }
 
                 State = GameState.HandleInput;
-                var key = requestedAction;
+                var key = _requestedAction;
 
                 if (key == InputAction.Undo)
                 {
@@ -132,10 +139,8 @@ namespace TheseusAndMinotaur.WorldControllers
                     break;
                 }
 
-                if (movementResult.BoardStatus == BoardStatus.GameOver)
-                    State = GameState.GameOver;
-                else
-                    State = GameState.Active;
+                State = movementResult.BoardStatus == BoardStatus.GameOver 
+                    ? GameState.GameOver : GameState.Active;
             } while (State == GameState.Active);
         }
 
@@ -159,7 +164,7 @@ namespace TheseusAndMinotaur.WorldControllers
                 return;
             }
 
-            requestedAction = inputAction;
+            _requestedAction = inputAction;
         }
 
         private void HandleHintRequest()
@@ -177,7 +182,7 @@ namespace TheseusAndMinotaur.WorldControllers
             }
         }
 
-        public (bool, List<Direction>) GetHint()
+        private (bool, List<Direction>) GetHint()
         {
             var pathFinder = new PathFinder(_gameLogic);
             return pathFinder.FindPath();
@@ -192,7 +197,11 @@ namespace TheseusAndMinotaur.WorldControllers
 
         private IEnumerator MoveCharacter(MovementController movementController, Direction direction)
         {
-            if (direction == Direction.None) yield break;
+            if (direction == Direction.None)
+            {
+                yield break;
+            }
+
             yield return StartCoroutine(movementController.MoveTo(direction));
         }
 
@@ -201,9 +210,9 @@ namespace TheseusAndMinotaur.WorldControllers
         }
 
         /// <summary>
-        /// Board found the path and request to show it
-        ///   Vector2Int - Theseus start position
-        ///   List<Direction> - direction for the path
+        ///     Board found the path and request to show it
+        ///     Vector2Int - Theseus start position
+        ///     List<Direction> - direction for the path
         /// </summary>
         public class ShowHintEvent : UnityEvent<Vector2Int, List<Direction>>
         {

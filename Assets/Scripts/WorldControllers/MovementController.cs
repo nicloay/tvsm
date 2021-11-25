@@ -17,7 +17,6 @@ namespace TheseusAndMinotaur.WorldControllers
         {
             _originalBoardPosition = startPosition;
             ResetToOriginalPosition();
-            
         }
 
         public void ResetToOriginalPosition()

@@ -16,7 +16,7 @@ namespace TheseusAndMinotaur.WorldControllers
         Undo,
         Restart,
         Wait,
-        Next, 
+        Next,
         Hint
     }
 

@@ -6,8 +6,8 @@ using UnityEngine.UI;
 namespace TheseusAndMinotaur.UI
 {
     /// <summary>
-    /// This controller handle the end screen when player won or failed
-    /// If player won and there is next leve, the corresponding button will be shown.
+    ///     This controller handle the end screen when player won or failed
+    ///     If player won and there is next leve, the corresponding button will be shown.
     /// </summary>
     public class GameOverPanelController : MonoBehaviour
     {
@@ -37,11 +37,19 @@ namespace TheseusAndMinotaur.UI
             if (canvas.enabled)
             {
                 if (Input.GetButtonUp(nameof(InputAction.Restart)))
+                {
                     OnRestartBoard();
+                }
+
                 if (Input.GetButtonUp(nameof(InputAction.Undo)))
+                {
                     OnUndoLastTurn();
+                }
+
                 if (nextLevelButton.interactable && Input.GetButtonUp(nameof(InputAction.Next)))
+                {
                     StartNext();
+                }
             }
         }
 
@@ -53,7 +61,11 @@ namespace TheseusAndMinotaur.UI
         private void OnGameStateChanged(GameState gameState)
         {
             canvas.enabled = gameState == GameState.GameOver || gameState == GameState.Victory;
-            if (!canvas.enabled) return;
+            if (!canvas.enabled)
+            {
+                return;
+            }
+
             gameOverHeader.SetActive(gameState == GameState.GameOver);
             victoryHeader.SetActive(gameState == GameState.Victory);
             nextLevelButton.interactable = _levelManager.HasMoreLevel;

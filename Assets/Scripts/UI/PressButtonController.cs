@@ -23,7 +23,10 @@ namespace TheseusAndMinotaur.UI
 
         private void Update()
         {
-            if (_button.interactable && Input.GetButtonDown(inputAction.ToString())) OnButtonClick();
+            if (_button.interactable && Input.GetButtonDown(inputAction.ToString()))
+            {
+                OnButtonClick();
+            }
         }
 
         private void OnButtonClick()

@@ -9,11 +9,11 @@ namespace TheseusAndMinotaur.WorldControllers
     {
         [SerializeField] private HintStepController stepPrefab;
 
-        private ObjectPool<HintStepController> _stepPool;
+        private readonly Stack<HintStepController> _activeHints = new();
 
-        private readonly Stack<HintStepController> _activeHints = new ();
+        private ObjectPool<HintStepController> _stepPool;
         public bool IsHintActive => _activeHints.Count > 0;
-        
+
         private void Awake()
         {
             _stepPool = new ObjectPool<HintStepController>(
@@ -30,10 +30,10 @@ namespace TheseusAndMinotaur.WorldControllers
             if (IsHintActive && gameState is GameState.HandleInput or GameState.NewGameStarted)
             {
                 Clear();
-            }   
+            }
         }
 
-        public void OnShowHintRequested(Vector2Int startPosition, List<Direction> directions)
+        private void OnShowHintRequested(Vector2Int startPosition, List<Direction> directions)
         {
             var currentPosition = startPosition;
             _activeHints.Clear();
@@ -42,7 +42,7 @@ namespace TheseusAndMinotaur.WorldControllers
                 var instance = _stepPool.Get();
                 instance.SetDirection(direction);
                 instance.transform.position = currentPosition.GetWorldPosition();
-                
+
                 _activeHints.Push(instance);
                 currentPosition = currentPosition.GetNeighbour(direction);
             }
