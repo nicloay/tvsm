@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7531e242c5634c808ee701c292aea9fc, type: 3}
+  m_Name: Level1
+  m_EditorClassIdentifier: 
+  levelInfo: 'Use <b>hot keys</b> or <b>buttons</b> on the right pannel to lead <b>Theseus</b><sprite
+    name="theseus"> to the <b>Exit (E)</b>.
+
+    Bad <b>Minotaur</b><sprite name="minotaur">
+    make <b>2</b> steps for every <b>single</b> step of Theseus
+
+    But good news,
+    Minotaur always makes <b>Left</b>, <b>Right</b> moves first and always tries
+    to step using shortest way, like he won''t see the walls.
+
+    Don''t forget
+    to use <b>Undo</b> when the game is over, or any time you made an awkward move.
+
+
+    Good
+    luck, and hope to see you at the next level. (argh.. almost forgot, did you see
+    the hint button?)'

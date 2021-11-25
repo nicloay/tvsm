@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using TheseusAndMinotaur.Data;
 using TheseusAndMinotaur.Data.Deserializer;
 using TheseusAndMinotaur.Data.Game;
@@ -21,7 +22,8 @@ namespace TheseusAndMinotaur.WorldControllers
         [SerializeField] private MovementController exitController;
         public readonly UnityEvent PathNotFound = new();
         public readonly ShowHintEvent ShowHint = new();
-
+        public readonly LevelStartEvent LevelStart = new();
+        
         public readonly UnityEvent WrongMovement = new();
         private BoardGridSpawner _boardGridSpawner;
         private GameLogic _gameLogic;
@@ -65,6 +67,7 @@ namespace TheseusAndMinotaur.WorldControllers
             theseusMovementController.Initialize(currentBoardConfig.TheseusStartPosition);
             minotaurMovementController.Initialize(currentBoardConfig.MinotaurStartPosition);
             exitController.Initialize(currentBoardConfig.Exit);
+            LevelStart.Invoke(Path.GetFileNameWithoutExtension(boardPath));
             StartNewGame();
         }
 
@@ -215,6 +218,14 @@ namespace TheseusAndMinotaur.WorldControllers
         ///     List<Direction> - direction for the path
         /// </summary>
         public class ShowHintEvent : UnityEvent<Vector2Int, List<Direction>>
+        {
+        }
+
+        /// <summary>
+        /// Event raised when new board started
+        /// Provide info of the level name which is equal FileNameWithoutExtension
+        /// </summary>
+        public class LevelStartEvent : UnityEvent<string>
         {
         }
     }
