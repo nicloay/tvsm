@@ -1,7 +1,9 @@
 using System.Collections;
+using System.Collections.Generic;
 using TheseusAndMinotaur.Data;
 using TheseusAndMinotaur.Data.Deserializer;
 using TheseusAndMinotaur.Data.Game;
+using TheseusAndMinotaur.Data.Game.PathFinder;
 using TheseusAndMinotaur.WorldControllers.Maze;
 using UnityEngine;
 using UnityEngine.Assertions;
@@ -17,7 +19,12 @@ namespace TheseusAndMinotaur.WorldControllers
         [SerializeField] private MovementController theseusMovementController;
         [SerializeField] private MovementController minotaurMovementController;
         [SerializeField] private MovementController exitController;
+
+        [SerializeField]
+        private HintController hintController; // we can invert this dependency, but for speed let's use it like that
+
         public readonly UnityEvent WrongMovement = new();
+        public readonly UnityEvent PathNotFound = new();
         private BoardGridSpawner _boardGridSpawner;
         private GameLogic _gameLogic;
         private GameState _state;
@@ -141,6 +148,19 @@ namespace TheseusAndMinotaur.WorldControllers
                 RestartBoard();
                 return;
             }
+            else if (inputAction == InputAction.Hint)
+            {
+                (bool pathFound, List<Direction> directions) = GetHint();
+                if (pathFound)
+                {
+                    hintController.Show(_gameLogic.TheseusCurrentPosition, directions);
+                }
+                else
+                {
+                    PathNotFound.Invoke();
+                }
+                return;
+            }
 
             if (State != GameState.ListenUserInput)
             {
@@ -151,6 +171,11 @@ namespace TheseusAndMinotaur.WorldControllers
             requestedAction = inputAction;
         }
 
+        public (bool, List<Direction>) GetHint()
+        {
+            var pathFinder = new PathFinder(_gameLogic);
+            return pathFinder.FindPath();
+        }
 
         private IEnumerator MoveCharacters(BoardMoveResult moveResult)
         {
