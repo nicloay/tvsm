@@ -14,16 +14,14 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
 
         public PathFinder(GameLogic gameLogic)
         {
-            _gameLogic =
-                gameLogic; // TODO: as it move theseus and minotaur it's modify board, so we need to clone it first.
+            _gameLogic = gameLogic; 
         }
-
 
         /// <summary>
         /// </summary>
         /// <returns>
         ///     true or false - for the first parameter if path is found
-        ///     List<Direction> - set of actions required to reach the target
+        ///     List{Direction} - set of actions required to reach the target
         /// </returns>
         public (bool, List<Direction>) FindPath()
         {
