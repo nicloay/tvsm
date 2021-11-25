@@ -1,5 +1,5 @@
 using TheseusAndMinotaur.Data;
-using TheseusAndMinotaur.Game;
+using TheseusAndMinotaur.WorldControllers;
 using UnityEngine;
 using UnityEngine.Assertions;
 

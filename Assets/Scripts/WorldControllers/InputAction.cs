@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using TheseusAndMinotaur.Data;
 
-namespace TheseusAndMinotaur.Game
+namespace TheseusAndMinotaur.WorldControllers
 {
     /// <summary>
     ///     AvailableInputAction
@@ -16,7 +16,8 @@ namespace TheseusAndMinotaur.Game
         Undo,
         Restart,
         Wait,
-        Next
+        Next,
+        Hint
     }
 
     public static class InputActionUtil

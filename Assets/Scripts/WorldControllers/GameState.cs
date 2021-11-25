@@ -1,4 +1,4 @@
-namespace TheseusAndMinotaur.Game
+namespace TheseusAndMinotaur.WorldControllers
 {
     public enum GameState
     {

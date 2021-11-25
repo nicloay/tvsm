@@ -26,7 +26,9 @@ namespace TheseusAndMinotaur.Data.Deserializer
         public static BoardConfig DeserializeFrom(string textData)
         {
             if (string.IsNullOrEmpty(textData))
+            {
                 throw new ParseMazeException("string is empty or null, you must provide something");
+            }
 
             var reader = new StringReader(textData);
             var line = reader.ReadLine();
@@ -38,16 +40,26 @@ namespace TheseusAndMinotaur.Data.Deserializer
             {
                 // check top wall from current line
                 for (var x = 1; x < line.Length; x += 2)
+                {
                     if (line[x] == HorizontalWallChar)
+                    {
                         rawBoard[y, x / 2] |= Direction.Up;
+                    }
+                }
 
                 // Check side walls on next line (but it can be null for the last line
                 line = reader.ReadLine();
-                if (line == null) break;
+                if (line == null)
+                {
+                    break;
+                }
 
                 for (var x = 0; x < line.Length; x++)
                 {
-                    if (line[x] == VerticalWallChar) rawBoard[y, x / 2] |= Direction.Left;
+                    if (line[x] == VerticalWallChar)
+                    {
+                        rawBoard[y, x / 2] |= Direction.Left;
+                    }
 
                     if (++x < line.Length)
                     {

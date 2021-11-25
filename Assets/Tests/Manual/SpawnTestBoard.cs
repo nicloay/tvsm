@@ -1,5 +1,5 @@
 using TheseusAndMinotaur.Data.Deserializer;
-using TheseusAndMinotaur.Maze;
+using TheseusAndMinotaur.WorldControllers.Maze;
 using UnityEngine;
 
 namespace TheseusAndMinotaur.Tests
@@ -23,7 +23,10 @@ namespace TheseusAndMinotaur.Tests
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.Space)) Spawn();
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Spawn();
+            }
         }
 
         private void Spawn()

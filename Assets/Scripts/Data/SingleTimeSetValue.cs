@@ -15,7 +15,10 @@ namespace TheseusAndMinotaur.Data
             get => _value;
             set
             {
-                if (IsValueSet) throw new Exception("Value can be set only single time");
+                if (IsValueSet)
+                {
+                    throw new Exception("Value can be set only single time");
+                }
 
                 IsValueSet = true;
                 _value = value;

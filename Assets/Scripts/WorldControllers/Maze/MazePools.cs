@@ -3,7 +3,7 @@ using TheseusAndMinotaur.Data;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace TheseusAndMinotaur.Maze
+namespace TheseusAndMinotaur.WorldControllers.Maze
 {
     /// <summary>
     ///     Contains pools for walls and cells

@@ -1,7 +1,7 @@
 using TheseusAndMinotaur.Data;
 using UnityEngine;
 
-namespace TheseusAndMinotaur.Maze
+namespace TheseusAndMinotaur.WorldControllers.Maze
 {
     /// <summary>
     ///     Generate game object from board data

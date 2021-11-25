@@ -59,27 +59,47 @@ namespace TheseusAndMinotaur.Data.Deserializer
             /// <exception cref="ParseMazeException"></exception>
             public BoardConfig ConvertToBoard()
             {
-                if (_maxX < 0 && _maxY < 0) throw new ParseMazeException("maze contains no walls");
+                if (_maxX < 0 && _maxY < 0)
+                {
+                    throw new ParseMazeException("maze contains no walls");
+                }
 
-                if (!TheseusStartPosition.IsValueSet) throw new ParseMazeException("Theseus position is not set");
+                if (!TheseusStartPosition.IsValueSet)
+                {
+                    throw new ParseMazeException("Theseus position is not set");
+                }
 
-                if (!MinotaurStartPosition.IsValueSet) throw new ParseMazeException("Minotaur position is not set");
+                if (!MinotaurStartPosition.IsValueSet)
+                {
+                    throw new ParseMazeException("Minotaur position is not set");
+                }
 
-                if (!ExitPosition.IsValueSet) throw new ParseMazeException("Exit position is not set");
+                if (!ExitPosition.IsValueSet)
+                {
+                    throw new ParseMazeException("Exit position is not set");
+                }
 
                 var map = new Direction[_maxY + 1, _maxX + 1];
                 // 1. invert Y indexes (move Y to the bottom)
                 for (var y = 0; y <= _maxY; y++)
                 for (var x = 0; x <= _maxX; x++)
+                {
                     map[_maxY - y, x] = this[y, x];
+                }
 
                 // 2. fill walls for neighbour cells (so any cells will have info about left, right, top, down cells
                 for (int y = 0, nextY = 1; y <= _maxY; y = nextY++)
                 for (int x = 0, nextX = 1; x <= _maxX; x = nextX++)
                 {
-                    if (nextX <= _maxX && map[y, nextX].HasLeft()) map[y, x] |= Direction.Right;
+                    if (nextX <= _maxX && map[y, nextX].HasLeft())
+                    {
+                        map[y, x] |= Direction.Right;
+                    }
 
-                    if (nextY <= _maxY && map[y, x].HasTop()) map[nextY, x] |= Direction.Down;
+                    if (nextY <= _maxY && map[y, x].HasTop())
+                    {
+                        map[nextY, x] |= Direction.Down;
+                    }
                 }
 
                 return new BoardConfig(map,

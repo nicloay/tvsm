@@ -1,14 +1,15 @@
 using TheseusAndMinotaur.Game;
+using TheseusAndMinotaur.WorldControllers;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace TheseusAndMinotaur.UI
 {
     /// <summary>
-    /// This controller handle the end screen when player won or failed
-    /// If player won and there is next leve, the corresponding button will be shown.
+    ///     This controller handle the end screen when player won or failed
+    ///     If player won and there is next leve, the corresponding button will be shown.
     /// </summary>
-    public class GameOverPopUpController : MonoBehaviour
+    public class GameOverPanelController : MonoBehaviour
     {
         [SerializeField] private Canvas canvas;
         [SerializeField] private Button restartButton;
@@ -26,9 +27,9 @@ namespace TheseusAndMinotaur.UI
         {
             _levelManager = FindObjectOfType<LevelManager>();
             _worldGameController = FindObjectOfType<WorldGameController>();
-            _worldGameController.GameStateChanged.AddListener(GameStateChanged);
-            restartButton.onClick.AddListener(RestartBoard);
-            undoButton.onClick.AddListener(UndoLastTurn);
+            _worldGameController.GameStateChanged.AddListener(OnGameStateChanged);
+            restartButton.onClick.AddListener(OnRestartBoard);
+            undoButton.onClick.AddListener(OnUndoLastTurn);
         }
 
         private void Update()
@@ -36,11 +37,19 @@ namespace TheseusAndMinotaur.UI
             if (canvas.enabled)
             {
                 if (Input.GetButtonUp(nameof(InputAction.Restart)))
-                    RestartBoard();
+                {
+                    OnRestartBoard();
+                }
+
                 if (Input.GetButtonUp(nameof(InputAction.Undo)))
-                    UndoLastTurn();
+                {
+                    OnUndoLastTurn();
+                }
+
                 if (nextLevelButton.interactable && Input.GetButtonUp(nameof(InputAction.Next)))
+                {
                     StartNext();
+                }
             }
         }
 
@@ -49,21 +58,25 @@ namespace TheseusAndMinotaur.UI
             _levelManager.StartNext();
         }
 
-        private void GameStateChanged(GameState gameState)
+        private void OnGameStateChanged(GameState gameState)
         {
             canvas.enabled = gameState == GameState.GameOver || gameState == GameState.Victory;
-            if (!canvas.enabled) return;
+            if (!canvas.enabled)
+            {
+                return;
+            }
+
             gameOverHeader.SetActive(gameState == GameState.GameOver);
             victoryHeader.SetActive(gameState == GameState.Victory);
             nextLevelButton.interactable = _levelManager.HasMoreLevel;
         }
 
-        private void UndoLastTurn()
+        private void OnUndoLastTurn()
         {
             _worldGameController.RequestUndoOnFinishedGame();
         }
 
-        private void RestartBoard()
+        private void OnRestartBoard()
         {
             _worldGameController.RestartBoard();
         }

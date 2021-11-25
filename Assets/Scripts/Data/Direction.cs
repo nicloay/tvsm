@@ -39,6 +39,14 @@ namespace TheseusAndMinotaur.Data
         public static readonly Direction[] BaseDirections =
             { Direction.Left, Direction.Right, Direction.Up, Direction.Down };
 
+        /// <summary>
+        ///     List of all directions which can be made on board
+        ///     Direction.None = for Wait
+        /// </summary>
+        public static readonly Direction[] MovementDirections =
+            { Direction.Left, Direction.Right, Direction.Up, Direction.Down, Direction.None };
+
+
         public static readonly HashSet<Direction> BaseDirectionsHashSet = new(BaseDirections);
 
 
@@ -62,7 +70,11 @@ namespace TheseusAndMinotaur.Data
 
         public static bool HasDirection(this Direction direction, Direction targetDirection)
         {
-            if (((byte)direction & (byte)targetDirection) == (byte)targetDirection) return true;
+            if (((byte)direction & (byte)targetDirection) == (byte)targetDirection)
+            {
+                return true;
+            }
+
             return false;
         }
 
@@ -145,7 +157,10 @@ namespace TheseusAndMinotaur.Data
         /// <returns></returns>
         public static Vector2Int GetNeighbour(this Vector2Int boardPosition, Direction direction)
         {
-            if (direction == Direction.None) return boardPosition;
+            if (direction == Direction.None)
+            {
+                return boardPosition;
+            }
 
             Assert.IsTrue(direction.IsBaseDirection());
             return boardPosition + OffsetByDirection[direction];
