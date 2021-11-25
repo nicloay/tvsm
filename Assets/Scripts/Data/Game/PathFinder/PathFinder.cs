@@ -14,7 +14,7 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
 
         public PathFinder(GameLogic gameLogic)
         {
-            _gameLogic = gameLogic; 
+            _gameLogic = gameLogic;
         }
 
         /// <summary>
@@ -106,7 +106,6 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
 
         private int GetReachExitCost(Vector2Int theseusPosition)
         {
-            // TODO: check maybe instead of path to start node, consider how many steps was made for this node.
             var theseus = _gameLogic.ExitPosition - theseusPosition;
             return Mathf.Abs(theseus.x) + Mathf.Abs(theseus.y);
         }
