@@ -11,12 +11,13 @@ namespace TheseusAndMinotaur.UI
     public class InfoBoxTextController : MonoBehaviour
     {
         private TextMeshProUGUI _textMeshProUGUI;
+
         private void Awake()
         {
             _textMeshProUGUI = GetComponent<TextMeshProUGUI>();
             FindObjectOfType<WorldGameController>().LevelStart.AddListener(OnLevelStarted);
         }
-        
+
         private void OnLevelStarted(string levelName)
         {
             StopAllCoroutines();
@@ -33,10 +34,11 @@ namespace TheseusAndMinotaur.UI
 
         private IEnumerator ShowUpdate()
         {
-            float startTime =  Time.timeSinceLevelLoad;
+            var startTime = Time.timeSinceLevelLoad;
             while (true)
             {
-                _textMeshProUGUI.text ="Time: "+ TimeSpan.FromSeconds(Time.timeSinceLevelLoad - startTime).ToString(@"mm\:ss");
+                _textMeshProUGUI.text =
+                    "Time: " + TimeSpan.FromSeconds(Time.timeSinceLevelLoad - startTime).ToString(@"mm\:ss");
                 yield return new WaitForSeconds(1f);
             }
         }

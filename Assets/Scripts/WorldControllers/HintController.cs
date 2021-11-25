@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using TheseusAndMinotaur.Data;
 using UnityEngine;
 using UnityEngine.Pool;
@@ -51,7 +50,7 @@ namespace TheseusAndMinotaur.WorldControllers
         {
             var currentPosition = startPosition;
             _activeHints.Clear();
-            HashSet<Vector2Int> usedPosition = new HashSet<Vector2Int>();
+            var usedPosition = new HashSet<Vector2Int>();
 
             var currentLevel = 0;
             foreach (var direction in directions)

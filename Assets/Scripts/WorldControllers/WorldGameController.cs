@@ -20,17 +20,17 @@ namespace TheseusAndMinotaur.WorldControllers
         [SerializeField] private MovementController theseusMovementController;
         [SerializeField] private MovementController minotaurMovementController;
         [SerializeField] private MovementController exitController;
+        public readonly GameStateChangedEvent GameStateChanged = new();
+        public readonly LevelStartEvent LevelStart = new();
         public readonly UnityEvent PathNotFound = new();
         public readonly ShowHintEvent ShowHint = new();
-        public readonly LevelStartEvent LevelStart = new();
-        
+
         public readonly UnityEvent WrongMovement = new();
         private BoardGridSpawner _boardGridSpawner;
         private GameLogic _gameLogic;
-        private GameState _state;
-        public readonly GameStateChangedEvent GameStateChanged = new();
 
         private InputAction _requestedAction;
+        private GameState _state;
         public bool HasUndo => _gameLogic.HasUndo;
 
         public Vector2 BoardWorldSize => _gameLogic.GridSize.ToWorldSize();
@@ -142,8 +142,9 @@ namespace TheseusAndMinotaur.WorldControllers
                     break;
                 }
 
-                State = movementResult.BoardStatus == BoardStatus.GameOver 
-                    ? GameState.GameOver : GameState.Active;
+                State = movementResult.BoardStatus == BoardStatus.GameOver
+                    ? GameState.GameOver
+                    : GameState.Active;
             } while (State == GameState.Active);
         }
 
@@ -222,8 +223,8 @@ namespace TheseusAndMinotaur.WorldControllers
         }
 
         /// <summary>
-        /// Event raised when new board started
-        /// Provide info of the level name which is equal FileNameWithoutExtension
+        ///     Event raised when new board started
+        ///     Provide info of the level name which is equal FileNameWithoutExtension
         /// </summary>
         public class LevelStartEvent : UnityEvent<string>
         {
