@@ -19,12 +19,10 @@ namespace TheseusAndMinotaur.WorldControllers
         [SerializeField] private MovementController theseusMovementController;
         [SerializeField] private MovementController minotaurMovementController;
         [SerializeField] private MovementController exitController;
-
-        [SerializeField]
-        private HintController hintController; // we can invert this dependency, but for speed let's use it like that
-
+        
         public readonly UnityEvent WrongMovement = new();
         public readonly UnityEvent PathNotFound = new();
+        public readonly ShowHintEvent ShowHint = new();
         private BoardGridSpawner _boardGridSpawner;
         private GameLogic _gameLogic;
         private GameState _state;
@@ -50,7 +48,6 @@ namespace TheseusAndMinotaur.WorldControllers
         {
             _boardGridSpawner = FindObjectOfType<BoardGridSpawner>();
         }
-
 
         /// <summary>
         ///     Open new Board
@@ -116,6 +113,7 @@ namespace TheseusAndMinotaur.WorldControllers
                 if (!_gameLogic.IsMoveAvailableForTheseus(direction))
                 {
                     WrongMovement.Invoke();
+                    State = GameState.Active;
                     continue;
                 }
 
@@ -143,23 +141,16 @@ namespace TheseusAndMinotaur.WorldControllers
 
         public void RequestAction(InputAction inputAction)
         {
-            if (inputAction == InputAction.Restart)
+            switch (inputAction)
             {
-                RestartBoard();
-                return;
-            }
-            else if (inputAction == InputAction.Hint)
-            {
-                (bool pathFound, List<Direction> directions) = GetHint();
-                if (pathFound)
+                case InputAction.Restart:
+                    RestartBoard();
+                    return;
+                case InputAction.Hint:
                 {
-                    hintController.Show(_gameLogic.TheseusCurrentPosition, directions);
+                    HandleHintRequest();
+                    return;
                 }
-                else
-                {
-                    PathNotFound.Invoke();
-                }
-                return;
             }
 
             if (State != GameState.ListenUserInput)
@@ -169,6 +160,21 @@ namespace TheseusAndMinotaur.WorldControllers
             }
 
             requestedAction = inputAction;
+        }
+
+        private void HandleHintRequest()
+        {
+            var (pathFound, directions) = GetHint();
+            if (pathFound)
+            {
+                State = GameState.HandleInput;
+                ShowHint.Invoke(_gameLogic.TheseusCurrentPosition, directions);
+                State = GameState.ListenUserInput;
+            }
+            else
+            {
+                PathNotFound.Invoke();
+            }
         }
 
         public (bool, List<Direction>) GetHint()
@@ -191,6 +197,15 @@ namespace TheseusAndMinotaur.WorldControllers
         }
 
         public class GameStateChangedEvent : UnityEvent<GameState>
+        {
+        }
+
+        /// <summary>
+        /// Board found the path and request to show it
+        ///   Vector2Int - Theseus start position
+        ///   List<Direction> - direction for the path
+        /// </summary>
+        public class ShowHintEvent : UnityEvent<Vector2Int, List<Direction>>
         {
         }
     }

@@ -12,26 +12,28 @@ namespace TheseusAndMinotaur.WorldControllers
         private ObjectPool<HintStepController> _stepPool;
 
         private readonly Stack<HintStepController> _activeHints = new ();
-        private bool HintActive => _activeHints.Count > 0;
+        public bool IsHintActive => _activeHints.Count > 0;
         
         private void Awake()
         {
             _stepPool = new ObjectPool<HintStepController>(
-                () => Instantiate<HintStepController>(stepPrefab),
+                () => Instantiate(stepPrefab),
                 o => o.gameObject.SetActive(true),
-                o => o.gameObject.SetActive(false));
-            FindObjectOfType<WorldGameController>().GameStateChanged.AddListener(OnGameStateChanged);
+                o => o.gameObject.SetActive(false), defaultCapacity: 30);
+            var worldGameController = FindObjectOfType<WorldGameController>();
+            worldGameController.GameStateChanged.AddListener(OnGameStateChanged);
+            worldGameController.ShowHint.AddListener(OnShowHintRequested);
         }
 
         private void OnGameStateChanged(GameState gameState)
         {
-            if (HintActive && gameState == GameState.HandleInput)
+            if (IsHintActive && gameState is GameState.HandleInput or GameState.NewGameStarted)
             {
                 Clear();
             }   
         }
 
-        public void Show(Vector2Int startPosition, List<Direction> directions)
+        public void OnShowHintRequested(Vector2Int startPosition, List<Direction> directions)
         {
             var currentPosition = startPosition;
             _activeHints.Clear();

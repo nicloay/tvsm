@@ -17,16 +17,16 @@ namespace TheseusAndMinotaur.UI
         private void Awake()
         {
             _button = GetComponent<Button>();
-            _button.onClick.AddListener(RequestAction);
+            _button.onClick.AddListener(OnButtonClick);
             _worldGameController = FindObjectOfType<WorldGameController>();
         }
 
         private void Update()
         {
-            if (_button.isActiveAndEnabled && Input.GetButtonDown(inputAction.ToString())) RequestAction();
+            if (_button.interactable && Input.GetButtonDown(inputAction.ToString())) OnButtonClick();
         }
 
-        private void RequestAction()
+        private void OnButtonClick()
         {
             _worldGameController.RequestAction(inputAction);
         }
