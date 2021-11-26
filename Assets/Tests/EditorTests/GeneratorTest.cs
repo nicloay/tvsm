@@ -1,9 +1,9 @@
 using NUnit.Framework;
 using TheseusAndMinotaur.Data;
-using TheseusAndMinotaur.Data.Deserializer;
+using TheseusAndMinotaur.Data.Converter;
 using UnityEngine;
 
-namespace TheseusAndMinotaur.Tests
+namespace TheseusAndMinotaur.Tests.Tests.EditorTests
 {
     public class GeneratorTest
     {
@@ -155,7 +155,7 @@ namespace TheseusAndMinotaur.Tests
         [Repeat(100)]
         public void CheckRandomBoardCanBeOpened()
         {
-            var randomConfig = BoardTextDeserializer.GenerateRandom(
+            var randomConfig = BoardConfig.GetRandom(
                 new Vector2Int(Random.Range(4, 9), Random.Range(4, 9)),
                 Random.Range(5, 15), Random.Range(5, 15));
 
@@ -175,7 +175,7 @@ namespace TheseusAndMinotaur.Tests
         [Repeat(100)]
         public void CheckRandomBoardTextSerialization()
         {
-            var randomConfig = BoardTextDeserializer.GenerateRandom(
+            var randomConfig = BoardConfig.GetRandom(
                 new Vector2Int(Random.Range(4, 9), Random.Range(4, 9)),
                 Random.Range(5, 15), Random.Range(5, 15));
 

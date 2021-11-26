@@ -1,24 +1,16 @@
 using System.IO;
-using NUnit.Framework;
 using TheseusAndMinotaur.Data;
-using TheseusAndMinotaur.Data.Deserializer;
+using TheseusAndMinotaur.Data.Converter;
 using TheseusAndMinotaur.Data.Game;
 using TheseusAndMinotaur.Data.Game.PathFinder;
-using TheseusAndMinotaur.WorldControllers;
-using UnityEngine;
 
-namespace TheseusAndMinotaur.Tests
+namespace TheseusAndMinotaur.Tests.Tests.EditorTests
 {
+    /// <summary>
+    ///     util methods used by another tests
+    /// </summary>
     public class TestUtils
     {
-        [Test]
-        public void CheckBoardToGlobalConversion()
-        {
-            var boardPosition = new Vector2Int(y: 5, x: 3);
-            var globalPosition = boardPosition.GetWorldPosition();
-            Assert.That(globalPosition, Is.EqualTo(new Vector3(y: 5f, x: 3f, z: 0f)));
-        }
-
         /// <summary>
         ///     Create game from the file locate at PROJECT_HOME/UnitTestsData
         /// </summary>

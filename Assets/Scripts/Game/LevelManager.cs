@@ -20,13 +20,13 @@ namespace TheseusAndMinotaur.Game
         // ReSharper disable once RedundantDefaultMemberInitializer
         private int _nextLevel = 0;
 
-        private WorldGameController _worldGameController;
+        private WorldGameManager _worldGameManager;
 
         public bool HasMoreLevel => _nextLevel < levels.Length;
 
         private void Awake()
         {
-            _worldGameController = FindObjectOfType<WorldGameController>();
+            _worldGameManager = FindObjectOfType<WorldGameManager>();
         }
 
         private void Start()
@@ -37,7 +37,7 @@ namespace TheseusAndMinotaur.Game
         public void StartNext()
         {
             Assert.IsTrue(HasMoreLevel);
-            _worldGameController.OpenBoard(levels[_nextLevel++]);
+            _worldGameManager.OpenBoard(levels[_nextLevel++]);
         }
     }
 }
