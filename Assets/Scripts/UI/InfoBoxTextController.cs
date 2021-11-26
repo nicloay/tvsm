@@ -41,6 +41,7 @@ namespace TheseusAndMinotaur.UI
                     "Time: " + TimeSpan.FromSeconds(Time.timeSinceLevelLoad - startTime).ToString(@"mm\:ss");
                 yield return new WaitForSeconds(1f);
             }
+            // ReSharper disable once IteratorNeverReturns
         }
     }
 }

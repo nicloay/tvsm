@@ -8,7 +8,7 @@ namespace TheseusAndMinotaur.Data
     /// </summary>
     public class BoardConfig
     {
-        internal readonly Direction[,] _wallMap;
+        internal readonly Direction[,] WallMap;
         public readonly Vector2Int Exit;
         public readonly Vector2Int MinotaurStartPosition;
         public readonly Vector2Int TheseusStartPosition;
@@ -24,7 +24,7 @@ namespace TheseusAndMinotaur.Data
 
             TheseusStartPosition = theseusStartPosition;
             MinotaurStartPosition = minotaurStartPosition;
-            _wallMap = wallMap;
+            WallMap = wallMap;
             Exit = exit;
         }
 
@@ -32,7 +32,7 @@ namespace TheseusAndMinotaur.Data
         ///     Get wall directions at specified position
         ///     pivot point: BottomLeft
         /// </summary>
-        public Direction this[int y, int x] => _wallMap[y, x];
+        public Direction this[int y, int x] => WallMap[y, x];
 
         /// <summary>
         ///     Get wall directions at specified position
@@ -40,8 +40,8 @@ namespace TheseusAndMinotaur.Data
         /// </summary>
         public Direction this[Vector2Int boardPosition] => this[boardPosition.y, boardPosition.x];
 
-        public int Height => _wallMap.GetLength(0);
-        public int Width => _wallMap.GetLength(1);
+        public int Height => WallMap.GetLength(0);
+        public int Width => WallMap.GetLength(1);
 
         public Vector2Int GridSize => new(Width, Height);
 
@@ -50,7 +50,7 @@ namespace TheseusAndMinotaur.Data
             var result = new Direction[Width];
             for (var x = 0; x < Width; x++)
             {
-                result[x] = _wallMap[rowId, x];
+                result[x] = WallMap[rowId, x];
             }
 
             return result;

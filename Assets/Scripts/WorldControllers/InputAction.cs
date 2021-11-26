@@ -22,7 +22,7 @@ namespace TheseusAndMinotaur.WorldControllers
 
     public static class InputActionUtil
     {
-        private static readonly Dictionary<InputAction, Direction> _directionByInputAction = new()
+        private static readonly Dictionary<InputAction, Direction> DirectionByInputAction = new()
         {
             { InputAction.MoveDown, Direction.Down },
             { InputAction.MoveLeft, Direction.Left },
@@ -36,7 +36,7 @@ namespace TheseusAndMinotaur.WorldControllers
         /// </summary>
         public static Direction ToDirection(this InputAction inputAction)
         {
-            return _directionByInputAction[inputAction];
+            return DirectionByInputAction[inputAction];
         }
     }
 }

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace TheseusAndMinotaur.Data.Deserializer
 {
-    public static partial class BoardDeserializer
+    public static partial class BoardTextDeserializer
     {
         /// <summary>
         ///     Internal class, used only to quickly update cells by index (without worrying if row or column exists in the target
@@ -87,20 +87,9 @@ namespace TheseusAndMinotaur.Data.Deserializer
                     map[_maxY - y, x] = this[y, x];
                 }
 
-                // 2. fill walls for neighbour cells (so any cells will have info about left, right, top, down cells
-                for (int y = 0, nextY = 1; y <= _maxY; y = nextY++)
-                for (int x = 0, nextX = 1; x <= _maxX; x = nextX++)
-                {
-                    if (nextX <= _maxX && map[y, nextX].HasLeft())
-                    {
-                        map[y, x] |= Direction.Right;
-                    }
 
-                    if (nextY <= _maxY && map[y, x].HasTop())
-                    {
-                        map[nextY, x] |= Direction.Down;
-                    }
-                }
+                // 2. fill walls for neighbour cells (so any cells will have info about left, right, top, down cells
+                FillNeighbourWalls(map);
 
                 return new BoardConfig(map,
                     ConvertToBoardPosition(TheseusStartPosition.Value),
@@ -116,6 +105,31 @@ namespace TheseusAndMinotaur.Data.Deserializer
             private Vector2Int ConvertToBoardPosition(Vector2Int value)
             {
                 return new Vector2Int(value.x, _maxY - value.y);
+            }
+
+            /// <summary>
+            ///     in source array input element contains only Left + Up walls
+            ///     this method fill walls for neighbour elements
+            /// </summary>
+            /// <param name="map"></param>
+            internal static void FillNeighbourWalls(Direction[,] map)
+            {
+                var height = map.GetLength(0);
+                var width = map.GetLength(1);
+
+                for (int y = 0, nextY = 1; y < height; y = nextY++)
+                for (int x = 0, nextX = 1; x < width; x = nextX++)
+                {
+                    if (nextX < width && map[y, nextX].HasLeft())
+                    {
+                        map[y, x] |= Direction.Right;
+                    }
+
+                    if (nextY < height && map[y, x].HasTop())
+                    {
+                        map[nextY, x] |= Direction.Down;
+                    }
+                }
             }
         }
     }

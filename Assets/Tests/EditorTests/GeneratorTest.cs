@@ -25,7 +25,7 @@ namespace TheseusAndMinotaur.Tests
                 "._\n" +
                 "| ";
 
-            var board = BoardDeserializer.DeserializeFrom(boardSrc);
+            var board = BoardTextDeserializer.DeserializeFrom(boardSrc);
 
             Assert.That(board[0, 0], Is.EqualTo(Direction.Left | Direction.Up));
         }
@@ -39,7 +39,7 @@ namespace TheseusAndMinotaur.Tests
                 "  \n" +
                 "._\n";
 
-            var board = BoardDeserializer.DeserializeFrom(boardSrc);
+            var board = BoardTextDeserializer.DeserializeFrom(boardSrc);
             Assert.That(board.GetWallsAtRow(1), Is.EquivalentTo(new[] { Direction.Vertical }));
             Assert.That(board.GetWallsAtRow(0), Is.EquivalentTo(new[] { Direction.Up }));
         }
@@ -52,7 +52,7 @@ namespace TheseusAndMinotaur.Tests
                 "._.\n" +
                 "| |\n";
 
-            var board = BoardDeserializer.DeserializeFrom(boardSrc);
+            var board = BoardTextDeserializer.DeserializeFrom(boardSrc);
             Assert.That(board.GetWallsAtRow(0),
                 Is.EquivalentTo(new[] { Direction.Horizontal | Direction.Up, Direction.Left }));
         }
@@ -68,7 +68,7 @@ namespace TheseusAndMinotaur.Tests
                 ". ._. .\n" +
                 ". . .E.\n";
 
-            var board = BoardDeserializer.DeserializeFrom(boardSrc);
+            var board = BoardTextDeserializer.DeserializeFrom(boardSrc);
             Assert.That(board.GetWallsAtRow(0),
                 Is.EquivalentTo(new[] { Direction.None, Direction.Up, Direction.None }));
             Assert.That(board.GetWallsAtRow(1),
@@ -88,7 +88,7 @@ namespace TheseusAndMinotaur.Tests
                 ". | | .\n" +
                 ". ._\n";
 
-            var board = BoardDeserializer.DeserializeFrom(boardSrc);
+            var board = BoardTextDeserializer.DeserializeFrom(boardSrc);
 
             Assert.That(board.GetWallsAtRow(0),
                 Is.EquivalentTo(new[] { Direction.None, Direction.Up, Direction.None }));
@@ -110,7 +110,7 @@ namespace TheseusAndMinotaur.Tests
                 ". ._. .\n" +
                 ".M. . .\n";
 
-            var board = BoardDeserializer.DeserializeFrom(boardSrc);
+            var board = BoardTextDeserializer.DeserializeFrom(boardSrc);
             Assert.That(board.MinotaurStartPosition, Is.EqualTo(new Vector2Int(0, 0)));
             Assert.That(board.TheseusStartPosition, Is.EqualTo(new Vector2Int(1, 1)));
             Assert.That(board.Exit, Is.EqualTo(new Vector2Int(1, 2)));
@@ -127,7 +127,7 @@ namespace TheseusAndMinotaur.Tests
                 ". ._. .\n" +
                 ". .M. .\n";
 
-            var board = BoardDeserializer.DeserializeFrom(boardSrc);
+            var board = BoardTextDeserializer.DeserializeFrom(boardSrc);
             Assert.That(board.MinotaurStartPosition, Is.EqualTo(new Vector2Int(1, 0)));
             Assert.That(board.TheseusStartPosition, Is.EqualTo(new Vector2Int(2, 1)));
             Assert.That(board.Exit, Is.EqualTo(new Vector2Int(0, 2)));
@@ -136,7 +136,7 @@ namespace TheseusAndMinotaur.Tests
         [Test]
         public void TestNullStringException()
         {
-            Assert.Throws<ParseMazeException>(() => BoardDeserializer.DeserializeFrom(null));
+            Assert.Throws<ParseMazeException>(() => BoardTextDeserializer.DeserializeFrom(null));
         }
 
         [Test]
@@ -148,7 +148,43 @@ namespace TheseusAndMinotaur.Tests
                 ". ._. .\n" +
                 ". .M. .\n";
 
-            Assert.Throws<ParseMazeException>(() => BoardDeserializer.DeserializeFrom(boardSrc));
+            Assert.Throws<ParseMazeException>(() => BoardTextDeserializer.DeserializeFrom(boardSrc));
+        }
+
+        [Test]
+        [Repeat(100)]
+        public void CheckRandomBoardCanBeOpened()
+        {
+            var randomConfig = BoardTextDeserializer.GenerateRandom(
+                new Vector2Int(Random.Range(4, 9), Random.Range(4, 9)),
+                Random.Range(5, 15), Random.Range(5, 15));
+
+            // check there is no assertion here, otherwise test will fail
+            Assert.DoesNotThrow(() => TestUtils.RunBoardWithConfig(randomConfig),
+                $"can't deserialize \n{randomConfig.ConvertToTextConfig()}");
+        }
+
+
+        [Test]
+        public void LastCellEntityTest()
+        {
+            TestUtils.CreateGame("last_cell_entity");
+        }
+
+        [Test]
+        [Repeat(100)]
+        public void CheckRandomBoardTextSerialization()
+        {
+            var randomConfig = BoardTextDeserializer.GenerateRandom(
+                new Vector2Int(Random.Range(4, 9), Random.Range(4, 9)),
+                Random.Range(5, 15), Random.Range(5, 15));
+
+            var text = randomConfig.ConvertToTextConfig();
+
+            var newConfig = BoardTextDeserializer.DeserializeFrom(text);
+
+            // check there is no assertion here, otherwise test will fail
+            Assert.DoesNotThrow(() => TestUtils.RunBoardWithConfig(newConfig), $"can't deserialize \n{text}");
         }
     }
 }

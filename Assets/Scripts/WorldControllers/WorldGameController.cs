@@ -61,7 +61,7 @@ namespace TheseusAndMinotaur.WorldControllers
         /// <param name="boardPath"></param>
         public void OpenBoard(string boardPath)
         {
-            var currentBoardConfig = BoardDeserializer.DeserializeFromStreamingAssets(boardPath);
+            var currentBoardConfig = BoardTextDeserializer.DeserializeFromStreamingAssets(boardPath);
             _gameLogic = new GameLogic(currentBoardConfig);
             _boardGridSpawner.SpawnBoard(currentBoardConfig);
             theseusMovementController.Initialize(currentBoardConfig.TheseusStartPosition);
@@ -174,19 +174,19 @@ namespace TheseusAndMinotaur.WorldControllers
         private void HandleHintRequest()
         {
             var (pathFound, directions) = GetHint();
-            if (pathFound)
+            if (pathFound == PathFinder.Result.PathNotFound)
+            {
+                PathNotFound.Invoke();
+            }
+            else
             {
                 State = GameState.HandleInput;
                 ShowHint.Invoke(_gameLogic.TheseusCurrentPosition, directions);
                 State = GameState.ListenUserInput;
             }
-            else
-            {
-                PathNotFound.Invoke();
-            }
         }
 
-        private (bool, List<Direction>) GetHint()
+        private (PathFinder.Result, List<Direction>) GetHint()
         {
             var pathFinder = new PathFinder(_gameLogic);
             return pathFinder.FindPath();
@@ -216,7 +216,7 @@ namespace TheseusAndMinotaur.WorldControllers
         /// <summary>
         ///     Board found the path and request to show it
         ///     Vector2Int - Theseus start position
-        ///     List<Direction> - direction for the path
+        ///     List{Direction} - direction for the path
         /// </summary>
         public class ShowHintEvent : UnityEvent<Vector2Int, List<Direction>>
         {

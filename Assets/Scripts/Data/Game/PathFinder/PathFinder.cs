@@ -10,6 +10,13 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
     /// </summary>
     public class PathFinder
     {
+        public enum Result
+        {
+            PathNotFound = 0,
+            SinglePathFound = 1,
+            MoreThanOneFound = 2
+        }
+
         private readonly GameLogic _gameLogic;
 
         public PathFinder(GameLogic gameLogic)
@@ -23,7 +30,7 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
         ///     true or false - for the first parameter if path is found
         ///     List{Direction} - set of actions required to reach the target
         /// </returns>
-        public (bool, List<Direction>) FindPath()
+        public (Result, List<Direction>) FindPath()
         {
             var theseusCurrentPosition = _gameLogic.TheseusCurrentPosition;
             var minotaurCurrentPosition = _gameLogic.MinotaurCurrentPosition;
@@ -31,6 +38,10 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
             {
                 GetNode(theseusCurrentPosition, minotaurCurrentPosition)
             };
+
+            var currentStatus = Result.PathNotFound;
+
+            List<Direction> shortestPath = null;
 
             var visitedNodes = new HashSet<Node>(Node.NodeComparer);
 
@@ -54,6 +65,11 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
                         continue;
                     }
 
+                    if (result.TheseusNewPosition == node.MinotaurPosition)
+                    {
+                        continue;
+                    }
+
                     if (result.BoardStatus == BoardStatus.GameOver)
                     {
                         continue;
@@ -61,7 +77,14 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
 
                     if (result.BoardStatus == BoardStatus.Victory)
                     {
-                        return (true, BuildPath(direction, node));
+                        if (currentStatus == Result.PathNotFound)
+                        {
+                            shortestPath = BuildPath(direction, node);
+                            currentStatus = Result.SinglePathFound;
+                            continue;
+                        }
+
+                        return (Result.MoreThanOneFound, shortestPath);
                     }
 
                     var newNode = GetNode(result.TheseusNewPosition, result.MinotaurNewPosition, node, direction);
@@ -75,7 +98,9 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
                 }
             }
 
-            return (false, null);
+            return currentStatus == Result.SinglePathFound
+                ? (Result.SinglePathFound, shortestPath)
+                : (Result.PathNotFound, null);
         }
 
         private static List<Direction> BuildPath(Direction lastDirection, Node node)

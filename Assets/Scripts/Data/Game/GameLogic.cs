@@ -203,8 +203,8 @@ namespace TheseusAndMinotaur.Data.Game
             return _config[sourcePosition].HasWayTo(direction)
                    && targetBoardPosition.x >= 0
                    && targetBoardPosition.y >= 0
-                   && targetBoardPosition.x <= _config.Width
-                   && targetBoardPosition.y <= _config.Height;
+                   && targetBoardPosition.x < _config.Width
+                   && targetBoardPosition.y < _config.Height;
         }
     }
 }

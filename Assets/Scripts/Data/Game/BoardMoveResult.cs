@@ -31,7 +31,6 @@ namespace TheseusAndMinotaur.Data.Game
             TheseusNewPosition = theseusNewPosition;
             MinotaurNewPosition = minotaurNewPosition;
             BoardChanged = moves[0] != Direction.None || moves[1] != Direction.None || moves[2] != Direction.None;
-            ;
         }
 
         public Direction TheseusMove => Moves[0];
