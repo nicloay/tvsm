@@ -18,9 +18,9 @@ namespace TheseusAndMinotaur.Tests
             var globalPosition = boardPosition.GetWorldPosition();
             Assert.That(globalPosition, Is.EqualTo(new Vector3(y: 5f, x: 3f, z: 0f)));
         }
-        
+
         /// <summary>
-        /// Create game from the file locate at PROJECT_HOME/UnitTestsData
+        ///     Create game from the file locate at PROJECT_HOME/UnitTestsData
         /// </summary>
         /// <param name="fileName">filename without extension</param>
         public static GameLogic CreateGame(string fileName)
@@ -28,9 +28,9 @@ namespace TheseusAndMinotaur.Tests
             return new GameLogic(
                 BoardTextDeserializer.DeserializeFrom(File.ReadAllText($"UnitTestsData/{fileName}.txt")));
         }
-        
+
         /// <summary>
-        /// Create gameLogic from config, search for path, if exists, run
+        ///     Create gameLogic from config, search for path, if exists, run
         /// </summary>
         /// <param name="config"></param>
         public static void RunBoardWithConfig(BoardConfig config)
@@ -38,7 +38,7 @@ namespace TheseusAndMinotaur.Tests
             var game = new GameLogic(config);
             RunGame(game);
         }
-        
+
         private static void RunGame(GameLogic game)
         {
             var pathFinder = new PathFinder(game);

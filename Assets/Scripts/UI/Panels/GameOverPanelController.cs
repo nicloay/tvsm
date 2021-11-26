@@ -74,7 +74,7 @@ namespace TheseusAndMinotaur.UI
             if (gameState == GameState.Victory && !_levelManager.HasMoreLevel)
             {
                 victoryHeader.GetComponentInChildren<TextMeshProUGUI>().text = "Congratulation you finished the game!";
-            } 
+            }
         }
 
         private void OnUndoLastTurn()

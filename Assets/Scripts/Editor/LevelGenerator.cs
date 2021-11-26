@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using TheseusAndMinotaur.Data;
 using TheseusAndMinotaur.Data.Deserializer;
 using TheseusAndMinotaur.Data.Game;
@@ -10,33 +7,28 @@ using TheseusAndMinotaur.Data.Game.PathFinder;
 using UnityEditor;
 using UnityEngine;
 
-namespace TheseusAndMinotaur
+namespace TheseusAndMinotaur.Editor
 {
     public class LevelGenerator : ScriptableWizard
     {
+        private const string FileName = "maze";
+        private const string TargetLocation = "Generated";
         [SerializeField] private int resultFilesNumber = 20;
-        
+
         [SerializeField] private int width = 5;
         [SerializeField] private int height = 5;
         [SerializeField] private int pathLenghtMin = 15;
 
         [SerializeField] private int verticalWallMin = 3;
         [SerializeField] private int verticalWallMax = 10;
-        
-        
+
+
         [SerializeField] private int horizontalWallMin = 3;
         [SerializeField] private int horizontalWallMax = 10;
 
-        
-        [MenuItem("Window/Generate level")]
-        static void CreateWizard()
+        private void OnWizardCreate()
         {
-            DisplayWizard<LevelGenerator>("Generate Level", "Generate");
-        }
-
-        void OnWizardCreate()
-        {
-            int currentAttemtp = 0;
+            var currentAttemtp = 0;
             var successNumber = 0;
             while (currentAttemtp++ < 100000 && successNumber < resultFilesNumber)
             {
@@ -58,8 +50,12 @@ namespace TheseusAndMinotaur
         }
 
 
-        private const string fileName = "maze";
-        private const string TargetLocation = "Generated";
+        [MenuItem("Window/Generate level")]
+        private static void CreateWizard()
+        {
+            DisplayWizard<LevelGenerator>("Generate Level", "Generate");
+        }
+
         private void SaveConfig(BoardConfig config)
         {
             if (!Directory.Exists(TargetLocation))
@@ -67,16 +63,15 @@ namespace TheseusAndMinotaur
                 Directory.CreateDirectory(TargetLocation);
             }
 
-            var existing = Directory.GetFiles(TargetLocation).Select(s => Path.GetFileNameWithoutExtension(s)).ToArray();
+            var existing = Directory.GetFiles(TargetLocation).Select(s => Path.GetFileNameWithoutExtension(s))
+                .ToArray();
 
-            var newName = ObjectNames.GetUniqueName(existing, fileName)+".txt";
+            var newName = ObjectNames.GetUniqueName(existing, FileName) + ".txt";
             var targetPath = Path.Combine(TargetLocation, newName);
-            
+
             Debug.Log($"save boardConfig to the {targetPath}");
-            
+
             File.WriteAllText(targetPath, config.ConvertToTextConfig());
         }
-        
     }
-    
 }

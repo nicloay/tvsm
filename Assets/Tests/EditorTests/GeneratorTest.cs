@@ -1,8 +1,6 @@
 using NUnit.Framework;
 using TheseusAndMinotaur.Data;
 using TheseusAndMinotaur.Data.Deserializer;
-using TheseusAndMinotaur.Data.Game;
-using TheseusAndMinotaur.Data.Game.PathFinder;
 using UnityEngine;
 
 namespace TheseusAndMinotaur.Tests
@@ -153,17 +151,19 @@ namespace TheseusAndMinotaur.Tests
             Assert.Throws<ParseMazeException>(() => BoardTextDeserializer.DeserializeFrom(boardSrc));
         }
 
-        [Test, Repeat(100)]
+        [Test]
+        [Repeat(100)]
         public void CheckRandomBoardCanBeOpened()
         {
-            var randomConfig = BoardTextDeserializer.GenerateRandom(new Vector2Int(Random.Range(4, 9), Random.Range(4, 9)),
+            var randomConfig = BoardTextDeserializer.GenerateRandom(
+                new Vector2Int(Random.Range(4, 9), Random.Range(4, 9)),
                 Random.Range(5, 15), Random.Range(5, 15));
-            
+
             // check there is no assertion here, otherwise test will fail
-            Assert.DoesNotThrow(() => TestUtils.RunBoardWithConfig(randomConfig), $"can't deserialize \n{randomConfig.ConvertToTextConfig()}");
+            Assert.DoesNotThrow(() => TestUtils.RunBoardWithConfig(randomConfig),
+                $"can't deserialize \n{randomConfig.ConvertToTextConfig()}");
         }
 
-       
 
         [Test]
         public void LastCellEntityTest()
@@ -171,10 +171,12 @@ namespace TheseusAndMinotaur.Tests
             TestUtils.CreateGame("last_cell_entity");
         }
 
-        [Test, Repeat(100)]
+        [Test]
+        [Repeat(100)]
         public void CheckRandomBoardTextSerialization()
         {
-            var randomConfig = BoardTextDeserializer.GenerateRandom(new Vector2Int(Random.Range(4, 9), Random.Range(4, 9)),
+            var randomConfig = BoardTextDeserializer.GenerateRandom(
+                new Vector2Int(Random.Range(4, 9), Random.Range(4, 9)),
                 Random.Range(5, 15), Random.Range(5, 15));
 
             var text = randomConfig.ConvertToTextConfig();

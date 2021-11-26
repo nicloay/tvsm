@@ -11,7 +11,7 @@ namespace TheseusAndMinotaur.WorldControllers
     [RequireComponent(typeof(TextMeshPro))]
     public class HintStepController : MonoBehaviour
     {
-        private static readonly Dictionary<Direction, string> signByDirection = new()
+        private static readonly Dictionary<Direction, string> IconSignByDirection = new()
         {
             { Direction.Left, "←" },
             { Direction.Right, "→" },
@@ -19,7 +19,7 @@ namespace TheseusAndMinotaur.WorldControllers
             { Direction.Down, "↓" },
             { Direction.None, "…" }
         };
-        
+
         private TextMeshPro _text;
 
         private void Awake()
@@ -29,7 +29,7 @@ namespace TheseusAndMinotaur.WorldControllers
 
         public void SetDirection(Direction direction)
         {
-            _text.text = signByDirection[direction];
+            _text.text = IconSignByDirection[direction];
         }
     }
 }

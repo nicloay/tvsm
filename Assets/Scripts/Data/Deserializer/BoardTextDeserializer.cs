@@ -27,10 +27,9 @@ namespace TheseusAndMinotaur.Data.Deserializer
 
 
         /// <summary>
-        /// Generate random board with size
-        /// horizontal WallsNumber will be spawned on random position on the cell, the same vertical number,
-        ///
-        /// exit/Thesaus/Minotaur positions will be spawned randomly
+        ///     Generate random board with size
+        ///     horizontal WallsNumber will be spawned on random position on the cell, the same vertical number,
+        ///     exit/Thesaus/Minotaur positions will be spawned randomly
         /// </summary>
         /// <param name="size"></param>
         /// <param name="horizontalWallsNumber"></param>
@@ -43,45 +42,44 @@ namespace TheseusAndMinotaur.Data.Deserializer
             var randomMap = ArrayUtils.GetOrderedSequence(size.x * size.y);
             randomMap.ShuffleArray();
 
-            for (int i = 0; i < horizontalWallsNumber; i++)
+            for (var i = 0; i < horizontalWallsNumber; i++)
             {
                 var randomId = randomMap[i];
                 var position = randomId.Get2DCoordinates(size.x);
                 map[position.y, position.x] |= Direction.Left;
             }
-            
+
             randomMap.ShuffleArray();
-            for (int i = 0; i < verticalWallsNumber; i++)
+            for (var i = 0; i < verticalWallsNumber; i++)
             {
                 var randomId = randomMap[i];
                 var position = randomId.Get2DCoordinates(size.x);
                 map[position.y, position.x] |= Direction.Up;
             }
-            
+
             randomMap.ShuffleArray();
-            
+
             RawBoard.FillNeighbourWalls(map);
-            
+
             return new BoardConfig(map,
                 randomMap[0].Get2DCoordinates(size.x),
                 randomMap[1].Get2DCoordinates(size.x),
                 randomMap[2].Get2DCoordinates(size.x));
-            
         }
 
         /// <summary>
-        /// Convert board config to the text file
+        ///     Convert board config to the text file
         /// </summary>
         public static string ConvertToTextConfig(this BoardConfig config)
         {
             var result = new StringBuilder();
             var top = new StringBuilder();
             var left = new StringBuilder();
-            for (int y = config.Height -1 ; y >=0 ; y--)
+            for (var y = config.Height - 1; y >= 0; y--)
             {
                 top.Clear();
                 left.Clear();
-                for (int x = 0; x < config.Width; x++)
+                for (var x = 0; x < config.Width; x++)
                 {
                     var direction = config[y, x];
                     top.Append(".");
@@ -94,28 +92,28 @@ namespace TheseusAndMinotaur.Data.Deserializer
                 {
                     left[1 + config.MinotaurStartPosition.x * 2] = MinotaurStartPoint;
                 }
-                
+
                 if (y == config.TheseusStartPosition.y)
                 {
                     left[1 + config.TheseusStartPosition.x * 2] = TheseusStartPoint;
                 }
-                
+
                 if (y == config.Exit.y)
                 {
                     left[1 + config.Exit.x * 2] = Exit;
                 }
-                
+
                 result.AppendLine(top.ToString());
                 result.AppendLine(left.ToString());
             }
 
             return result.ToString();
         }
-        
+
         /// <summary>
-        ///     Deserialize from text Data <see cref="Example.txt"/>
+        ///     Deserialize from text Data Example.txt at StreamingAssets folder />
         /// </summary>
-        /// <param name="textData">board config in text format <see cref="Example.txt"/> at StreamingAsset folder</param>
+        /// <param name="textData">board config in text format Example.txt at StreamingAssets folder</param>
         /// <returns>board</returns>
         public static BoardConfig DeserializeFrom(string textData)
         {
@@ -177,7 +175,7 @@ namespace TheseusAndMinotaur.Data.Deserializer
                 rawBoard[rawBoard.MinotaurStartPosition.Value] |= Direction.None;
                 rawBoard[rawBoard.TheseusStartPosition.Value] |= Direction.None;
                 rawBoard[rawBoard.ExitPosition.Value] |= Direction.None;
-                
+
                 y++;
                 line = reader.ReadLine();
             }

@@ -16,7 +16,7 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
             SinglePathFound = 1,
             MoreThanOneFound = 2
         }
-        
+
         private readonly GameLogic _gameLogic;
 
         public PathFinder(GameLogic gameLogic)
@@ -40,9 +40,9 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
             };
 
             var currentStatus = Result.PathNotFound;
-            
+
             List<Direction> shortestPath = null;
-            
+
             var visitedNodes = new HashSet<Node>(Node.NodeComparer);
 
             while (currentNodes.Count > 0)
@@ -69,7 +69,7 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
                     {
                         continue;
                     }
-                    
+
                     if (result.BoardStatus == BoardStatus.GameOver)
                     {
                         continue;
@@ -83,10 +83,8 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
                             currentStatus = Result.SinglePathFound;
                             continue;
                         }
-                        else
-                        {
-                            return (Result.MoreThanOneFound, shortestPath);
-                        }
+
+                        return (Result.MoreThanOneFound, shortestPath);
                     }
 
                     var newNode = GetNode(result.TheseusNewPosition, result.MinotaurNewPosition, node, direction);
@@ -98,11 +96,11 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
 
                     currentNodes.Add(newNode);
                 }
-                
             }
 
-            return currentStatus == Result.SinglePathFound 
-                ? (Result.SinglePathFound, shortestPath) : (Result.PathNotFound, null);
+            return currentStatus == Result.SinglePathFound
+                ? (Result.SinglePathFound, shortestPath)
+                : (Result.PathNotFound, null);
         }
 
         private static List<Direction> BuildPath(Direction lastDirection, Node node)

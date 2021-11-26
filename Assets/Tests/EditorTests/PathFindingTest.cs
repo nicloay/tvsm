@@ -1,9 +1,6 @@
 using System.Collections.Generic;
-using System.IO;
 using NUnit.Framework;
 using TheseusAndMinotaur.Data;
-using TheseusAndMinotaur.Data.Deserializer;
-using TheseusAndMinotaur.Data.Game;
 using TheseusAndMinotaur.Data.Game.PathFinder;
 using UnityEngine;
 
@@ -17,14 +14,14 @@ namespace TheseusAndMinotaur.Tests
             // 5_4 must fail, as pathfinding must not allow to step to the same position where minotaur stays at the moment
             var game = TestUtils.CreateGame("g5_4");
             var pathFinder = new PathFinder(game);
-            var (result, directions) = pathFinder.FindPath();
+            var (result, _) = pathFinder.FindPath();
             Assert.That(result, Is.EqualTo(PathFinder.Result.PathNotFound));
         }
-        
-        
+
+
         [Test]
         public void Test1()
-        
+
         {
             var game = TestUtils.CreateGame("PathFinding1");
             var pathFinder = new PathFinder(game);
@@ -78,7 +75,7 @@ namespace TheseusAndMinotaur.Tests
                 Is.EqualTo(new[]
                     { Direction.Left, Direction.Right, Direction.Right, Direction.Down, Direction.Right }));
         }
-        
+
         [Test]
         public void Estivalet2()
         {

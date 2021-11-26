@@ -216,7 +216,7 @@ namespace TheseusAndMinotaur.WorldControllers
         /// <summary>
         ///     Board found the path and request to show it
         ///     Vector2Int - Theseus start position
-        ///     List<Direction> - direction for the path
+        ///     List{Direction} - direction for the path
         /// </summary>
         public class ShowHintEvent : UnityEvent<Vector2Int, List<Direction>>
         {
