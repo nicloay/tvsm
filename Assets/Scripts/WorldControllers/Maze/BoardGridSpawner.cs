@@ -24,11 +24,10 @@ namespace TheseusAndMinotaur.WorldControllers.Maze
         {
             Clear();
             var cellStep = GameConfig.Instance.CellStep;
-            var xOffset = (boardConfig.Width * cellStep.x) / -2f;
-            var cellPosition = new Vector2(xOffset, 0f);
+            var cellPosition = Vector2.zero;
             for (var y = 0; y < boardConfig.Height; y++)
             {
-                cellPosition.x = xOffset;
+                cellPosition.x = 0;
                 for (var x = 0; x < boardConfig.Width; x++)
                 {
                     _mazePools.AddCell(cellPosition, boardConfig[y, x]);
