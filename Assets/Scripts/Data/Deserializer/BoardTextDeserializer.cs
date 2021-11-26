@@ -13,16 +13,27 @@ namespace TheseusAndMinotaur.Data.Deserializer
         private const char MinotaurStartPoint = 'M';
         private const char Exit = 'E';
 
+
         /// <summary>
-        ///     Deserialize from streaming asset file
+        /// Get text content from the resouce
         /// </summary>
-        /// <param name="relativePath">file path, relative to streaming assets folder</param>
-        /// <returns>board</returns>
-        public static BoardConfig DeserializeFromStreamingAssets(string relativePath)
+        /// <param name="resourcePath"></param>
+        /// <returns></returns>
+        public static string GetResourceContent(this string resourcePath)
         {
-            var fullPath = Path.Combine(Application.streamingAssetsPath, relativePath);
-            var data = File.ReadAllText(fullPath);
-            return DeserializeFrom(data);
+            var textAsset = Resources.Load<TextAsset>(resourcePath);
+            var data = textAsset.text;
+            Resources.UnloadAsset(textAsset);
+            return data;
+        }
+
+        /// <summary>
+        /// Get level name from resource path
+        /// </summary>
+        /// <param name="resourcePath"></param>
+        public static string GetLevelName(this string resourcePath)
+        {
+            return Path.GetFileNameWithoutExtension(resourcePath);
         }
 
 
@@ -111,11 +122,11 @@ namespace TheseusAndMinotaur.Data.Deserializer
         }
 
         /// <summary>
-        ///     Deserialize from text Data Example.txt at StreamingAssets folder />
+        ///     Deserialize from text />
         /// </summary>
         /// <param name="textData">board config in text format Example.txt at StreamingAssets folder</param>
         /// <returns>board</returns>
-        public static BoardConfig DeserializeFrom(string textData)
+        public static BoardConfig ToBoardConfig(this string textData)
         {
             if (string.IsNullOrEmpty(textData))
             {

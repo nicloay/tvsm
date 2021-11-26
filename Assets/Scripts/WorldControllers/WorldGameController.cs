@@ -9,6 +9,7 @@ using TheseusAndMinotaur.WorldControllers.Maze;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
+using UnityEngine.Networking;
 
 namespace TheseusAndMinotaur.WorldControllers
 {
@@ -24,7 +25,7 @@ namespace TheseusAndMinotaur.WorldControllers
         public readonly LevelStartEvent LevelStart = new();
         public readonly UnityEvent PathNotFound = new();
         public readonly ShowHintEvent ShowHint = new();
-
+        public readonly LoadLevelCommunicationProblemEvent LoadLevelCommunicationProblem = new();
         public readonly UnityEvent WrongMovement = new();
         private BoardGridSpawner _boardGridSpawner;
         private GameLogic _gameLogic;
@@ -58,16 +59,22 @@ namespace TheseusAndMinotaur.WorldControllers
         /// <summary>
         ///     Open new Board
         /// </summary>
-        /// <param name="boardPath"></param>
-        public void OpenBoard(string boardPath)
+        /// <param name="boardResourcePath">path to the board TEXT asset in Resources folder</param>
+        public void OpenBoard(string boardResourcePath)
         {
-            var currentBoardConfig = BoardTextDeserializer.DeserializeFromStreamingAssets(boardPath);
+            var fullPath = boardResourcePath.GetResourceContent();
+            StartBoard(fullPath, boardResourcePath.GetLevelName());
+        }
+
+        public void StartBoard(string textConfig, string levelName)
+        {
+            var currentBoardConfig = textConfig.ToBoardConfig();
             _gameLogic = new GameLogic(currentBoardConfig);
             _boardGridSpawner.SpawnBoard(currentBoardConfig);
             theseusMovementController.Initialize(currentBoardConfig.TheseusStartPosition);
             minotaurMovementController.Initialize(currentBoardConfig.MinotaurStartPosition);
             exitController.Initialize(currentBoardConfig.Exit);
-            LevelStart.Invoke(Path.GetFileNameWithoutExtension(boardPath));
+            LevelStart.Invoke(levelName);
             StartNewGame();
         }
 
@@ -227,6 +234,11 @@ namespace TheseusAndMinotaur.WorldControllers
         ///     Provide info of the level name which is equal FileNameWithoutExtension
         /// </summary>
         public class LevelStartEvent : UnityEvent<string>
+        {
+        }
+
+
+        public class LoadLevelCommunicationProblemEvent : UnityEvent<string>
         {
         }
     }
