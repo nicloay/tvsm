@@ -174,19 +174,19 @@ namespace TheseusAndMinotaur.WorldControllers
         private void HandleHintRequest()
         {
             var (pathFound, directions) = GetHint();
-            if (pathFound)
+            if (pathFound == PathFinder.Result.PathNotFound)
+            {
+                PathNotFound.Invoke();
+            }
+            else
             {
                 State = GameState.HandleInput;
                 ShowHint.Invoke(_gameLogic.TheseusCurrentPosition, directions);
                 State = GameState.ListenUserInput;
             }
-            else
-            {
-                PathNotFound.Invoke();
-            }
         }
 
-        private (bool, List<Direction>) GetHint()
+        private (PathFinder.Result, List<Direction>) GetHint()
         {
             var pathFinder = new PathFinder(_gameLogic);
             return pathFinder.FindPath();

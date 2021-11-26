@@ -1,4 +1,5 @@
 using System.IO;
+using TheseusAndMinotaur.Utils;
 using UnityEngine;
 
 namespace TheseusAndMinotaur.Data.Deserializer
@@ -23,6 +24,52 @@ namespace TheseusAndMinotaur.Data.Deserializer
             return DeserializeFrom(data);
         }
 
+
+        /// <summary>
+        /// Generate random board with size
+        /// horizontal WallsNumber will be spawned on random position on the cell, the same vertical number,
+        ///
+        /// exit/Thesaus/Minotaur positions will be spawned randomly
+        /// </summary>
+        /// <param name="size"></param>
+        /// <param name="horizontalWallsNumber"></param>
+        /// <param name="verticalWallsNumber"></param>
+        /// <returns></returns>
+        public static BoardConfig GenerateRandom(Vector2Int size, int horizontalWallsNumber, int verticalWallsNumber)
+        {
+            var map = new Direction[size.y, size.x];
+
+            var randomMap = ArrayUtils.GetOrderedSequence(size.x * size.y);
+            randomMap.ShuffleArray();
+
+            for (int i = 0; i < horizontalWallsNumber; i++)
+            {
+                var randomId = randomMap[i];
+                var position = randomId.Get2DCoordinates(size.x);
+                map[position.y, position.x] |= Direction.Left;
+            }
+            
+            randomMap.ShuffleArray();
+            for (int i = 0; i < verticalWallsNumber; i++)
+            {
+                var randomId = randomMap[i];
+                var position = randomId.Get2DCoordinates(size.x);
+                map[position.y, position.x] |= Direction.Up;
+            }
+            
+            randomMap.ShuffleArray();
+            
+            RawBoard.FillNeighbourWalls(map);
+            
+            return new BoardConfig(map,
+                randomMap[0].Get2DCoordinates(size.x),
+                randomMap[1].Get2DCoordinates(size.x),
+                randomMap[2].Get2DCoordinates(size.x));
+            
+        }
+
+        
+        
         public static BoardConfig DeserializeFrom(string textData)
         {
             if (string.IsNullOrEmpty(textData))

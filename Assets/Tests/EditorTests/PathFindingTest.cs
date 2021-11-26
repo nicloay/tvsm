@@ -17,7 +17,7 @@ namespace TheseusAndMinotaur.Tests
             var game = CreateGame("PathFinding1");
             var pathFinder = new PathFinder(game);
             var (result, directions) = pathFinder.FindPath();
-            Assert.That(result, Is.EqualTo(true));
+            Assert.That(result, Is.EqualTo(PathFinder.Result.SinglePathFound));
             Assert.That(directions, Is.EqualTo(new[] { Direction.Right, Direction.Up, Direction.Left }));
         }
 
@@ -27,7 +27,7 @@ namespace TheseusAndMinotaur.Tests
             var game = CreateGame("PathFinding2");
             var pathFinder = new PathFinder(game);
             var (result, directions) = pathFinder.FindPath();
-            Assert.That(result, Is.EqualTo(true));
+            Assert.That(result, Is.EqualTo(PathFinder.Result.SinglePathFound));
             Assert.That(directions,
                 Is.EqualTo(new[]
                 {
@@ -61,7 +61,7 @@ namespace TheseusAndMinotaur.Tests
             var pathFinder = new PathFinder(game);
             var (result, directions) = pathFinder.FindPath();
             Debug.Log(string.Join(",", directions));
-            Assert.That(result, Is.EqualTo(true));
+            Assert.That(result, Is.EqualTo(PathFinder.Result.SinglePathFound));
             Assert.That(directions,
                 Is.EqualTo(new[]
                     { Direction.Left, Direction.Right, Direction.Right, Direction.Down, Direction.Right }));
@@ -74,7 +74,7 @@ namespace TheseusAndMinotaur.Tests
             var pathFinder = new PathFinder(game);
             var (result, directions) = pathFinder.FindPath();
             Debug.Log(string.Join(",", directions));
-            Assert.That(result, Is.EqualTo(true));
+            Assert.That(result, Is.EqualTo(PathFinder.Result.SinglePathFound));
             Assert.That(directions, Is.EqualTo(new[]
             {
                 Direction.Right, Direction.Right, Direction.Right, Direction.Right,
@@ -92,7 +92,7 @@ namespace TheseusAndMinotaur.Tests
             var pathFinder = new PathFinder(game);
             var (result, directions) = pathFinder.FindPath();
             Debug.Log(string.Join(",", directions));
-            Assert.That(result, Is.EqualTo(true));
+            Assert.That(result, Is.EqualTo(PathFinder.Result.MoreThanOneFound));
             Assert.That(directions, Is.EqualTo(new[]
             {
                 Direction.Down, Direction.Down,
