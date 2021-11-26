@@ -17,7 +17,7 @@ namespace TheseusAndMinotaur.Game
             "Levels/level3.txt"
         };
 
-        private int _nextLevel = 13;
+        private int _nextLevel = 0;
 
         private WorldGameController _worldGameController;
 
