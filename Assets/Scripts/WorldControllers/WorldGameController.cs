@@ -61,7 +61,7 @@ namespace TheseusAndMinotaur.WorldControllers
         /// <param name="boardPath"></param>
         public void OpenBoard(string boardPath)
         {
-            var currentBoardConfig = BoardDeserializer.DeserializeFromStreamingAssets(boardPath);
+            var currentBoardConfig = BoardTextDeserializer.DeserializeFromStreamingAssets(boardPath);
             _gameLogic = new GameLogic(currentBoardConfig);
             _boardGridSpawner.SpawnBoard(currentBoardConfig);
             theseusMovementController.Initialize(currentBoardConfig.TheseusStartPosition);

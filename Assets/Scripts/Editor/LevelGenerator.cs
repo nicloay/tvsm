@@ -31,7 +31,7 @@ namespace TheseusAndMinotaur
         [MenuItem("Window/Generate level")]
         static void CreateWizard()
         {
-            ScriptableWizard.DisplayWizard<LevelGenerator>("Generate Level", "Generate");
+            DisplayWizard<LevelGenerator>("Generate Level", "Generate");
         }
 
         void OnWizardCreate()
@@ -40,7 +40,7 @@ namespace TheseusAndMinotaur
             var successNumber = 0;
             while (currentAttemtp++ < 100000 && successNumber < resultFilesNumber)
             {
-                var mazeConfig = BoardDeserializer.GenerateRandom(new Vector2Int(width, height),
+                var mazeConfig = BoardTextDeserializer.GenerateRandom(new Vector2Int(width, height),
                     Random.Range(horizontalWallMin, horizontalWallMax), Random.Range(verticalWallMin, verticalWallMax));
                 var gameLogic = new GameLogic(mazeConfig);
                 var pathfinder = new PathFinder(gameLogic);
@@ -73,45 +73,10 @@ namespace TheseusAndMinotaur
             var targetPath = Path.Combine(TargetLocation, newName);
             
             Debug.Log($"save boardConfig to the {targetPath}");
-
-            var result = new StringBuilder();
-            var top = new StringBuilder();
-            var left = new StringBuilder();
-            for (int y = config.Height -1 ; y >=0 ; y--)
-            {
-                top.Clear();
-                left.Clear();
-                for (int x = 0; x < config.Width; x++)
-                {
-                    var direction = config[y, x];
-                    top.Append(".");
-                    top.Append(direction.HasTop() ? "_" : " ");
-                    left.Append(direction.HasLeft() ? "|" : " ");
-                    left.Append(" ");
-                }
-                
-                
-                
-                if (y == config.MinotaurStartPosition.y)
-                {
-                    left[1 + config.MinotaurStartPosition.x * 2] = 'M';
-                }
-                
-                if (y == config.TheseusStartPosition.y)
-                {
-                    left[1 + config.TheseusStartPosition.x * 2] = 'T';
-                }
-                
-                if (y == config.Exit.y)
-                {
-                    left[1 + config.Exit.x * 2] = 'E';
-                }
-                
-                result.AppendLine(top.ToString());
-                result.AppendLine(left.ToString());
-            }
-            File.WriteAllText(targetPath, result.ToString());
+            
+            File.WriteAllText(targetPath, config.ConvertToTextConfig());
         }
         
     }
+    
 }

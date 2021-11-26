@@ -15,7 +15,7 @@ namespace TheseusAndMinotaur.Tests
         public void TestNoPath()
         {
             // 5_4 must fail, as pathfinding must not allow to step to the same position where minotaur stays at the moment
-            var game = CreateGame("g5_4");
+            var game = TestUtils.CreateGame("g5_4");
             var pathFinder = new PathFinder(game);
             var (result, directions) = pathFinder.FindPath();
             Assert.That(result, Is.EqualTo(PathFinder.Result.PathNotFound));
@@ -26,7 +26,7 @@ namespace TheseusAndMinotaur.Tests
         public void Test1()
         
         {
-            var game = CreateGame("PathFinding1");
+            var game = TestUtils.CreateGame("PathFinding1");
             var pathFinder = new PathFinder(game);
             var (result, directions) = pathFinder.FindPath();
             Assert.That(result, Is.EqualTo(PathFinder.Result.SinglePathFound));
@@ -36,7 +36,7 @@ namespace TheseusAndMinotaur.Tests
         [Test]
         public void Test2()
         {
-            var game = CreateGame("PathFinding2");
+            var game = TestUtils.CreateGame("PathFinding2");
             var pathFinder = new PathFinder(game);
             var (result, directions) = pathFinder.FindPath();
             Assert.That(result, Is.EqualTo(PathFinder.Result.SinglePathFound));
@@ -69,7 +69,7 @@ namespace TheseusAndMinotaur.Tests
         [Test]
         public void Estivalet1()
         {
-            var game = CreateGame("estivalet1");
+            var game = TestUtils.CreateGame("estivalet1");
             var pathFinder = new PathFinder(game);
             var (result, directions) = pathFinder.FindPath();
             Debug.Log(string.Join(",", directions));
@@ -78,11 +78,11 @@ namespace TheseusAndMinotaur.Tests
                 Is.EqualTo(new[]
                     { Direction.Left, Direction.Right, Direction.Right, Direction.Down, Direction.Right }));
         }
-
+        
         [Test]
         public void Estivalet2()
         {
-            var game = CreateGame("estivalet2");
+            var game = TestUtils.CreateGame("estivalet2");
             var pathFinder = new PathFinder(game);
             var (result, directions) = pathFinder.FindPath();
             Debug.Log(string.Join(",", directions));
@@ -100,7 +100,7 @@ namespace TheseusAndMinotaur.Tests
         [Test]
         public void Estivalet3()
         {
-            var game = CreateGame("estivalet3");
+            var game = TestUtils.CreateGame("estivalet3");
             var pathFinder = new PathFinder(game);
             var (result, directions) = pathFinder.FindPath();
             Debug.Log(string.Join(",", directions));
@@ -123,12 +123,6 @@ namespace TheseusAndMinotaur.Tests
             var node2 = new Node(Vector2Int.left, Vector2Int.right, 12, Direction.Left);
             var hashSet = new HashSet<Node>(Node.NodeComparer) { node1 };
             Assert.That(hashSet.Contains(node2), Is.True);
-        }
-
-        private static GameLogic CreateGame(string fileName)
-        {
-            return new GameLogic(
-                BoardDeserializer.DeserializeFrom(File.ReadAllText($"UnitTestsData/{fileName}.txt")));
         }
     }
 }

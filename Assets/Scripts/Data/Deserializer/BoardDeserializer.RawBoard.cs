@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace TheseusAndMinotaur.Data.Deserializer
 {
-    public static partial class BoardDeserializer
+    public static partial class BoardTextDeserializer
     {
         /// <summary>
         ///     Internal class, used only to quickly update cells by index (without worrying if row or column exists in the target

@@ -32,7 +32,7 @@ namespace TheseusAndMinotaur.Tests
         private void Spawn()
         {
             var relativePath = $"Test/test{(_spawnFirst ? 1 : 2)}.txt";
-            var board = BoardDeserializer.DeserializeFromStreamingAssets(relativePath);
+            var board = BoardTextDeserializer.DeserializeFromStreamingAssets(relativePath);
             _boardGridSpawner.SpawnBoard(board);
             _spawnFirst = !_spawnFirst;
         }

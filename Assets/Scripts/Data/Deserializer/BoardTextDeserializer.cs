@@ -1,10 +1,11 @@
 using System.IO;
+using System.Text;
 using TheseusAndMinotaur.Utils;
 using UnityEngine;
 
 namespace TheseusAndMinotaur.Data.Deserializer
 {
-    public static partial class BoardDeserializer
+    public static partial class BoardTextDeserializer
     {
         private const char HorizontalWallChar = '_';
         private const char VerticalWallChar = '|';
@@ -68,8 +69,54 @@ namespace TheseusAndMinotaur.Data.Deserializer
             
         }
 
+        /// <summary>
+        /// Convert board config to the text file
+        /// </summary>
+        public static string ConvertToTextConfig(this BoardConfig config)
+        {
+            var result = new StringBuilder();
+            var top = new StringBuilder();
+            var left = new StringBuilder();
+            for (int y = config.Height -1 ; y >=0 ; y--)
+            {
+                top.Clear();
+                left.Clear();
+                for (int x = 0; x < config.Width; x++)
+                {
+                    var direction = config[y, x];
+                    top.Append(".");
+                    top.Append(direction.HasTop() ? HorizontalWallChar : " ");
+                    left.Append(direction.HasLeft() ? VerticalWallChar : " ");
+                    left.Append(" ");
+                }
+
+                if (y == config.MinotaurStartPosition.y)
+                {
+                    left[1 + config.MinotaurStartPosition.x * 2] = MinotaurStartPoint;
+                }
+                
+                if (y == config.TheseusStartPosition.y)
+                {
+                    left[1 + config.TheseusStartPosition.x * 2] = TheseusStartPoint;
+                }
+                
+                if (y == config.Exit.y)
+                {
+                    left[1 + config.Exit.x * 2] = Exit;
+                }
+                
+                result.AppendLine(top.ToString());
+                result.AppendLine(left.ToString());
+            }
+
+            return result.ToString();
+        }
         
-        
+        /// <summary>
+        ///     Deserialize from text Data <see cref="Example.txt"/>
+        /// </summary>
+        /// <param name="textData">board config in text format <see cref="Example.txt"/> at StreamingAsset folder</param>
+        /// <returns>board</returns>
         public static BoardConfig DeserializeFrom(string textData)
         {
             if (string.IsNullOrEmpty(textData))
@@ -127,7 +174,10 @@ namespace TheseusAndMinotaur.Data.Deserializer
                     }
                 }
 
-
+                rawBoard[rawBoard.MinotaurStartPosition.Value] |= Direction.None;
+                rawBoard[rawBoard.TheseusStartPosition.Value] |= Direction.None;
+                rawBoard[rawBoard.ExitPosition.Value] |= Direction.None;
+                
                 y++;
                 line = reader.ReadLine();
             }
