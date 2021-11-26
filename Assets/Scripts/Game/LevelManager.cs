@@ -17,6 +17,7 @@ namespace TheseusAndMinotaur.Game
             "Levels/level3.txt"
         };
 
+        // ReSharper disable once RedundantDefaultMemberInitializer
         private int _nextLevel = 0;
 
         private WorldGameController _worldGameController;
