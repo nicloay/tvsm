@@ -17,18 +17,9 @@ namespace TheseusAndMinotaur.WorldControllers
             { Direction.Right, "→" },
             { Direction.Up, "↑" },
             { Direction.Down, "↓" },
-            { Direction.None, "]" }
+            { Direction.None, "…" }
         };
-
-        private static readonly Dictionary<Direction, Quaternion> RotationByDirection = new()
-        {
-            { Direction.Left, Quaternion.identity },
-            { Direction.Right, Quaternion.identity },
-            { Direction.Up, Quaternion.identity },
-            { Direction.Down, Quaternion.identity },
-            { Direction.None, Quaternion.Euler(0, 0, -90) }
-        };
-
+        
         private TextMeshPro _text;
 
         private void Awake()
@@ -39,7 +30,6 @@ namespace TheseusAndMinotaur.WorldControllers
         public void SetDirection(Direction direction)
         {
             _text.text = signByDirection[direction];
-            _text.transform.rotation = RotationByDirection[direction];
         }
     }
 }
