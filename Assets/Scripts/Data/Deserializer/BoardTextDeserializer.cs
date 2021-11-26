@@ -15,7 +15,7 @@ namespace TheseusAndMinotaur.Data.Deserializer
 
 
         /// <summary>
-        /// Get text content from the resouce
+        ///     Get text content from the resouce
         /// </summary>
         /// <param name="resourcePath"></param>
         /// <returns></returns>
@@ -28,7 +28,7 @@ namespace TheseusAndMinotaur.Data.Deserializer
         }
 
         /// <summary>
-        /// Get level name from resource path
+        ///     Get level name from resource path
         /// </summary>
         /// <param name="resourcePath"></param>
         public static string GetLevelName(this string resourcePath)

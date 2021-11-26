@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using TheseusAndMinotaur.Data;
 using TheseusAndMinotaur.Data.Deserializer;
 using TheseusAndMinotaur.Data.Game;
@@ -9,7 +8,6 @@ using TheseusAndMinotaur.WorldControllers.Maze;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
-using UnityEngine.Networking;
 
 namespace TheseusAndMinotaur.WorldControllers
 {
@@ -23,9 +21,9 @@ namespace TheseusAndMinotaur.WorldControllers
         [SerializeField] private MovementController exitController;
         public readonly GameStateChangedEvent GameStateChanged = new();
         public readonly LevelStartEvent LevelStart = new();
+        public readonly LoadLevelCommunicationProblemEvent LoadLevelCommunicationProblem = new();
         public readonly UnityEvent PathNotFound = new();
         public readonly ShowHintEvent ShowHint = new();
-        public readonly LoadLevelCommunicationProblemEvent LoadLevelCommunicationProblem = new();
         public readonly UnityEvent WrongMovement = new();
         private BoardGridSpawner _boardGridSpawner;
         private GameLogic _gameLogic;

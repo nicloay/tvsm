@@ -8,10 +8,10 @@ namespace TheseusAndMinotaur.Data
     /// </summary>
     public class BoardConfig
     {
-        internal readonly Direction[,] WallMap;
         public readonly Vector2Int Exit;
         public readonly Vector2Int MinotaurStartPosition;
         public readonly Vector2Int TheseusStartPosition;
+        internal readonly Direction[,] WallMap;
 
 
         public BoardConfig(Direction[,] wallMap, Vector2Int theseusStartPosition, Vector2Int minotaurStartPosition,

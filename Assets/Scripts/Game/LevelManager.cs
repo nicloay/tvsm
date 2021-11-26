@@ -6,7 +6,7 @@ namespace TheseusAndMinotaur.Game
 {
     /// <summary>
     ///     contains list to the levels
-    ///    Responsible to start next level when previous complete
+    ///     Responsible to start next level when previous complete
     /// </summary>
     public class LevelManager : MonoBehaviour
     {

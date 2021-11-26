@@ -136,7 +136,7 @@ namespace TheseusAndMinotaur.Tests
         [Test]
         public void TestNullStringException()
         {
-            Assert.Throws<ParseMazeException>(() => null.ToBoardConfig());
+            Assert.Throws<ParseMazeException>(() => "".ToBoardConfig());
         }
 
         [Test]
