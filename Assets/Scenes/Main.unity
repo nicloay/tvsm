@@ -153,8 +153,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   levels:
-  - Levels/level2.txt
   - Levels/level1.txt
+  - Levels/level2.txt
   - Levels/level3.txt
 --- !u!4 &9412808
 Transform:
