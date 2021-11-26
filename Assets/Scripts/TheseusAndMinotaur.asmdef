@@ -1,0 +1,17 @@
+{
+    "name": "TheseusAndMinotaur",
+    "rootNamespace": "TheseusAndMinotaur",
+    "references": [
+        "Unity.Mathematics",
+        "Unity.TextMeshPro"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
