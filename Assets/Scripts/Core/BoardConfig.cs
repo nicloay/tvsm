@@ -57,7 +57,7 @@ namespace TheseusAndMinotaur.Data
 
             return result;
         }
-        
+
         /// <summary>
         ///     Factory method which Generate board with random data according to parameters
         ///     horizontal WallsNumber will be spawned on random position on the cell, the same vertical number,

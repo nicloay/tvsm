@@ -8,7 +8,6 @@ namespace TheseusAndMinotaur.WorldControllers
     /// <summary>
     ///     Move game object in the world
     ///     Theseus and Minotaur use this.
-    ///     
     /// </summary>
     public class MovementController : MonoBehaviour
     {

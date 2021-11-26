@@ -4,7 +4,7 @@ using TheseusAndMinotaur.Data;
 using TheseusAndMinotaur.Data.Game.PathFinder;
 using UnityEngine;
 
-namespace TheseusAndMinotaur.Tests
+namespace TheseusAndMinotaur.Tests.Tests.EditorTests
 {
     public class PathFindingTest
     {

@@ -3,7 +3,7 @@ using TheseusAndMinotaur.Data;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace TheseusAndMinotaur.WorldControllers.Maze
+namespace TheseusAndMinotaur.WorldControllers
 {
     public class CellController : MonoBehaviour
     {

@@ -13,9 +13,10 @@ namespace TheseusAndMinotaur.Data.Converter
         /// <summary>
         ///     Internal class, used only to quickly update cells by index (without worrying if row or column exists in the target
         ///     array)
-        ///      e.g.: RawBoard[2,5]|=Direction.Left | Direction.Top;
+        ///     e.g.: RawBoard[2,5]|=Direction.Left | Direction.Top;
         ///     All internal maps and board arrays in the format [y, x]
-        ///     PivotPoint: topLeft (it's the single place where pivot point is like that, as it's the text file start read top to bottom
+        ///     PivotPoint: topLeft (it's the single place where pivot point is like that, as it's the text file start read top to
+        ///     bottom
         /// </summary>
         internal sealed class RawBoard
         {
@@ -62,7 +63,7 @@ namespace TheseusAndMinotaur.Data.Converter
             {
                 if (_maxX < 0 && _maxY < 0)
                 {
-                    throw new ParseMazeException("maze contains no walls");
+                    throw new ParseMazeException("Grid contains no walls");
                 }
 
                 if (!TheseusStartPosition.IsValueSet)

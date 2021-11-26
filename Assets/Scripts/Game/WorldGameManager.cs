@@ -4,10 +4,10 @@ using TheseusAndMinotaur.Data;
 using TheseusAndMinotaur.Data.Converter;
 using TheseusAndMinotaur.Data.Game;
 using TheseusAndMinotaur.Data.Game.PathFinder;
+using TheseusAndMinotaur.Visual.World;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.Events;
-using TheseusAndMinotaur.Visual.World;
 
 namespace TheseusAndMinotaur.WorldControllers
 {
@@ -25,11 +25,11 @@ namespace TheseusAndMinotaur.WorldControllers
         public readonly UnityEvent PathNotFound = new();
         public readonly ShowHintEvent ShowHint = new();
         public readonly UnityEvent WrongMovement = new();
-        private WorldGridManager _worldGridManager;
         private GameLogic _gameLogic;
-        
+
         private InputAction _requestedAction;
         private GameState _state;
+        private WorldGridManager _worldGridManager;
         public bool HasUndo => _gameLogic.HasUndo;
 
         public Vector2 BoardWorldSize => _gameLogic.GridSize.ToWorldSize();

@@ -2,7 +2,7 @@ using NUnit.Framework;
 using TheseusAndMinotaur.WorldControllers;
 using UnityEngine;
 
-namespace TheseusAndMinotaur.Tests
+namespace TheseusAndMinotaur.Tests.Tests.EditorTests
 {
     public class GeneralTests
     {

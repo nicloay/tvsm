@@ -7,8 +7,8 @@ namespace TheseusAndMinotaur.Data
     ///     We don't have DI system yet, so let's use singleton
     ///     This config contains world configuration of the game
     ///     like:
-    ///       * how big (inf world size) the cell
-    ///       * Theseus/Minotaur movement speed
+    ///     * how big (inf world size) the cell
+    ///     * Theseus/Minotaur movement speed
     /// </summary>
     [CreateAssetMenu]
     public class GameConfig : ScriptableObject

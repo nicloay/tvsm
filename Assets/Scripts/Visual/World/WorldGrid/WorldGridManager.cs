@@ -1,5 +1,5 @@
 using TheseusAndMinotaur.Data;
-using TheseusAndMinotaur.WorldControllers.Maze;
+using TheseusAndMinotaur.WorldControllers;
 using UnityEngine;
 
 namespace TheseusAndMinotaur.Visual.World

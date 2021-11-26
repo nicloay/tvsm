@@ -5,7 +5,7 @@ using UnityEngine;
 namespace TheseusAndMinotaur.Data.Converter
 {
     /// <summary>
-    /// Convert text in to the board configuration and back
+    ///     Convert text in to the board configuration and back
     /// </summary>
     public static partial class BoardTextConverter
     {
@@ -14,7 +14,7 @@ namespace TheseusAndMinotaur.Data.Converter
         private const char TheseusStartPoint = 'T';
         private const char MinotaurStartPoint = 'M';
         private const char Exit = 'E';
-        
+
         /// <summary>
         ///     Get resource content from the resource
         /// </summary>

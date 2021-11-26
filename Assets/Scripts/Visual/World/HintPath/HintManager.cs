@@ -5,10 +5,9 @@ using UnityEngine.Pool;
 
 namespace TheseusAndMinotaur.WorldControllers
 {
-    
     /// <summary>
-    /// Listen request from gameManager,
-    /// If player requested a hint, spawn direction icons indicating how player can reach the Exit
+    ///     Listen request from gameManager,
+    ///     If player requested a hint, spawn direction icons indicating how player can reach the Exit
     /// </summary>
     public class HintManager : MonoBehaviour
     {

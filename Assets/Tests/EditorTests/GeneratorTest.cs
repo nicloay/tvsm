@@ -3,7 +3,7 @@ using TheseusAndMinotaur.Data;
 using TheseusAndMinotaur.Data.Converter;
 using UnityEngine;
 
-namespace TheseusAndMinotaur.Tests
+namespace TheseusAndMinotaur.Tests.Tests.EditorTests
 {
     public class GeneratorTest
     {

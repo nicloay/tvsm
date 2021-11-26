@@ -4,10 +4,10 @@ using TheseusAndMinotaur.Data.Converter;
 using TheseusAndMinotaur.Data.Game;
 using TheseusAndMinotaur.Data.Game.PathFinder;
 
-namespace TheseusAndMinotaur.Tests
+namespace TheseusAndMinotaur.Tests.Tests.EditorTests
 {
     /// <summary>
-    /// util methods used by another tests
+    ///     util methods used by another tests
     /// </summary>
     public class TestUtils
     {

@@ -3,11 +3,11 @@ using TheseusAndMinotaur.Data;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace TheseusAndMinotaur.WorldControllers.Maze
+namespace TheseusAndMinotaur.WorldControllers
 {
     /// <summary>
     ///     Common pool for walls and cells
-    ///     used by <see cref="GridSpawner"/> to reuse world game objects
+    ///     used by GridManager to reuse world game objects
     /// </summary>
     public class GridPools : MonoBehaviour
     {
@@ -43,8 +43,7 @@ namespace TheseusAndMinotaur.WorldControllers.Maze
         public void AddCell(Vector2 position, Direction direction)
         {
             var cell = _cellPool.Get();
-            cell.SetupWalls(position,
-                direction); // TODO: find better place to calculate position (Vector2Int to Vector3)
+            cell.SetupWalls(position, direction); 
             _spawnedCells.Add(cell);
         }
 
