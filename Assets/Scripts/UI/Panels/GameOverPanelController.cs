@@ -1,5 +1,6 @@
 using TheseusAndMinotaur.Game;
 using TheseusAndMinotaur.WorldControllers;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -30,6 +31,7 @@ namespace TheseusAndMinotaur.UI
             _worldGameController.GameStateChanged.AddListener(OnGameStateChanged);
             restartButton.onClick.AddListener(OnRestartBoard);
             undoButton.onClick.AddListener(OnUndoLastTurn);
+            nextLevelButton.onClick.AddListener(StartNext);
         }
 
         private void Update()
@@ -69,6 +71,10 @@ namespace TheseusAndMinotaur.UI
             gameOverHeader.SetActive(gameState == GameState.GameOver);
             victoryHeader.SetActive(gameState == GameState.Victory);
             nextLevelButton.interactable = _levelManager.HasMoreLevel;
+            if (gameState == GameState.Victory && !_levelManager.HasMoreLevel)
+            {
+                victoryHeader.GetComponentInChildren<TextMeshProUGUI>().text = "Congratulation you finished the game!";
+            } 
         }
 
         private void OnUndoLastTurn()

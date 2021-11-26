@@ -16,7 +16,7 @@ namespace TheseusAndMinotaur.Game
             "Levels/level3.txt"
         };
 
-        private int _currentLevel;
+        private int _currentLevel = 0;
 
         private WorldGameController _worldGameController;
 
@@ -29,7 +29,7 @@ namespace TheseusAndMinotaur.Game
 
         private void Start()
         {
-            _worldGameController.OpenBoard(levels[0]);
+            _worldGameController.OpenBoard(levels[_currentLevel++]);
         }
 
         public void StartNext()

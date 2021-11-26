@@ -12,7 +12,16 @@ namespace TheseusAndMinotaur.Tests
     public class PathFindingTest
     {
         [Test]
+        public void TestNoPath()
+        {
+            // 5_4 must fail, as pathfinding must not allow to step to the same position where minotaur stays at the moment
+            Assert.Fail();
+        }
+        
+        
+        [Test]
         public void Test1()
+        
         {
             var game = CreateGame("PathFinding1");
             var pathFinder = new PathFinder(game);
