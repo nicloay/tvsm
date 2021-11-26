@@ -25,8 +25,8 @@ namespace TheseusAndMinotaur.Tests
         /// <param name="fileName">filename without extension</param>
         public static GameLogic CreateGame(string fileName)
         {
-            return new GameLogic(
-                BoardTextDeserializer.DeserializeFrom(File.ReadAllText($"UnitTestsData/{fileName}.txt")));
+            var content = File.ReadAllText($"UnitTestsData/{fileName}.txt");
+            return new GameLogic(content.ToBoardConfig());
         }
 
         /// <summary>

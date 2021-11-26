@@ -6,6 +6,7 @@ namespace TheseusAndMinotaur.Game
 {
     /// <summary>
     ///     contains list to the levels
+    ///     Responsible to start next level when previous complete
     /// </summary>
     public class LevelManager : MonoBehaviour
     {
@@ -16,11 +17,12 @@ namespace TheseusAndMinotaur.Game
             "Levels/level3.txt"
         };
 
-        private int _currentLevel;
+        // ReSharper disable once RedundantDefaultMemberInitializer
+        private int _nextLevel = 0;
 
         private WorldGameController _worldGameController;
 
-        public bool HasMoreLevel => _currentLevel < levels.Length - 1;
+        public bool HasMoreLevel => _nextLevel < levels.Length;
 
         private void Awake()
         {
@@ -29,13 +31,13 @@ namespace TheseusAndMinotaur.Game
 
         private void Start()
         {
-            _worldGameController.OpenBoard(levels[_currentLevel++]);
+            StartNext();
         }
 
         public void StartNext()
         {
             Assert.IsTrue(HasMoreLevel);
-            _worldGameController.OpenBoard(levels[++_currentLevel]);
+            _worldGameController.OpenBoard(levels[_nextLevel++]);
         }
     }
 }

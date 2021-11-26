@@ -22,6 +22,7 @@ namespace TheseusAndMinotaur.UI
             var gameController = FindObjectOfType<WorldGameController>();
             gameController.WrongMovement.AddListener(() => ShowError(wrongMovementText));
             gameController.PathNotFound.AddListener(() => ShowError(pathNotFound));
+            gameController.LoadLevelCommunicationProblem.AddListener(ShowError);
         }
 
         private void ShowError(string text)
