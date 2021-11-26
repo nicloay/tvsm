@@ -65,6 +65,11 @@ namespace TheseusAndMinotaur.Data.Game.PathFinder
                         continue;
                     }
 
+                    if (result.TheseusNewPosition == node.MinotaurPosition)
+                    {
+                        continue;
+                    }
+                    
                     if (result.BoardStatus == BoardStatus.GameOver)
                     {
                         continue;
